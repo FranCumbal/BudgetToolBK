@@ -1,0 +1,477 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>services.field_lines_services.executed_activities_manager &mdash; documentación de Budget Tool Phase II - 2025</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7005c00d"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=f85f4cfb"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Budget Tool Phase II
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contenidos:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../reports.html">Reportes de Campo</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Budget Tool Phase II</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Código de módulo</a></li>
+      <li class="breadcrumb-item active">services.field_lines_services.executed_activities_manager</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fuente para services.field_lines_services.executed_activities_manager</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">services.field_lines_services.executed_plan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExecutedActivitiesPlan</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">utils.months_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">MONTH_ES_TO_MONTH_EN</span><span class="p">,</span> <span class="n">SORTED_MONTHS</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<div class="viewcode-block" id="ExecutedActivitiesManager">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager">[documentos]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ExecutedActivitiesManager</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gestiona el acceso y procesamiento de los datos de actividades ejecutadas.</span>
+
+<span class="sd">    Esta clase carga los datos desde un plan de Excel, los pre-procesa y ofrece</span>
+<span class="sd">    métodos para consultar costos reales, conteo de actividades y otros datos</span>
+<span class="sd">    filtrados por mes y línea de servicio.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicializa el gestor, carga los datos de actividades ejecutadas y los pre-procesa.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">ExecutedActivitiesPlan</span><span class="p">()</span><span class="o">.</span><span class="n">get_executed_data_from_excel</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meses_ordenados</span> <span class="o">=</span> <span class="n">SORTED_MONTHS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meses_ingles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;january&#39;</span><span class="p">,</span> <span class="s1">&#39;february&#39;</span><span class="p">,</span> <span class="s1">&#39;march&#39;</span><span class="p">,</span> <span class="s1">&#39;april&#39;</span><span class="p">,</span> <span class="s1">&#39;may&#39;</span><span class="p">,</span> <span class="s1">&#39;june&#39;</span><span class="p">,</span> <span class="s1">&#39;july&#39;</span><span class="p">,</span> <span class="s1">&#39;august&#39;</span><span class="p">,</span> <span class="s1">&#39;september&#39;</span><span class="p">,</span> <span class="s1">&#39;october&#39;</span><span class="p">,</span> <span class="s1">&#39;november&#39;</span><span class="p">,</span> <span class="s1">&#39;december&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_preprocess_df</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        
+<div class="viewcode-block" id="ExecutedActivitiesManager.convert_columns_to_numeric">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.convert_columns_to_numeric">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_columns_to_numeric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column_names</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convierte de forma segura una lista de columnas del DataFrame a tipo numérico.</span>
+<span class="sd">        Los valores que no se puedan convertir se transformarán en NaN.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">column_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_preprocess_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pre-procesa el DataFrame interno para estandarizar los datos.</span>
+
+<span class="sd">        Limpia y normaliza la columna &#39;Month&#39;, traduciéndola a inglés y</span>
+<span class="sd">        estableciendo un orden categórico para asegurar la correcta ordenación.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">MONTH_ES_TO_MONTH_EN</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">meses_ingles</span><span class="p">,</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;Month&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ExecutedActivitiesManager.get_executed_activities_data_frame_by_month">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_data_frame_by_month">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_executed_activities_data_frame_by_month</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">line_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filtra y devuelve un DataFrame con el detalle de actividades para un mes y línea.&quot;&quot;&quot;</span>
+        <span class="n">month</span> <span class="o">=</span> <span class="n">month</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">servicios_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_Servicios&#39;</span>
+        <span class="n">productos_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_Productos&#39;</span>
+        <span class="n">b_and_h_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_B&amp;H&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convert_columns_to_numeric</span><span class="p">([</span><span class="n">servicios_col</span><span class="p">,</span> <span class="n">productos_col</span><span class="p">,</span> <span class="n">b_and_h_col</span><span class="p">])</span>
+        <span class="n">conditions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_conditions_to_check_services_and_product</span><span class="p">(</span><span class="n">line_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
+        <span class="n">filtered_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">conditions</span><span class="p">]</span>
+        <span class="n">columnas</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;WELL&#39;</span><span class="p">,</span> <span class="s1">&#39;STATUS&#39;</span><span class="p">,</span> <span class="s1">&#39;Month&#39;</span><span class="p">,</span> <span class="n">servicios_col</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">productos_col</span> <span class="ow">in</span> <span class="n">filtered_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">columnas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">productos_col</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">b_and_h_col</span> <span class="ow">in</span> <span class="n">filtered_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">columnas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b_and_h_col</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">filtered_df</span><span class="p">[</span><span class="n">columnas</span><span class="p">]</span></div>
+
+    
+<div class="viewcode-block" id="ExecutedActivitiesManager.get_last_index_month_in_excel">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_last_index_month_in_excel">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_last_index_month_in_excel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Obtiene el índice numérico (0-11) del último mes con datos en el Excel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">valid_months_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()]</span> 
+        <span class="n">last_valid_month</span> <span class="o">=</span> <span class="n">valid_months_df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">month_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">last_index_month</span> <span class="o">=</span> <span class="n">month_indices</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">last_valid_month</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">last_index_month</span></div>
+
+    
+<div class="viewcode-block" id="ExecutedActivitiesManager.get_executed_activities_data_frame_by_month_to_draw">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_data_frame_by_month_to_draw">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_executed_activities_data_frame_by_month_to_draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">line_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Obtiene el detalle de actividades para un mes, excluyendo las &#39;adicionales&#39;.</span>
+
+<span class="sd">        Este método está pensado para generar gráficos que solo deben mostrar</span>
+<span class="sd">        las actividades planificadas y ejecutadas, no las adicionales.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">month</span> <span class="o">=</span> <span class="n">month</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">servicios_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_Servicios&#39;</span>
+        <span class="n">productos_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_Productos&#39;</span>
+        <span class="c1"># ✅ Conversión segura a numérico</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convert_columns_to_numeric</span><span class="p">([</span><span class="n">servicios_col</span><span class="p">,</span> <span class="n">productos_col</span><span class="p">])</span>
+        <span class="n">conditions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_conditions_to_check_services_and_product_to_draw</span><span class="p">(</span><span class="n">line_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
+        <span class="n">filtered_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">conditions</span><span class="p">]</span>
+        <span class="n">columnas</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;WELL&#39;</span><span class="p">,</span> <span class="s1">&#39;Month&#39;</span><span class="p">,</span> <span class="n">servicios_col</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">productos_col</span> <span class="ow">in</span> <span class="n">filtered_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">columnas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">productos_col</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">filtered_df</span><span class="p">[</span><span class="n">columnas</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ExecutedActivitiesManager.get_executed_activities_accumulated_df_by_column_from_excel">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_accumulated_df_by_column_from_excel">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_executed_activities_accumulated_df_by_column_from_excel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meses</span><span class="p">,</span> <span class="n">line_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Obtiene el acumulado de actividades desde una columna de resumen en Excel.</span>
+
+<span class="sd">        Es usado por reportes como Echometer, que tienen una columna específica</span>
+<span class="sd">        con el total de actividades ejecutadas.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df_mes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_executed_activities_sum_by_month</span><span class="p">(</span><span class="n">meses</span><span class="p">,</span> <span class="n">line_name</span><span class="p">,</span> <span class="n">status_filter</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;final&#39;</span><span class="p">,</span> <span class="s1">&#39;pend.&#39;</span><span class="p">])</span>
+        <span class="n">df_mes</span><span class="p">[</span><span class="s1">&#39;Executed Activities&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_mes</span><span class="p">[</span><span class="s1">&#39;Executed Activities&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">df_mes</span></div>
+
+    
+<div class="viewcode-block" id="ExecutedActivitiesManager.get_executed_activities_df_by_column_from_excel_monthly_distributed">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_df_by_column_from_excel_monthly_distributed">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_executed_activities_df_by_column_from_excel_monthly_distributed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meses</span><span class="p">,</span> <span class="n">line_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Obtiene el total mensual de actividades desde una columna de resumen en Excel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df_mes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_executed_activities_sum_by_month</span><span class="p">(</span><span class="n">meses</span><span class="p">,</span> <span class="n">line_name</span><span class="p">,</span> <span class="n">status_filter</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;final&#39;</span><span class="p">,</span> <span class="s1">&#39;pend.&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">df_mes</span></div>
+
+    
+<div class="viewcode-block" id="ExecutedActivitiesManager.get_echometer_executed_activities_monthly">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_echometer_executed_activities_monthly">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_echometer_executed_activities_monthly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meses</span><span class="p">,</span> <span class="n">line_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método específico para obtener las actividades mensuales acumuladas de Echometer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_executed_activities_accumulated_df_by_column_from_excel</span><span class="p">(</span><span class="n">meses</span><span class="p">,</span> <span class="n">line_name</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_executed_activities_sum_by_month</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meses</span><span class="p">,</span> <span class="n">line_name</span><span class="p">,</span> <span class="n">status_filter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper privado para sumar actividades de una columna específica por mes.</span>
+
+<span class="sd">        Busca una columna como &#39;{line_name}_Act. Ejecutadas&#39; y suma sus valores</span>
+<span class="sd">        para cada mes, aplicando un filtro de estado opcional.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">act_ejecutadas_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_Act. Ejecutadas&#39;</span>
+        <span class="k">if</span> <span class="n">act_ejecutadas_col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">act_ejecutadas_col</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Month&#39;</span><span class="p">,</span> <span class="n">act_ejecutadas_col</span><span class="p">,</span> <span class="s1">&#39;STATUS&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">if</span> <span class="s1">&#39;STATUS&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Month&#39;</span><span class="p">,</span> <span class="n">act_ejecutadas_col</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">MONTH_ES_TO_MONTH_EN</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">df</span><span class="p">[</span><span class="n">act_ejecutadas_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">act_ejecutadas_col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">status_filter</span> <span class="ow">and</span> <span class="s1">&#39;STATUS&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">status_filter</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">set</span><span class="p">)):</span>
+                <span class="n">status_filter_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">status_filter</span><span class="p">])</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;STATUS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">status_filter_set</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;STATUS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">status_filter</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+        <span class="n">meses_lower</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">meses</span><span class="p">]</span>
+        <span class="n">activities_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">meses_lower</span><span class="p">:</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">month</span><span class="p">,</span> <span class="n">act_ejecutadas_col</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">if</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">activities_data</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;Month&quot;</span><span class="p">:</span> <span class="n">month</span><span class="p">,</span> <span class="s2">&quot;Executed Activities&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">total</span><span class="p">)})</span>
+        <span class="n">df_result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">activities_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_result</span>
+    
+<div class="viewcode-block" id="ExecutedActivitiesManager.generate_executed_activities_data_frame">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_executed_activities_data_frame">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_executed_activities_data_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">months</span><span class="p">,</span> <span class="n">line_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Genera un DataFrame con el conteo de actividades ejecutadas para cada mes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">activities_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">months</span><span class="p">:</span>
+            <span class="n">executed_activities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_executed_activities_by_month_to_draw</span><span class="p">(</span><span class="n">month</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">line_name</span><span class="p">)</span>
+            <span class="n">activities_data</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;Month&quot;</span><span class="p">:</span> <span class="n">month</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="s2">&quot;Executed Activities&quot;</span><span class="p">:</span> <span class="n">executed_activities</span><span class="p">})</span>
+        <span class="n">df_executed_activities</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">activities_data</span><span class="p">)</span>
+        <span class="n">df_executed_activities</span><span class="p">[</span><span class="s1">&#39;Executed Activities&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_executed_activities</span><span class="p">[</span><span class="s1">&#39;Executed Activities&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">df_executed_activities</span></div>
+
+    
+<div class="viewcode-block" id="ExecutedActivitiesManager.generate_executed_activities_data_frame_to_draw">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_executed_activities_data_frame_to_draw">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_executed_activities_data_frame_to_draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">months</span><span class="p">,</span> <span class="n">line_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Genera un DataFrame con el conteo de actividades para graficar.</span>
+
+<span class="sd">        Excluye actividades &#39;adicionales&#39; para no distorsionar los gráficos.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">activities_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">months</span><span class="p">:</span>
+            <span class="n">executed_activities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_executed_activities_by_month_to_draw</span><span class="p">(</span><span class="n">month</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">line_name</span><span class="p">)</span>
+            <span class="n">activities_data</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;Month&quot;</span><span class="p">:</span> <span class="n">month</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="s2">&quot;Executed Activities&quot;</span><span class="p">:</span> <span class="n">executed_activities</span><span class="p">})</span>
+        <span class="n">df_executed_activities</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">activities_data</span><span class="p">)</span>
+        <span class="n">df_executed_activities</span><span class="p">[</span><span class="s1">&#39;Executed Activities&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_executed_activities</span><span class="p">[</span><span class="s1">&#39;Executed Activities&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">df_executed_activities</span></div>
+
+
+<div class="viewcode-block" id="ExecutedActivitiesManager.get_executed_activities_by_month">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_by_month">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_executed_activities_by_month</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">line_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Devuelve el número (conteo) de actividades ejecutadas para un mes y línea.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">month</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">meses_ingles</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mes &#39;</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s2">&#39; no está en la lista de meses válidos.&quot;</span><span class="p">)</span>
+        <span class="n">filtered</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_executed_activities_data_frame_by_month</span><span class="p">(</span><span class="n">month</span><span class="p">,</span> <span class="n">line_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">filtered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+    
+<div class="viewcode-block" id="ExecutedActivitiesManager.get_executed_activities_by_month_to_draw">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_by_month_to_draw">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_executed_activities_by_month_to_draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">line_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Devuelve el conteo de actividades para graficar (excluye &#39;adicionales&#39;).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">month</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">meses_ingles</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mes &#39;</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s2">&#39; no está en la lista de meses válidos.&quot;</span><span class="p">)</span>
+        <span class="n">filtered</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_executed_activities_data_frame_by_month_to_draw</span><span class="p">(</span><span class="n">month</span><span class="p">,</span> <span class="n">line_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">filtered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ExecutedActivitiesManager.get_total_real_cost_by_month">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_total_real_cost_by_month">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_total_real_cost_by_month</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">line_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calcula el costo real total para un mes sumando servicios y productos.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df_total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_executed_activities_data_frame_by_month</span><span class="p">(</span><span class="n">month</span><span class="p">,</span> <span class="n">line_name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+        <span class="n">servicios_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_Servicios&#39;</span>
+        <span class="n">productos_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_Productos&#39;</span>
+        <span class="n">servicios_sum</span> <span class="o">=</span> <span class="n">df_total</span><span class="p">[</span><span class="n">servicios_col</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">if</span> <span class="n">servicios_col</span> <span class="ow">in</span> <span class="n">df_total</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="n">productos_sum</span> <span class="o">=</span> <span class="n">df_total</span><span class="p">[</span><span class="n">productos_col</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">if</span> <span class="n">productos_col</span> <span class="ow">in</span> <span class="n">df_total</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+        <span class="k">return</span> <span class="n">servicios_sum</span> <span class="o">+</span> <span class="n">productos_sum</span></div>
+
+
+<div class="viewcode-block" id="ExecutedActivitiesManager.generate_real_cost_data_frame">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_real_cost_data_frame">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_real_cost_data_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Genera un DataFrame con el costo real total para cada mes del año.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">full_english_months</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meses_ingles</span>
+        <span class="n">data_to_real_cost</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">full_english_months</span><span class="p">:</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_total_real_cost_by_month</span><span class="p">(</span><span class="n">month</span><span class="p">,</span> <span class="n">line_name</span><span class="p">)</span>
+            <span class="n">data_to_real_cost</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;Month&quot;</span><span class="p">:</span> <span class="n">month</span><span class="p">,</span> <span class="s2">&quot;TotalRealCost&quot;</span><span class="p">:</span> <span class="n">total</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data_to_real_cost</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ExecutedActivitiesManager.generate_accumulated_real_cost_data_frame">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_accumulated_real_cost_data_frame">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_accumulated_real_cost_data_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Genera un DataFrame con el costo real acumulado mes a mes.</span>
+
+<span class="sd">        La acumulación se detiene y se mantiene constante después del último mes</span>
+<span class="sd">        que contiene datos en el archivo de origen.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df_acummulated_cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_real_cost_data_frame</span><span class="p">(</span><span class="n">line_name</span><span class="p">)</span>
+        <span class="n">accumulated</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">prev_accumulated</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">MONTH_ES_TO_MONTH_EN</span><span class="p">)</span>
+        <span class="n">last_month_in_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Month&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df_acummulated_cost</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">month_name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Month&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="n">current_real_cost</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;TotalRealCost&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">meses_ingles</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">month_name</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meses_ingles</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">last_month_in_df</span><span class="p">):</span>
+                <span class="n">current_accumulated</span> <span class="o">=</span> <span class="n">current_real_cost</span> <span class="o">+</span> <span class="n">prev_accumulated</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">current_accumulated</span> <span class="o">=</span> <span class="mi">0</span> 
+
+            <span class="n">accumulated</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_accumulated</span><span class="p">)</span>
+            <span class="n">prev_accumulated</span> <span class="o">=</span> <span class="n">current_accumulated</span>
+
+        <span class="n">df_acummulated_cost</span><span class="p">[</span><span class="s2">&quot;TotalAccumulatedCost&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">accumulated</span>
+        <span class="k">return</span> <span class="n">df_acummulated_cost</span><span class="p">[[</span><span class="s2">&quot;Month&quot;</span><span class="p">,</span> <span class="s2">&quot;TotalAccumulatedCost&quot;</span><span class="p">]]</span></div>
+
+
+<div class="viewcode-block" id="ExecutedActivitiesManager.get_conditions_to_check_services_and_product">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_conditions_to_check_services_and_product">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_conditions_to_check_services_and_product</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_name</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">month</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construye y devuelve las condiciones para filtrar actividades ejecutadas.</span>
+
+<span class="sd">        Considera una actividad como ejecutada si su estado es &#39;final&#39;, &#39;pend.&#39; o</span>
+<span class="sd">        &#39;adicional&#39; y tiene un costo asociado (en servicios, productos o B&amp;H).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">servicios_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_Servicios&#39;</span>
+        <span class="n">productos_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_Productos&#39;</span>
+        <span class="n">b_and_h_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_B&amp;H&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convert_columns_to_numeric</span><span class="p">([</span><span class="n">servicios_col</span><span class="p">,</span> <span class="n">productos_col</span><span class="p">,</span> <span class="n">b_and_h_col</span><span class="p">])</span>
+        <span class="n">has_productos</span> <span class="o">=</span> <span class="n">productos_col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">has_b_and_h</span> <span class="o">=</span> <span class="n">b_and_h_col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">is_final</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;STATUS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;final&#39;</span> 
+        <span class="n">is_aditional</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;STATUS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;adicional&#39;</span> 
+        <span class="n">is_pending</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;STATUS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;pend.&#39;</span> 
+        <span class="n">is_correct_month</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">month</span>
+        <span class="n">valid_servicios</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">servicios_col</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">servicios_col</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">has_productos</span> <span class="ow">and</span> <span class="n">has_b_and_h</span><span class="p">:</span>
+            <span class="n">valid_productos</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">productos_col</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">productos_col</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span> <span class="o">|</span>
+                <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">b_and_h_col</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">b_and_h_col</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">has_productos</span><span class="p">:</span>
+            <span class="n">valid_productos</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">productos_col</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">productos_col</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">has_b_and_h</span><span class="p">:</span>
+            <span class="n">valid_productos</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">b_and_h_col</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">b_and_h_col</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">valid_productos</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">conditions</span> <span class="o">=</span> <span class="p">(</span><span class="n">is_final</span> <span class="o">|</span> <span class="n">is_pending</span> <span class="o">|</span> <span class="n">is_aditional</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">is_correct_month</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">valid_servicios</span> <span class="o">|</span> <span class="n">valid_productos</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">conditions</span></div>
+
+    
+<div class="viewcode-block" id="ExecutedActivitiesManager.get_conditions_to_check_services_and_product_to_draw">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_conditions_to_check_services_and_product_to_draw">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_conditions_to_check_services_and_product_to_draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_name</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">month</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construye las condiciones para filtrar actividades para gráficos.</span>
+
+<span class="sd">        Es similar al otro método de condiciones, pero excluye explícitamente</span>
+<span class="sd">        las actividades con estado &#39;adicional&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">servicios_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_Servicios&#39;</span>
+        <span class="n">productos_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_Productos&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convert_columns_to_numeric</span><span class="p">([</span><span class="n">servicios_col</span><span class="p">,</span> <span class="n">productos_col</span><span class="p">])</span>
+        <span class="n">has_productos</span> <span class="o">=</span> <span class="n">productos_col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">is_final</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;STATUS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;final&#39;</span>
+        <span class="n">is_pending</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;STATUS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;pend.&#39;</span> 
+        <span class="n">is_correct_month</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">month</span>
+        <span class="n">valid_servicios</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">servicios_col</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">servicios_col</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">valid_productos</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">productos_col</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">productos_col</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">has_productos</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">conditions</span> <span class="o">=</span> <span class="p">(</span><span class="n">is_final</span> <span class="o">|</span> <span class="n">is_pending</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">is_correct_month</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">valid_servicios</span> <span class="o">|</span> <span class="n">valid_productos</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">conditions</span></div>
+
+    
+<div class="viewcode-block" id="ExecutedActivitiesManager.get_total_executed_activities_data_frame">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_total_executed_activities_data_frame">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_total_executed_activities_data_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">months</span><span class="p">,</span> <span class="n">line_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Consolida todas las actividades ejecutadas de varios meses en un solo DataFrame.</span>
+
+<span class="sd">        Añade columnas calculadas para el costo total con y sin B&amp;H (Burning &amp;</span>
+<span class="sd">        Handling).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">servicios_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_Servicios&#39;</span>
+        <span class="n">productos_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_Productos&#39;</span>
+        <span class="n">b_and_h_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">line_name</span><span class="si">}</span><span class="s1">_B&amp;H&#39;</span>
+        <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">months</span><span class="p">:</span>
+            <span class="n">df_month</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_executed_activities_data_frame_by_month</span><span class="p">(</span><span class="n">month</span><span class="p">,</span> <span class="n">line_name</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_month</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">df_month</span><span class="p">[</span><span class="n">col</span><span class="p">]):</span>
+                    <span class="n">df_month</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_month</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">df_month</span><span class="p">[</span><span class="s1">&#39;Total sin B&amp;H&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_month</span><span class="p">[</span><span class="n">servicios_col</span><span class="p">]</span> <span class="o">+</span> <span class="n">df_month</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">productos_col</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">b_and_h_col</span> <span class="ow">in</span> <span class="n">df_month</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">df_month</span><span class="p">[</span><span class="s1">&#39;Total con B&amp;H&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_month</span><span class="p">[</span><span class="n">servicios_col</span><span class="p">]</span> <span class="o">+</span> <span class="n">df_month</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">productos_col</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">df_month</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">b_and_h_col</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">df_month</span><span class="p">[</span><span class="s1">&#39;Total con B&amp;H&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_month</span><span class="p">[</span><span class="s1">&#39;Total sin B&amp;H&#39;</span><span class="p">]</span>
+            <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_month</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dfs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2025, Cristian Zambrano.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

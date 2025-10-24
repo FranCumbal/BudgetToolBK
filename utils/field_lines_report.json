@@ -1,0 +1,105 @@
+[
+    {
+        "title": "ITEM 104 Std. Valve",
+        "service_type": "schedule_without_categorizer",
+        "zone": "N/A",
+        "line_type": "field"
+    },
+    {
+        "title": "ITEM 66 CTU Limpieza ESP",
+        "service_type": "schedule_without_categorizer",
+        "zone": "south",
+        "line_type": "field",
+        "class": "VarilleraReport"
+    },
+    {
+        "title": "ITEM 68 CTU Estimulación Productor",
+        "service_type": "schedule_without_categorizer",
+        "zone": "south",
+        "line_type": "field",
+        "class": "VarilleraReport"
+    },
+    {
+        "title": "ITEM 70 CTU Estimulación Inyector",
+        "service_type": "schedule_without_categorizer",
+        "zone": "south",
+        "line_type": "field",
+        "class": "VarilleraReport"
+    },
+    {
+        "title": "ITEM 49 Slick Line",
+        "service_type": "schedule_with_categorizer",
+        "zone": "N/A",
+        "line_type": "field",
+        "class": "SlickAndBacheoReport",
+        "categoria_1": 15000,
+        "categoria_2": 30000,
+        "categoria_3": 45000
+    },
+    {
+        "title": "ITEM 104 Varillera",
+        "service_type": "schedule_without_categorizer",
+        "zone": "N/A",
+        "line_type": "field",
+        "class": "VarilleraReport"
+    },
+    {
+        "title": "ITEM 65 Bacheo Anular",
+        "service_type": "schedule_with_categorizer",
+        "zone": "N/A",
+        "line_type": "field",
+        "class": "SlickAndBacheoReport",
+        "categoria_1": 17000,
+        "categoria_2": 32000,
+        "categoria_3": 49000
+    },
+    {
+        "title": "ITEM 114 Build up",
+        "service_type": "schedule_without_categorizer",
+        "zone": "N/A",
+        "line_type": "field"
+    },
+    {
+        "title": "ITEM 100 Echometer",
+        "service_type": "schedule_without_categorizer",
+        "zone": "N/A",
+        "line_type": "field",
+        "class": "EchometerReport"
+    },
+    {
+        "title": "ITEM 59 ILT",
+        "service_type": "schedule_without_categorizer",
+        "zone": "N/A",
+        "line_type": "field"
+    },
+    {
+        "title": "ITEM 60 PLT",
+        "service_type": "schedule_without_categorizer",
+        "zone": "N/A",
+        "line_type": "field"
+    },
+    {
+        "title": "ITM 63 Prueba Tuberia",
+        "service_type": "schedule_without_categorizer",
+        "zone": "N/A",
+        "line_type": "field"
+    },
+    {
+        "title": "ITEM 64 SRT",
+        "service_type": "schedule_without_categorizer",
+        "zone": "N/A",
+        "line_type": "field"
+    },
+    {
+        "title": "ITEM 62 Reg. Corr.",
+        "service_type": "schedule_without_categorizer",
+        "zone": "N/A",
+        "line_type": "field"
+    },
+    {
+        "title": "Field Leader Line (Consolidated)",
+        "class": "FieldLeadLineReport",
+        "is_consolidated": true,
+        "line_type": "field" 
+    }
+]

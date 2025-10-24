@@ -1,0 +1,187 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>logic.field_lines.reports.echometer_report &mdash; documentación de Budget Tool Phase II - 2025</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=7005c00d"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/translations.js?v=f85f4cfb"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../../../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Budget Tool Phase II
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contenidos:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reports.html">Reportes de Campo</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Budget Tool Phase II</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Código de módulo</a></li>
+      <li class="breadcrumb-item active">logic.field_lines.reports.echometer_report</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fuente para logic.field_lines.reports.echometer_report</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">logic.field_lines.reports.field_report</span><span class="w"> </span><span class="kn">import</span> <span class="n">FieldReport</span>
+
+
+<div class="viewcode-block" id="EchometerReport">
+<a class="viewcode-back" href="../../../../reports.html#logic.field_lines.reports.echometer_report.EchometerReport">[documentos]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EchometerReport</span><span class="p">(</span><span class="n">FieldReport</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reporte especializado para la línea de servicio &#39;Echometer&#39;.</span>
+
+<span class="sd">    Hereda de FieldReport y fija el tipo de línea, permitiendo generar</span>
+<span class="sd">    reportes y análisis de datos específicos para mediciones con Echometer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="EchometerReport.get_data_sources">
+<a class="viewcode-back" href="../../../../reports.html#logic.field_lines.reports.echometer_report.EchometerReport.get_data_sources">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_data_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sobrescribe el método base para proporcionar fuentes de datos específicas de Echometer.</span>
+
+<span class="sd">        Reemplaza los DataFrames de actividades ejecutadas (mensuales y acumuladas)</span>
+<span class="sd">        con versiones que leen los datos de una columna específica del Excel,</span>
+<span class="sd">        adaptándose a la forma en que se registran las actividades de Echometer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sources</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_data_sources</span><span class="p">()</span>
+        <span class="n">sources</span><span class="p">[</span><span class="s2">&quot;executed_activities&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_executed_activities_accumulated_df_by_column_from_excel</span><span class="p">()</span>
+        <span class="n">sources</span><span class="p">[</span><span class="s2">&quot;executed_activities_monthly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_executed_activities_df_by_column_from_excel_monthly_distributed</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">sources</span></div>
+
+
+<div class="viewcode-block" id="EchometerReport.get_executed_activities_df_by_column_from_excel_monthly_distributed">
+<a class="viewcode-back" href="../../../../reports.html#logic.field_lines.reports.echometer_report.EchometerReport.get_executed_activities_df_by_column_from_excel_monthly_distributed">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_executed_activities_df_by_column_from_excel_monthly_distributed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Obtiene las actividades ejecutadas distribuidas mensualmente desde Excel.</span>
+
+<span class="sd">        Utiliza el gestor de actividades ejecutadas para leer los datos de una</span>
+<span class="sd">        columna específica del archivo Excel y los distribuye por mes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">meses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_months_data</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">executed_activities_manager</span><span class="o">.</span><span class="n">get_executed_activities_df_by_column_from_excel_monthly_distributed</span><span class="p">(</span><span class="n">meses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="EchometerReport.get_executed_activities_accumulated_df_by_column_from_excel">
+<a class="viewcode-back" href="../../../../reports.html#logic.field_lines.reports.echometer_report.EchometerReport.get_executed_activities_accumulated_df_by_column_from_excel">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_executed_activities_accumulated_df_by_column_from_excel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Obtiene el acumulado de actividades ejecutadas desde una columna de Excel.</span>
+
+<span class="sd">        Calcula el acumulado mes a mes de las actividades ejecutadas que se</span>
+<span class="sd">        obtienen de una columna específica del archivo Excel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">meses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_months_data</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">executed_activities_manager</span><span class="o">.</span><span class="n">get_executed_activities_accumulated_df_by_column_from_excel</span><span class="p">(</span><span class="n">meses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="EchometerReport.generate_executed_activities_data_frame_by_month">
+<a class="viewcode-back" href="../../../../reports.html#logic.field_lines.reports.echometer_report.EchometerReport.generate_executed_activities_data_frame_by_month">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_executed_activities_data_frame_by_month</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Genera el DataFrame de actividades ejecutadas por mes sumando los valores.</span>
+
+<span class="sd">        Sobrescribe el método base para utilizar una lógica de suma específica</span>
+<span class="sd">        para las actividades de Echometer, obteniendo el total mensual.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">meses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_months_data</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">executed_activities_manager</span><span class="o">.</span><span class="n">_get_executed_activities_sum_by_month</span><span class="p">(</span><span class="n">meses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="EchometerReport.generate_scheduled_executed_activities_accumulated_data_frame">
+<a class="viewcode-back" href="../../../../reports.html#logic.field_lines.reports.echometer_report.EchometerReport.generate_scheduled_executed_activities_accumulated_data_frame">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_scheduled_executed_activities_accumulated_data_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Genera el DataFrame de actividades proyectadas (ejecutadas + planeadas) acumuladas.</span>
+
+<span class="sd">        Sobrescribe el método base para usar el cálculo de actividades ejecutadas</span>
+<span class="sd">        específico de Echometer como punto de partida para la proyección futura.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">executed_activities_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_executed_activities_accumulated_df_by_column_from_excel</span><span class="p">()</span>
+        <span class="n">last_value</span> <span class="o">=</span> <span class="n">executed_activities_df</span><span class="p">[</span><span class="n">executed_activities_df</span><span class="p">[</span><span class="s1">&#39;Executed Activities&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">][</span><span class="s1">&#39;Executed Activities&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">executed_activities_df</span><span class="p">[</span><span class="n">executed_activities_df</span><span class="p">[</span><span class="s1">&#39;Executed Activities&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">empty</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">last_valid_month</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">executed_activities_manager</span><span class="o">.</span><span class="n">get_last_index_month_in_excel</span><span class="p">()</span>
+        <span class="n">scheduled_activities_accumulated_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">planned_activities_manager</span><span class="o">.</span><span class="n">get_df_scheduled_executed_activities_accumulated</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">service_type</span><span class="p">,</span> <span class="n">last_value</span><span class="p">,</span> <span class="n">last_valid_month</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">scheduled_activities_accumulated_df</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2025, Cristian Zambrano.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

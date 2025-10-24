@@ -1,0 +1,18 @@
+{
+    "C1.1":  {"types": ["Pulling Simple", "Pulling Simple (PS)"], "min": 10000, "max": 70000},
+    "C1.2":  {"types": ["PS + Recañoneo WL"], "min": 50000},
+    "C1.3":  {"types": ["Pulling Simple + Recanoneo TCP + Evaluacion"], "min": 0},
+    "C1.4":  {"types": ["Pilling Simple + recuperacion de BHA selectivo"], "min": 0},
+    "C1.5":  {"types": ["Pulling Pesca"], "min": 50000},
+    "C1.6":  {"types": ["Pulling Pesca + Squeeze", "PS + Squeeze"], "min": 0},
+    "C1.7":  {"types": ["Pulling Simple + Estimulacion + Evaluacion", "PS + Estimulación + Evaluación"], "min": 0},
+    "C1.8":  {"types": ["Pulling (Hidraulico a Mecanico)"], "min": 0},
+    "C1.9":  {"types": ["Cambio Sistema Artificial Lift (Hidraulico a electrico)"], "min": 0},
+    "C1.10": {"types": ["WO Dual"], "min": 0},
+    "C1.11": {"types": ["PS - Adecuación pozo Reentry"], "min": 0},
+    "C1.12": {"types": ["Pulling Simple + Adquisición de equipos Nuevos de Amplio Rango", "PS + Adquisición de equipos Nuevos de Amplio Rango"], "min": 0},
+    "C1.13": {"types": ["1.13.- Pulling Simple + Adquisición de equipos Nuevo para pozos de Bajo Caudal", "1.13.- Pulling Simple + Adquisición de equipos Nuevos para pozos de Bajo Caudal"], "min": 0},
+    "C1.14": {"types": ["PS Inyector o Reinyector Sencillo"], "min": 0},
+    "C1.15": {"types": ["Pulling Simple Pozo Inyector Selectivo", "W9 Conversion de Productor a Inyector", "W9 Conversion de Productor a Inyector (Piloto)"], "min": 0},
+    "C1.16": {"types": ["W12 Conversión a Productor- Inyector (Dump flooding)"], "min": 0}
+}

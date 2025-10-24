@@ -1,0 +1,1077 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reportes de Campo &mdash; documentación de Budget Tool Phase II - 2025</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7005c00d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=f85f4cfb"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="prev" title="Budget Tool Phase II documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Budget Tool Phase II
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contenidos:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Reportes de Campo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-logic.field_lines.reports.field_report">Reporte Base</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport"><code class="docutils literal notranslate"><span class="pre">FieldReport</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.anual_initial_planned_loader"><code class="docutils literal notranslate"><span class="pre">FieldReport.anual_initial_planned_loader</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.cost_by_activity"><code class="docutils literal notranslate"><span class="pre">FieldReport.cost_by_activity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.executed_activities_manager"><code class="docutils literal notranslate"><span class="pre">FieldReport.executed_activities_manager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.field_activities_coordinator"><code class="docutils literal notranslate"><span class="pre">FieldReport.field_activities_coordinator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.field_data_service"><code class="docutils literal notranslate"><span class="pre">FieldReport.field_data_service</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.field_graph_service"><code class="docutils literal notranslate"><span class="pre">FieldReport.field_graph_service</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_accumulated_executed_activities_data_frame"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_accumulated_executed_activities_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_accumulated_planned_activities_data_frame"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_accumulated_planned_activities_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_accumulated_real_cost_data_frame"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_accumulated_real_cost_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_budget"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_combined_cpi_spi_dataframe"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_combined_cpi_spi_dataframe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_cpae_data_frame_to_budget"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_cpae_data_frame_to_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_cpi_dataframe"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_cpi_dataframe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_deviations"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_deviations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_executed_activities_and_cost_data_frame_by_month"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_executed_activities_and_cost_data_frame_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_executed_activities_data_frame_by_month"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_executed_activities_data_frame_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_forecast"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_forecast()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_graph"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_planned_activities_data_frame_by_month"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_planned_activities_data_frame_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_scheduled_executed_activities_accumulated_data_frame"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_scheduled_executed_activities_accumulated_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_scheduled_executed_activities_by_month"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_scheduled_executed_activities_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_spi_dataframe"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_spi_dataframe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.generate_summary_data_frame"><code class="docutils literal notranslate"><span class="pre">FieldReport.generate_summary_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.get_approved_budget_activities"><code class="docutils literal notranslate"><span class="pre">FieldReport.get_approved_budget_activities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.get_automatic_distribution"><code class="docutils literal notranslate"><span class="pre">FieldReport.get_automatic_distribution()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.get_balances"><code class="docutils literal notranslate"><span class="pre">FieldReport.get_balances()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.get_cost_by_activity"><code class="docutils literal notranslate"><span class="pre">FieldReport.get_cost_by_activity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.get_cpi_spi_info"><code class="docutils literal notranslate"><span class="pre">FieldReport.get_cpi_spi_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.get_data_sources"><code class="docutils literal notranslate"><span class="pre">FieldReport.get_data_sources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.get_executed_activities_data_frame_by_month"><code class="docutils literal notranslate"><span class="pre">FieldReport.get_executed_activities_data_frame_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.get_monthly_summary_dataframe"><code class="docutils literal notranslate"><span class="pre">FieldReport.get_monthly_summary_dataframe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.get_total_executed_activities"><code class="docutils literal notranslate"><span class="pre">FieldReport.get_total_executed_activities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.get_year"><code class="docutils literal notranslate"><span class="pre">FieldReport.get_year()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.manual_planning_service"><code class="docutils literal notranslate"><span class="pre">FieldReport.manual_planning_service</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.planned_activities_manager"><code class="docutils literal notranslate"><span class="pre">FieldReport.planned_activities_manager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.reload_approved_budget_data"><code class="docutils literal notranslate"><span class="pre">FieldReport.reload_approved_budget_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.reload_executed_activities_manager"><code class="docutils literal notranslate"><span class="pre">FieldReport.reload_executed_activities_manager()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.reload_manual_planning_service"><code class="docutils literal notranslate"><span class="pre">FieldReport.reload_manual_planning_service()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.reload_planned_activities_manager"><code class="docutils literal notranslate"><span class="pre">FieldReport.reload_planned_activities_manager()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.field_report.FieldReport.year"><code class="docutils literal notranslate"><span class="pre">FieldReport.year</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-logic.field_lines.reports.varillera_report">Reportes Especializados</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#logic.field_lines.reports.varillera_report.VarilleraReport"><code class="docutils literal notranslate"><span class="pre">VarilleraReport</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.varillera_report.VarilleraReport.generate_forecast"><code class="docutils literal notranslate"><span class="pre">VarilleraReport.generate_forecast()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.varillera_report.VarilleraReport.generate_projected_data_frame"><code class="docutils literal notranslate"><span class="pre">VarilleraReport.generate_projected_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.varillera_report.VarilleraReport.generate_real_cost_data_frame"><code class="docutils literal notranslate"><span class="pre">VarilleraReport.generate_real_cost_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.varillera_report.VarilleraReport.generate_scheduled_executed_activities_accumulated_data_frame"><code class="docutils literal notranslate"><span class="pre">VarilleraReport.generate_scheduled_executed_activities_accumulated_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.varillera_report.VarilleraReport.generate_scheduled_executed_activities_by_month"><code class="docutils literal notranslate"><span class="pre">VarilleraReport.generate_scheduled_executed_activities_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.varillera_report.VarilleraReport.get_data_sources"><code class="docutils literal notranslate"><span class="pre">VarilleraReport.get_data_sources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.varillera_report.VarilleraReport.get_df_scheduled_executed_activities"><code class="docutils literal notranslate"><span class="pre">VarilleraReport.get_df_scheduled_executed_activities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.varillera_report.VarilleraReport.get_df_scheduled_executed_activities_validated"><code class="docutils literal notranslate"><span class="pre">VarilleraReport.get_df_scheduled_executed_activities_validated()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.varillera_report.VarilleraReport.get_projected_adjusted_by_month"><code class="docutils literal notranslate"><span class="pre">VarilleraReport.get_projected_adjusted_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.varillera_report.VarilleraReport.get_projected_adjusted_data_frame"><code class="docutils literal notranslate"><span class="pre">VarilleraReport.get_projected_adjusted_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.varillera_report.VarilleraReport.get_total_scheduled_executed_activities_cost_by_month"><code class="docutils literal notranslate"><span class="pre">VarilleraReport.get_total_scheduled_executed_activities_cost_by_month()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#logic.field_lines.reports.echometer_report.EchometerReport"><code class="docutils literal notranslate"><span class="pre">EchometerReport</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.echometer_report.EchometerReport.generate_executed_activities_data_frame_by_month"><code class="docutils literal notranslate"><span class="pre">EchometerReport.generate_executed_activities_data_frame_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.echometer_report.EchometerReport.generate_scheduled_executed_activities_accumulated_data_frame"><code class="docutils literal notranslate"><span class="pre">EchometerReport.generate_scheduled_executed_activities_accumulated_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.echometer_report.EchometerReport.get_data_sources"><code class="docutils literal notranslate"><span class="pre">EchometerReport.get_data_sources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.echometer_report.EchometerReport.get_executed_activities_accumulated_df_by_column_from_excel"><code class="docutils literal notranslate"><span class="pre">EchometerReport.get_executed_activities_accumulated_df_by_column_from_excel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.echometer_report.EchometerReport.get_executed_activities_df_by_column_from_excel_monthly_distributed"><code class="docutils literal notranslate"><span class="pre">EchometerReport.get_executed_activities_df_by_column_from_excel_monthly_distributed()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport"><code class="docutils literal notranslate"><span class="pre">SlickAndBacheoReport</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.clasificar_valor_servicio"><code class="docutils literal notranslate"><span class="pre">SlickAndBacheoReport.clasificar_valor_servicio()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.generate_budget_with_static_cpae"><code class="docutils literal notranslate"><span class="pre">SlickAndBacheoReport.generate_budget_with_static_cpae()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.get_categorizer_executed_activities_by_month"><code class="docutils literal notranslate"><span class="pre">SlickAndBacheoReport.get_categorizer_executed_activities_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.get_data_sources"><code class="docutils literal notranslate"><span class="pre">SlickAndBacheoReport.get_data_sources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.get_executed_activities_data_frame_by_month"><code class="docutils literal notranslate"><span class="pre">SlickAndBacheoReport.get_executed_activities_data_frame_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.static_cpae_value"><code class="docutils literal notranslate"><span class="pre">SlickAndBacheoReport.static_cpae_value()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-services.field_lines_services.executed_plan">Servicios Principales</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#services.field_lines_services.executed_plan.ExecutedActivitiesPlan"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesPlan</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_plan.ExecutedActivitiesPlan.get_executed_data_from_excel"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesPlan.get_executed_data_from_excel()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.convert_columns_to_numeric"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.convert_columns_to_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_accumulated_real_cost_data_frame"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.generate_accumulated_real_cost_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_executed_activities_data_frame"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.generate_executed_activities_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_executed_activities_data_frame_to_draw"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.generate_executed_activities_data_frame_to_draw()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_real_cost_data_frame"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.generate_real_cost_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_conditions_to_check_services_and_product"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.get_conditions_to_check_services_and_product()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_conditions_to_check_services_and_product_to_draw"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.get_conditions_to_check_services_and_product_to_draw()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_echometer_executed_activities_monthly"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.get_echometer_executed_activities_monthly()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_accumulated_df_by_column_from_excel"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.get_executed_activities_accumulated_df_by_column_from_excel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_by_month"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.get_executed_activities_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_by_month_to_draw"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.get_executed_activities_by_month_to_draw()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_data_frame_by_month"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.get_executed_activities_data_frame_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_data_frame_by_month_to_draw"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.get_executed_activities_data_frame_by_month_to_draw()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_df_by_column_from_excel_monthly_distributed"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.get_executed_activities_df_by_column_from_excel_monthly_distributed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_last_index_month_in_excel"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.get_last_index_month_in_excel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_total_executed_activities_data_frame"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.get_total_executed_activities_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_total_real_cost_by_month"><code class="docutils literal notranslate"><span class="pre">ExecutedActivitiesManager.get_total_real_cost_by_month()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager"><code class="docutils literal notranslate"><span class="pre">PlannedActivitiesManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_budget_data_frame"><code class="docutils literal notranslate"><span class="pre">PlannedActivitiesManager.generate_budget_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_cpae_data_frame"><code class="docutils literal notranslate"><span class="pre">PlannedActivitiesManager.generate_cpae_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_cpae_data_frame_to_budget"><code class="docutils literal notranslate"><span class="pre">PlannedActivitiesManager.generate_cpae_data_frame_to_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_forecast_from_csv"><code class="docutils literal notranslate"><span class="pre">PlannedActivitiesManager.generate_forecast_from_csv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_planned_activities_data_frame"><code class="docutils literal notranslate"><span class="pre">PlannedActivitiesManager.generate_planned_activities_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_activities_planned_by_month"><code class="docutils literal notranslate"><span class="pre">PlannedActivitiesManager.get_activities_planned_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_budget_by_month"><code class="docutils literal notranslate"><span class="pre">PlannedActivitiesManager.get_budget_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_cpae_by_month"><code class="docutils literal notranslate"><span class="pre">PlannedActivitiesManager.get_cpae_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_cpae_to_budget_by_month"><code class="docutils literal notranslate"><span class="pre">PlannedActivitiesManager.get_cpae_to_budget_by_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_df_scheduled_executed_activities"><code class="docutils literal notranslate"><span class="pre">PlannedActivitiesManager.get_df_scheduled_executed_activities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_df_scheduled_executed_activities_accumulated"><code class="docutils literal notranslate"><span class="pre">PlannedActivitiesManager.get_df_scheduled_executed_activities_accumulated()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_df_scheduled_executed_activities_accumulated_varillera"><code class="docutils literal notranslate"><span class="pre">PlannedActivitiesManager.get_df_scheduled_executed_activities_accumulated_varillera()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_scheduled_executed_activities_by_month"><code class="docutils literal notranslate"><span class="pre">PlannedActivitiesManager.get_scheduled_executed_activities_by_month()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator"><code class="docutils literal notranslate"><span class="pre">FieldActivitiesCoordinator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator.apply_projected_adjustment_logic"><code class="docutils literal notranslate"><span class="pre">FieldActivitiesCoordinator.apply_projected_adjustment_logic()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator.generate_projected_data_frame"><code class="docutils literal notranslate"><span class="pre">FieldActivitiesCoordinator.generate_projected_data_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator.get_projected_adjusted_data_frame"><code class="docutils literal notranslate"><span class="pre">FieldActivitiesCoordinator.get_projected_adjusted_data_frame()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#services.field_lines_services.leader_line_service.LeaderLineService"><code class="docutils literal notranslate"><span class="pre">LeaderLineService</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.leader_line_service.LeaderLineService.generate_aggregated_dataframe"><code class="docutils literal notranslate"><span class="pre">LeaderLineService.generate_aggregated_dataframe()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService"><code class="docutils literal notranslate"><span class="pre">FieldGraphGeneratorService</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService.generate_field_forecast_graph"><code class="docutils literal notranslate"><span class="pre">FieldGraphGeneratorService.generate_field_forecast_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService.toggle_initial_cost"><code class="docutils literal notranslate"><span class="pre">FieldGraphGeneratorService.toggle_initial_cost()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Budget Tool Phase II</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Reportes de Campo</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/reports.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="reportes-de-campo">
+<h1>Reportes de Campo<a class="headerlink" href="#reportes-de-campo" title="Link to this heading"></a></h1>
+<p>Esta sección documenta las clases principales responsables de generar los reportes.</p>
+<section id="module-logic.field_lines.reports.field_report">
+<span id="reporte-base"></span><h2>Reporte Base<a class="headerlink" href="#module-logic.field_lines.reports.field_report" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logic.field_lines.reports.field_report.</span></span><span class="sig-name descname"><span class="pre">FieldReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_graph_service</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService" title="services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService"><span class="pre">FieldGraphGeneratorService</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planned_activities_manager</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager" title="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager"><span class="pre">PlannedActivitiesManager</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">executed_activities_manager</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager" title="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager"><span class="pre">ExecutedActivitiesManager</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual_planning_service</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ManualPlanningService</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_data_service</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FieldDataService</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_activities_coordinator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator" title="services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator"><span class="pre">FieldActivitiesCoordinator</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport" title="Link to this definition"></a></dt>
+<dd><p>Clase que encapsula la lógica para generar un reporte completo de una línea de campo.</p>
+<p>Esta clase centraliza el acceso y la manipulación de datos relacionados con
+actividades planeadas, ejecutadas, presupuestos y proyecciones, actuando como
+una fachada para diversos servicios y gestores de datos.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.anual_initial_planned_loader">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">anual_initial_planned_loader</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">AnnualPTALoader</span></em><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.anual_initial_planned_loader"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.anual_initial_planned_loader" title="Link to this definition"></a></dt>
+<dd><p>Carga y devuelve de forma perezosa el cargador de PTA anual inicial.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.cost_by_activity">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cost_by_activity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.cost_by_activity" title="Link to this definition"></a></dt>
+<dd><p>Calcula y cachea el costo por actividad (CPAE) para el año del reporte.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.executed_activities_manager">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">executed_activities_manager</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager" title="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager"><span class="pre">ExecutedActivitiesManager</span></a></em><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.executed_activities_manager" title="Link to this definition"></a></dt>
+<dd><p>Inicializa y devuelve de forma perezosa el gestor de actividades ejecutadas.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.field_activities_coordinator">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">field_activities_coordinator</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator" title="services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator"><span class="pre">FieldActivitiesCoordinator</span></a></em><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.field_activities_coordinator" title="Link to this definition"></a></dt>
+<dd><p>Inicializa y devuelve de forma perezosa el coordinador de actividades de campo.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.field_data_service">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">field_data_service</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">FieldDataService</span></em><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.field_data_service" title="Link to this definition"></a></dt>
+<dd><p>Inicializa y devuelve de forma perezosa el servicio de datos de campo.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.field_graph_service">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">field_graph_service</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService" title="services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService"><span class="pre">FieldGraphGeneratorService</span></a></em><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.field_graph_service" title="Link to this definition"></a></dt>
+<dd><p>Inicializa y devuelve de forma perezosa el servicio de generación de gráficos.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_accumulated_executed_activities_data_frame">
+<span class="sig-name descname"><span class="pre">generate_accumulated_executed_activities_data_frame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_accumulated_executed_activities_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_accumulated_executed_activities_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con el acumulado de actividades ejecutadas mes a mes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_accumulated_planned_activities_data_frame">
+<span class="sig-name descname"><span class="pre">generate_accumulated_planned_activities_data_frame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_accumulated_planned_activities_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_accumulated_planned_activities_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con el acumulado de actividades planeadas mes a mes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_accumulated_real_cost_data_frame">
+<span class="sig-name descname"><span class="pre">generate_accumulated_real_cost_data_frame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_accumulated_real_cost_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_accumulated_real_cost_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con el costo real acumulado mes a mes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_budget">
+<span class="sig-name descname"><span class="pre">generate_budget</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_budget"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_budget" title="Link to this definition"></a></dt>
+<dd><p>Genera el DataFrame del presupuesto mensual basado en las actividades planeadas y el CPAE.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_combined_cpi_spi_dataframe">
+<span class="sig-name descname"><span class="pre">generate_combined_cpi_spi_dataframe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_combined_cpi_spi_dataframe"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_combined_cpi_spi_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame combinado con CPI y SPI</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_cpae_data_frame_to_budget">
+<span class="sig-name descname"><span class="pre">generate_cpae_data_frame_to_budget</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_cpae_data_frame_to_budget"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_cpae_data_frame_to_budget" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame del costo por actividad (CPAE) por mes para el presupuesto.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_cpi_dataframe">
+<span class="sig-name descname"><span class="pre">generate_cpi_dataframe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_cpi_dataframe"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_cpi_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con el Índice de Desempeño de Costos (CPI) mensual.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_deviations">
+<span class="sig-name descname"><span class="pre">generate_deviations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_deviations"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_deviations" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con las desviaciones (actualmente es un placeholder).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_executed_activities_and_cost_data_frame_by_month">
+<span class="sig-name descname"><span class="pre">generate_executed_activities_and_cost_data_frame_by_month</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_executed_activities_and_cost_data_frame_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_executed_activities_and_cost_data_frame_by_month" title="Link to this definition"></a></dt>
+<dd><p>Crea un DataFrame que combina actividades ejecutadas y costos reales por mes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_executed_activities_data_frame_by_month">
+<span class="sig-name descname"><span class="pre">generate_executed_activities_data_frame_by_month</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_executed_activities_data_frame_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_executed_activities_data_frame_by_month" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con el número de actividades ejecutadas por mes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_forecast">
+<span class="sig-name descname"><span class="pre">generate_forecast</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_forecast"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_forecast" title="Link to this definition"></a></dt>
+<dd><p>Genera el DataFrame del forecast (proyección) de costos.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_graph">
+<span class="sig-name descname"><span class="pre">generate_graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_graph"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_graph" title="Link to this definition"></a></dt>
+<dd><p>Genera el gráfico de forecast de la línea utilizando todas las fuentes de datos.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_planned_activities_data_frame_by_month">
+<span class="sig-name descname"><span class="pre">generate_planned_activities_data_frame_by_month</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_planned_activities_data_frame_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_planned_activities_data_frame_by_month" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con el número de actividades planeadas manualmente por mes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_scheduled_executed_activities_accumulated_data_frame">
+<span class="sig-name descname"><span class="pre">generate_scheduled_executed_activities_accumulated_data_frame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_scheduled_executed_activities_accumulated_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_scheduled_executed_activities_accumulated_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con el acumulado de actividades proyectadas (ejecutadas + planeadas).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_scheduled_executed_activities_by_month">
+<span class="sig-name descname"><span class="pre">generate_scheduled_executed_activities_by_month</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_scheduled_executed_activities_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_scheduled_executed_activities_by_month" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con las actividades proyectadas (ejecutadas + planeadas) por mes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_spi_dataframe">
+<span class="sig-name descname"><span class="pre">generate_spi_dataframe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_spi_dataframe"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_spi_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Genera DataFrame de SPI basado en actividades planeadas y ejecutadas acumuladas</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.generate_summary_data_frame">
+<span class="sig-name descname"><span class="pre">generate_summary_data_frame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.generate_summary_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.generate_summary_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Crea un DataFrame resumen con los principales indicadores de la línea.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.get_approved_budget_activities">
+<span class="sig-name descname"><span class="pre">get_approved_budget_activities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.get_approved_budget_activities"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.get_approved_budget_activities" title="Link to this definition"></a></dt>
+<dd><p>Obtiene y cachea el DataFrame de actividades y presupuesto aprobados para la línea.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.get_automatic_distribution">
+<span class="sig-name descname"><span class="pre">get_automatic_distribution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.get_automatic_distribution"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.get_automatic_distribution" title="Link to this definition"></a></dt>
+<dd><p>Distribuye automáticamente las actividades aprobadas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.get_balances">
+<span class="sig-name descname"><span class="pre">get_balances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forecast_activities_accumulated</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approved_activities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_forecast_cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approved_budget</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.get_balances"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.get_balances" title="Link to this definition"></a></dt>
+<dd><p>Calcula los balances de actividades y costos entre lo aprobado y lo proyectado.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.get_cost_by_activity">
+<span class="sig-name descname"><span class="pre">get_cost_by_activity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.get_cost_by_activity"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.get_cost_by_activity" title="Link to this definition"></a></dt>
+<dd><p>Devuelve el costo por actividad (CPAE) cacheado.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.get_cpi_spi_info">
+<span class="sig-name descname"><span class="pre">get_cpi_spi_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.get_cpi_spi_info"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.get_cpi_spi_info" title="Link to this definition"></a></dt>
+<dd><p>Obtiene la información de CPI y SPI para el mes actual y el siguiente.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.get_data_sources">
+<span class="sig-name descname"><span class="pre">get_data_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.get_data_sources"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.get_data_sources" title="Link to this definition"></a></dt>
+<dd><p>Recopila y devuelve un diccionario con todos los DataFrames necesarios para el reporte.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.get_executed_activities_data_frame_by_month">
+<span class="sig-name descname"><span class="pre">get_executed_activities_data_frame_by_month</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.get_executed_activities_data_frame_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.get_executed_activities_data_frame_by_month" title="Link to this definition"></a></dt>
+<dd><p>Devuelve el DataFrame de actividades ejecutadas por mes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.get_monthly_summary_dataframe">
+<span class="sig-name descname"><span class="pre">get_monthly_summary_dataframe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.get_monthly_summary_dataframe"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.get_monthly_summary_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Crea y devuelve un DataFrame con el resumen mensual de todos los datos clave.
+Esta es la base para la agregación del Reporte Líder.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.get_total_executed_activities">
+<span class="sig-name descname"><span class="pre">get_total_executed_activities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.get_total_executed_activities"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.get_total_executed_activities" title="Link to this definition"></a></dt>
+<dd><p>Obtiene el total de actividades ejecutadas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.get_year">
+<span class="sig-name descname"><span class="pre">get_year</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.get_year"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.get_year" title="Link to this definition"></a></dt>
+<dd><p>Devuelve el año del reporte.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.manual_planning_service">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">manual_planning_service</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ManualPlanningService</span></em><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.manual_planning_service" title="Link to this definition"></a></dt>
+<dd><p>Inicializa y devuelve de forma perezosa el servicio de planificación manual.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.planned_activities_manager">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">planned_activities_manager</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager" title="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager"><span class="pre">PlannedActivitiesManager</span></a></em><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.planned_activities_manager" title="Link to this definition"></a></dt>
+<dd><p>Inicializa y devuelve de forma perezosa el gestor de actividades planeadas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.reload_approved_budget_data">
+<span class="sig-name descname"><span class="pre">reload_approved_budget_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.reload_approved_budget_data"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.reload_approved_budget_data" title="Link to this definition"></a></dt>
+<dd><p>Limpia el caché interno de datos de presupuesto y CPAE</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.reload_executed_activities_manager">
+<span class="sig-name descname"><span class="pre">reload_executed_activities_manager</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.reload_executed_activities_manager"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.reload_executed_activities_manager" title="Link to this definition"></a></dt>
+<dd><p>Recarga del gestor de actividades ejecutadas, creando una nueva instancia que leerá los datos más recientes del archivo Excel de origen.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.reload_manual_planning_service">
+<span class="sig-name descname"><span class="pre">reload_manual_planning_service</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.reload_manual_planning_service"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.reload_manual_planning_service" title="Link to this definition"></a></dt>
+<dd><p>Recarga el servicio de planificación manual desde el archivo CSV.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.reload_planned_activities_manager">
+<span class="sig-name descname"><span class="pre">reload_planned_activities_manager</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/field_report.html#FieldReport.reload_planned_activities_manager"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.reload_planned_activities_manager" title="Link to this definition"></a></dt>
+<dd><p>Recarga el gestor de actividades planeadas para reflejar los datos más recientes.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logic.field_lines.reports.field_report.FieldReport.year">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">year</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#logic.field_lines.reports.field_report.FieldReport.year" title="Link to this definition"></a></dt>
+<dd><p>Determina y devuelve el año fiscal del reporte, ajustando si el mes actual es enero.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-logic.field_lines.reports.varillera_report">
+<span id="reportes-especializados"></span><h2>Reportes Especializados<a class="headerlink" href="#module-logic.field_lines.reports.varillera_report" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="logic.field_lines.reports.varillera_report.VarilleraReport">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logic.field_lines.reports.varillera_report.</span></span><span class="sig-name descname"><span class="pre">VarilleraReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/varillera_report.html#VarilleraReport"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.varillera_report.VarilleraReport" title="Link to this definition"></a></dt>
+<dd><p>Reporte especializado para la línea de servicio “Varillera”.</p>
+<p>Hereda de FieldReport pero sobrescribe la lógica de generación de proyecciones (forecast)
+para basarse en un archivo CSV de actividades programadas y validadas, en lugar
+de la planificación manual estándar.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.varillera_report.VarilleraReport.generate_forecast">
+<span class="sig-name descname"><span class="pre">generate_forecast</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/varillera_report.html#VarilleraReport.generate_forecast"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.varillera_report.VarilleraReport.generate_forecast" title="Link to this definition"></a></dt>
+<dd><p>Genera el DataFrame del forecast (proyección) usando la lógica específica de Varillera.</p>
+<p>Sobrescribe el método base para utilizar un cálculo de proyección que combina
+costos reales con costos de actividades programadas desde un archivo CSV.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.varillera_report.VarilleraReport.generate_projected_data_frame">
+<span class="sig-name descname"><span class="pre">generate_projected_data_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/varillera_report.html#VarilleraReport.generate_projected_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.varillera_report.VarilleraReport.generate_projected_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Crea el DataFrame de costos proyectados iniciales mes a mes.</p>
+<p>Para cada mes, combina el costo total de las actividades programadas y validadas
+(desde el CSV) con el costo real ejecutado hasta la fecha.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.varillera_report.VarilleraReport.generate_real_cost_data_frame">
+<span class="sig-name descname"><span class="pre">generate_real_cost_data_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/varillera_report.html#VarilleraReport.generate_real_cost_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.varillera_report.VarilleraReport.generate_real_cost_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Obtiene el DataFrame de costos reales por mes.</p>
+<p>Delega la llamada al gestor de actividades ejecutadas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.varillera_report.VarilleraReport.generate_scheduled_executed_activities_accumulated_data_frame">
+<span class="sig-name descname"><span class="pre">generate_scheduled_executed_activities_accumulated_data_frame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/varillera_report.html#VarilleraReport.generate_scheduled_executed_activities_accumulated_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.varillera_report.VarilleraReport.generate_scheduled_executed_activities_accumulated_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Genera el DataFrame acumulado de actividades proyectadas (ejecutadas + programadas).</p>
+<p>Sobrescribe el método base para usar una función de acumulación específica
+de Varillera que considera las actividades del archivo CSV.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.varillera_report.VarilleraReport.generate_scheduled_executed_activities_by_month">
+<span class="sig-name descname"><span class="pre">generate_scheduled_executed_activities_by_month</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/varillera_report.html#VarilleraReport.generate_scheduled_executed_activities_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.varillera_report.VarilleraReport.generate_scheduled_executed_activities_by_month" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con el conteo mensual de actividades programadas y validadas.</p>
+<p>Sobrescribe el método base para obtener el conteo de actividades desde el CSV.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.varillera_report.VarilleraReport.get_data_sources">
+<span class="sig-name descname"><span class="pre">get_data_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/logic/field_lines/reports/varillera_report.html#VarilleraReport.get_data_sources"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.varillera_report.VarilleraReport.get_data_sources" title="Link to this definition"></a></dt>
+<dd><p>Sobrescribe el método base para añadir fuentes de datos específicas de Varillera.</p>
+<p>Añade el “initial_approved_cost” (costo aprobado inicial) solo si el reporte
+corresponde al «ITEM 104 Varillera», manteniendo la flexibilidad para otras líneas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.varillera_report.VarilleraReport.get_df_scheduled_executed_activities">
+<span class="sig-name descname"><span class="pre">get_df_scheduled_executed_activities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/varillera_report.html#VarilleraReport.get_df_scheduled_executed_activities"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.varillera_report.VarilleraReport.get_df_scheduled_executed_activities" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con el conteo mensual de actividades programadas y validadas.</p>
+<p>Itera sobre cada mes, obtiene las actividades validadas del CSV y cuenta cuántas hay.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.varillera_report.VarilleraReport.get_df_scheduled_executed_activities_validated">
+<span class="sig-name descname"><span class="pre">get_df_scheduled_executed_activities_validated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/varillera_report.html#VarilleraReport.get_df_scheduled_executed_activities_validated"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.varillera_report.VarilleraReport.get_df_scheduled_executed_activities_validated" title="Link to this definition"></a></dt>
+<dd><p>Lee y filtra las actividades programadas desde un archivo CSV para un mes específico.</p>
+<p>Busca el archivo CSV correspondiente a la línea, lo lee, y filtra las filas
+que corresponden al mes solicitado y tienen una validación de “yes”.
+Maneja de forma segura el caso en que el archivo no exista.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.varillera_report.VarilleraReport.get_projected_adjusted_by_month">
+<span class="sig-name descname"><span class="pre">get_projected_adjusted_by_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/varillera_report.html#VarilleraReport.get_projected_adjusted_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.varillera_report.VarilleraReport.get_projected_adjusted_by_month" title="Link to this definition"></a></dt>
+<dd><p>Obtiene el valor del forecast ajustado para un mes y línea específicos.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.varillera_report.VarilleraReport.get_projected_adjusted_data_frame">
+<span class="sig-name descname"><span class="pre">get_projected_adjusted_data_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/varillera_report.html#VarilleraReport.get_projected_adjusted_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.varillera_report.VarilleraReport.get_projected_adjusted_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Orquesta la generación del forecast y aplica los ajustes finales.</p>
+<p>Primero, genera el DataFrame de costos proyectados y luego utiliza el coordinador
+de actividades para aplicar la lógica de ajuste (reemplazar con costos reales).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.varillera_report.VarilleraReport.get_total_scheduled_executed_activities_cost_by_month">
+<span class="sig-name descname"><span class="pre">get_total_scheduled_executed_activities_cost_by_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/varillera_report.html#VarilleraReport.get_total_scheduled_executed_activities_cost_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.varillera_report.VarilleraReport.get_total_scheduled_executed_activities_cost_by_month" title="Link to this definition"></a></dt>
+<dd><p>Calcula el costo total de las actividades programadas y validadas para un mes.</p>
+<p>Suma la columna “Net Total (USD)” del DataFrame de actividades validadas.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-logic.field_lines.reports.echometer_report">
+<dt class="sig sig-object py" id="logic.field_lines.reports.echometer_report.EchometerReport">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logic.field_lines.reports.echometer_report.</span></span><span class="sig-name descname"><span class="pre">EchometerReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_graph_service</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService" title="services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService"><span class="pre">FieldGraphGeneratorService</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planned_activities_manager</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager" title="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager"><span class="pre">PlannedActivitiesManager</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">executed_activities_manager</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager" title="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager"><span class="pre">ExecutedActivitiesManager</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual_planning_service</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ManualPlanningService</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_data_service</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FieldDataService</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_activities_coordinator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator" title="services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator"><span class="pre">FieldActivitiesCoordinator</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/echometer_report.html#EchometerReport"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.echometer_report.EchometerReport" title="Link to this definition"></a></dt>
+<dd><p>Reporte especializado para la línea de servicio “Echometer”.</p>
+<p>Hereda de FieldReport y fija el tipo de línea, permitiendo generar
+reportes y análisis de datos específicos para mediciones con Echometer.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.echometer_report.EchometerReport.generate_executed_activities_data_frame_by_month">
+<span class="sig-name descname"><span class="pre">generate_executed_activities_data_frame_by_month</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/echometer_report.html#EchometerReport.generate_executed_activities_data_frame_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.echometer_report.EchometerReport.generate_executed_activities_data_frame_by_month" title="Link to this definition"></a></dt>
+<dd><p>Genera el DataFrame de actividades ejecutadas por mes sumando los valores.</p>
+<p>Sobrescribe el método base para utilizar una lógica de suma específica
+para las actividades de Echometer, obteniendo el total mensual.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.echometer_report.EchometerReport.generate_scheduled_executed_activities_accumulated_data_frame">
+<span class="sig-name descname"><span class="pre">generate_scheduled_executed_activities_accumulated_data_frame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/echometer_report.html#EchometerReport.generate_scheduled_executed_activities_accumulated_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.echometer_report.EchometerReport.generate_scheduled_executed_activities_accumulated_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Genera el DataFrame de actividades proyectadas (ejecutadas + planeadas) acumuladas.</p>
+<p>Sobrescribe el método base para usar el cálculo de actividades ejecutadas
+específico de Echometer como punto de partida para la proyección futura.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.echometer_report.EchometerReport.get_data_sources">
+<span class="sig-name descname"><span class="pre">get_data_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/logic/field_lines/reports/echometer_report.html#EchometerReport.get_data_sources"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.echometer_report.EchometerReport.get_data_sources" title="Link to this definition"></a></dt>
+<dd><p>Sobrescribe el método base para proporcionar fuentes de datos específicas de Echometer.</p>
+<p>Reemplaza los DataFrames de actividades ejecutadas (mensuales y acumuladas)
+con versiones que leen los datos de una columna específica del Excel,
+adaptándose a la forma en que se registran las actividades de Echometer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.echometer_report.EchometerReport.get_executed_activities_accumulated_df_by_column_from_excel">
+<span class="sig-name descname"><span class="pre">get_executed_activities_accumulated_df_by_column_from_excel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/logic/field_lines/reports/echometer_report.html#EchometerReport.get_executed_activities_accumulated_df_by_column_from_excel"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.echometer_report.EchometerReport.get_executed_activities_accumulated_df_by_column_from_excel" title="Link to this definition"></a></dt>
+<dd><p>Obtiene el acumulado de actividades ejecutadas desde una columna de Excel.</p>
+<p>Calcula el acumulado mes a mes de las actividades ejecutadas que se
+obtienen de una columna específica del archivo Excel.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.echometer_report.EchometerReport.get_executed_activities_df_by_column_from_excel_monthly_distributed">
+<span class="sig-name descname"><span class="pre">get_executed_activities_df_by_column_from_excel_monthly_distributed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/logic/field_lines/reports/echometer_report.html#EchometerReport.get_executed_activities_df_by_column_from_excel_monthly_distributed"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.echometer_report.EchometerReport.get_executed_activities_df_by_column_from_excel_monthly_distributed" title="Link to this definition"></a></dt>
+<dd><p>Obtiene las actividades ejecutadas distribuidas mensualmente desde Excel.</p>
+<p>Utiliza el gestor de actividades ejecutadas para leer los datos de una
+columna específica del archivo Excel y los distribuye por mes.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-logic.field_lines.reports.slick_and_bacheo_report">
+<dt class="sig sig-object py" id="logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logic.field_lines.reports.slick_and_bacheo_report.</span></span><span class="sig-name descname"><span class="pre">SlickAndBacheoReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categoria_1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categoria_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categoria_3</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/slick_and_bacheo_report.html#SlickAndBacheoReport"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport" title="Link to this definition"></a></dt>
+<dd><p>Reporte especializado para las líneas de servicio “Slickline” y “Bacheo”.</p>
+<p>Hereda de FieldReport y añade lógica para calcular el presupuesto con un
+CPAE estático y para categorizar las actividades ejecutadas según su costo.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.clasificar_valor_servicio">
+<span class="sig-name descname"><span class="pre">clasificar_valor_servicio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">valor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/slick_and_bacheo_report.html#SlickAndBacheoReport.clasificar_valor_servicio"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.clasificar_valor_servicio" title="Link to this definition"></a></dt>
+<dd><p>Clasifica un valor de costo en una categoría numérica.</p>
+<p>Utiliza los umbrales (CATEGORIA_1, CATEGORIA_2, CATEGORIA_3) definidos
+en la inicialización para asignar un número de categoría (1 a 4) a un
+costo dado. Devuelve 0 si el valor es nulo o cero.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.generate_budget_with_static_cpae">
+<span class="sig-name descname"><span class="pre">generate_budget_with_static_cpae</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpae_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/slick_and_bacheo_report.html#SlickAndBacheoReport.generate_budget_with_static_cpae"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.generate_budget_with_static_cpae" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame de presupuesto con el mismo valor CPAE para cada mes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.get_categorizer_executed_activities_by_month">
+<span class="sig-name descname"><span class="pre">get_categorizer_executed_activities_by_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/slick_and_bacheo_report.html#SlickAndBacheoReport.get_categorizer_executed_activities_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.get_categorizer_executed_activities_by_month" title="Link to this definition"></a></dt>
+<dd><p>Obtiene y categoriza las actividades ejecutadas para un mes dado.</p>
+<p>Distingue entre “Slickline” (usa solo costos de servicios) y “Bacheo”
+(suma costos de servicios y productos). Luego, clasifica el costo total
+en categorías predefinidas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.get_data_sources">
+<span class="sig-name descname"><span class="pre">get_data_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/logic/field_lines/reports/slick_and_bacheo_report.html#SlickAndBacheoReport.get_data_sources"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.get_data_sources" title="Link to this definition"></a></dt>
+<dd><p>Sobrescribe el método base para usar un presupuesto con CPAE estático.</p>
+<p>Reemplaza la fuente de datos “budget” por una versión calculada con un
+costo por actividad (CPAE) distribuido uniformemente a lo largo del año.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.get_executed_activities_data_frame_by_month">
+<span class="sig-name descname"><span class="pre">get_executed_activities_data_frame_by_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logic/field_lines/reports/slick_and_bacheo_report.html#SlickAndBacheoReport.get_executed_activities_data_frame_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.get_executed_activities_data_frame_by_month" title="Link to this definition"></a></dt>
+<dd><p>Obtiene el DataFrame de actividades ejecutadas para un mes y línea específicos.</p>
+<p>Delega la llamada al gestor de actividades ejecutadas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.static_cpae_value">
+<span class="sig-name descname"><span class="pre">static_cpae_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/logic/field_lines/reports/slick_and_bacheo_report.html#SlickAndBacheoReport.static_cpae_value"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.static_cpae_value" title="Link to this definition"></a></dt>
+<dd><p>Calcula un valor de CPAE estático y distribuido uniformemente.</p>
+<p>Obtiene el presupuesto total anual y lo divide entre los 12 meses para
+obtener un costo mensual constante.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-services.field_lines_services.executed_plan">
+<span id="servicios-principales"></span><h2>Servicios Principales<a class="headerlink" href="#module-services.field_lines_services.executed_plan" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_plan.ExecutedActivitiesPlan">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">services.field_lines_services.executed_plan.</span></span><span class="sig-name descname"><span class="pre">ExecutedActivitiesPlan</span></span><a class="reference internal" href="_modules/services/field_lines_services/executed_plan.html#ExecutedActivitiesPlan"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_plan.ExecutedActivitiesPlan" title="Link to this definition"></a></dt>
+<dd><p>Clase responsable de leer y procesar el archivo Excel de costos de campo.</p>
+<p>Su principal función es manejar la estructura de encabezado de múltiples niveles
+del archivo de origen, limpiar los nombres de las columnas y preparar un
+DataFrame estandarizado para su uso en el resto de la aplicación.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_plan.ExecutedActivitiesPlan.get_executed_data_from_excel">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_executed_data_from_excel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_plan.html#ExecutedActivitiesPlan.get_executed_data_from_excel"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_plan.ExecutedActivitiesPlan.get_executed_data_from_excel" title="Link to this definition"></a></dt>
+<dd><p>Lee el archivo Excel de costos de campo y lo transforma en un DataFrame limpio.</p>
+<p>Este método realiza varias operaciones clave:
+1. Lee el archivo Excel utilizando un encabezado de dos niveles.
+2. Ignora la primera columna, que suele estar vacía o ser un índice.
+3. Combina los dos niveles del encabezado para crear nombres de columna únicos</p>
+<blockquote>
+<div><p>(ej. “LINEA_Servicios”), manejando columnas sin nombre.</p>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Si una columna “DATE” existe pero “Mes” no, la convierte para generar
+la columna “Mes” en formato “dd-mes-aa”.</p></li>
+<li><p>Filtra las filas que no tienen un valor válido en la columna “Month”.</p></li>
+<li><p>Maneja errores de lectura de archivos, devolviendo None en caso de fallo.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Devuelve<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Un DataFrame con los datos procesados, o None si ocurre un error.</p>
+</dd>
+<dt class="field-even">Tipo del valor devuelto<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-services.field_lines_services.executed_activities_manager">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">services.field_lines_services.executed_activities_manager.</span></span><span class="sig-name descname"><span class="pre">ExecutedActivitiesManager</span></span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager" title="Link to this definition"></a></dt>
+<dd><p>Gestiona el acceso y procesamiento de los datos de actividades ejecutadas.</p>
+<p>Esta clase carga los datos desde un plan de Excel, los pre-procesa y ofrece
+métodos para consultar costos reales, conteo de actividades y otros datos
+filtrados por mes y línea de servicio.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.convert_columns_to_numeric">
+<span class="sig-name descname"><span class="pre">convert_columns_to_numeric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.convert_columns_to_numeric"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.convert_columns_to_numeric" title="Link to this definition"></a></dt>
+<dd><p>Convierte de forma segura una lista de columnas del DataFrame a tipo numérico.
+Los valores que no se puedan convertir se transformarán en NaN.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_accumulated_real_cost_data_frame">
+<span class="sig-name descname"><span class="pre">generate_accumulated_real_cost_data_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.generate_accumulated_real_cost_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_accumulated_real_cost_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con el costo real acumulado mes a mes.</p>
+<p>La acumulación se detiene y se mantiene constante después del último mes
+que contiene datos en el archivo de origen.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_executed_activities_data_frame">
+<span class="sig-name descname"><span class="pre">generate_executed_activities_data_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">months</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.generate_executed_activities_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_executed_activities_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con el conteo de actividades ejecutadas para cada mes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_executed_activities_data_frame_to_draw">
+<span class="sig-name descname"><span class="pre">generate_executed_activities_data_frame_to_draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">months</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.generate_executed_activities_data_frame_to_draw"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_executed_activities_data_frame_to_draw" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con el conteo de actividades para graficar.</p>
+<p>Excluye actividades “adicionales” para no distorsionar los gráficos.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_real_cost_data_frame">
+<span class="sig-name descname"><span class="pre">generate_real_cost_data_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.generate_real_cost_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.generate_real_cost_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con el costo real total para cada mes del año.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_conditions_to_check_services_and_product">
+<span class="sig-name descname"><span class="pre">get_conditions_to_check_services_and_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.get_conditions_to_check_services_and_product"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_conditions_to_check_services_and_product" title="Link to this definition"></a></dt>
+<dd><p>Construye y devuelve las condiciones para filtrar actividades ejecutadas.</p>
+<p>Considera una actividad como ejecutada si su estado es “final”, “pend.” o
+“adicional” y tiene un costo asociado (en servicios, productos o B&amp;H).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_conditions_to_check_services_and_product_to_draw">
+<span class="sig-name descname"><span class="pre">get_conditions_to_check_services_and_product_to_draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.get_conditions_to_check_services_and_product_to_draw"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_conditions_to_check_services_and_product_to_draw" title="Link to this definition"></a></dt>
+<dd><p>Construye las condiciones para filtrar actividades para gráficos.</p>
+<p>Es similar al otro método de condiciones, pero excluye explícitamente
+las actividades con estado “adicional”.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_echometer_executed_activities_monthly">
+<span class="sig-name descname"><span class="pre">get_echometer_executed_activities_monthly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.get_echometer_executed_activities_monthly"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_echometer_executed_activities_monthly" title="Link to this definition"></a></dt>
+<dd><p>Método específico para obtener las actividades mensuales acumuladas de Echometer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_accumulated_df_by_column_from_excel">
+<span class="sig-name descname"><span class="pre">get_executed_activities_accumulated_df_by_column_from_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.get_executed_activities_accumulated_df_by_column_from_excel"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_accumulated_df_by_column_from_excel" title="Link to this definition"></a></dt>
+<dd><p>Obtiene el acumulado de actividades desde una columna de resumen en Excel.</p>
+<p>Es usado por reportes como Echometer, que tienen una columna específica
+con el total de actividades ejecutadas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_by_month">
+<span class="sig-name descname"><span class="pre">get_executed_activities_by_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.get_executed_activities_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_by_month" title="Link to this definition"></a></dt>
+<dd><p>Devuelve el número (conteo) de actividades ejecutadas para un mes y línea.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_by_month_to_draw">
+<span class="sig-name descname"><span class="pre">get_executed_activities_by_month_to_draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.get_executed_activities_by_month_to_draw"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_by_month_to_draw" title="Link to this definition"></a></dt>
+<dd><p>Devuelve el conteo de actividades para graficar (excluye “adicionales”).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_data_frame_by_month">
+<span class="sig-name descname"><span class="pre">get_executed_activities_data_frame_by_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.get_executed_activities_data_frame_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_data_frame_by_month" title="Link to this definition"></a></dt>
+<dd><p>Filtra y devuelve un DataFrame con el detalle de actividades para un mes y línea.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_data_frame_by_month_to_draw">
+<span class="sig-name descname"><span class="pre">get_executed_activities_data_frame_by_month_to_draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.get_executed_activities_data_frame_by_month_to_draw"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_data_frame_by_month_to_draw" title="Link to this definition"></a></dt>
+<dd><p>Obtiene el detalle de actividades para un mes, excluyendo las “adicionales”.</p>
+<p>Este método está pensado para generar gráficos que solo deben mostrar
+las actividades planificadas y ejecutadas, no las adicionales.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_df_by_column_from_excel_monthly_distributed">
+<span class="sig-name descname"><span class="pre">get_executed_activities_df_by_column_from_excel_monthly_distributed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.get_executed_activities_df_by_column_from_excel_monthly_distributed"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_executed_activities_df_by_column_from_excel_monthly_distributed" title="Link to this definition"></a></dt>
+<dd><p>Obtiene el total mensual de actividades desde una columna de resumen en Excel.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_last_index_month_in_excel">
+<span class="sig-name descname"><span class="pre">get_last_index_month_in_excel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.get_last_index_month_in_excel"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_last_index_month_in_excel" title="Link to this definition"></a></dt>
+<dd><p>Obtiene el índice numérico (0-11) del último mes con datos en el Excel.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_total_executed_activities_data_frame">
+<span class="sig-name descname"><span class="pre">get_total_executed_activities_data_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">months</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.get_total_executed_activities_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_total_executed_activities_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Consolida todas las actividades ejecutadas de varios meses en un solo DataFrame.</p>
+<p>Añade columnas calculadas para el costo total con y sin B&amp;H (Burning &amp;
+Handling).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_total_real_cost_by_month">
+<span class="sig-name descname"><span class="pre">get_total_real_cost_by_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/executed_activities_manager.html#ExecutedActivitiesManager.get_total_real_cost_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.executed_activities_manager.ExecutedActivitiesManager.get_total_real_cost_by_month" title="Link to this definition"></a></dt>
+<dd><p>Calcula el costo real total para un mes sumando servicios y productos.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-services.field_lines_services.planned_activities_manager">
+<dt class="sig sig-object py" id="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">services.field_lines_services.planned_activities_manager.</span></span><span class="sig-name descname"><span class="pre">PlannedActivitiesManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/planned_activities_manager.html#PlannedActivitiesManager"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager" title="Link to this definition"></a></dt>
+<dd><p>Gestiona y procesa los datos de las actividades planeadas desde un DataFrame.</p>
+<p>Esta clase se encarga de normalizar los datos de entrada (especialmente las fechas),
+y proporciona métodos para calcular proyecciones, presupuestos y conteos de
+actividades planeadas y programadas.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_budget_data_frame">
+<span class="sig-name descname"><span class="pre">generate_budget_data_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_cpae</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/planned_activities_manager.html#PlannedActivitiesManager.generate_budget_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_budget_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Calcula el presupuesto acumulado a partir de un DataFrame de costos mensuales (CPAE).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_cpae_data_frame">
+<span class="sig-name descname"><span class="pre">generate_cpae_data_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">months</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_by_activity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/planned_activities_manager.html#PlannedActivitiesManager.generate_cpae_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_cpae_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con los costos proyectados (CPAE) para cada mes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_cpae_data_frame_to_budget">
+<span class="sig-name descname"><span class="pre">generate_cpae_data_frame_to_budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">months</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_by_activity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/planned_activities_manager.html#PlannedActivitiesManager.generate_cpae_data_frame_to_budget"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_cpae_data_frame_to_budget" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con los costos mensuales para el presupuesto (CPAE).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_forecast_from_csv">
+<span class="sig-name descname"><span class="pre">generate_forecast_from_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">service_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/planned_activities_manager.html#PlannedActivitiesManager.generate_forecast_from_csv"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_forecast_from_csv" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame de forecast utilizando un servicio de planificación específico.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_planned_activities_data_frame">
+<span class="sig-name descname"><span class="pre">generate_planned_activities_data_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">months</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/planned_activities_manager.html#PlannedActivitiesManager.generate_planned_activities_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.generate_planned_activities_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Crea un DataFrame con el acumulado de actividades planeadas mes a mes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_activities_planned_by_month">
+<span class="sig-name descname"><span class="pre">get_activities_planned_by_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/planned_activities_manager.html#PlannedActivitiesManager.get_activities_planned_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_activities_planned_by_month" title="Link to this definition"></a></dt>
+<dd><p>Obtiene el número de actividades planeadas para un mes específico.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_budget_by_month">
+<span class="sig-name descname"><span class="pre">get_budget_by_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_budget</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/services/field_lines_services/planned_activities_manager.html#PlannedActivitiesManager.get_budget_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_budget_by_month" title="Link to this definition"></a></dt>
+<dd><p>Obtiene el valor del presupuesto para un mes desde un DataFrame de presupuesto.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_cpae_by_month">
+<span class="sig-name descname"><span class="pre">get_cpae_by_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_by_activity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/planned_activities_manager.html#PlannedActivitiesManager.get_cpae_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_cpae_by_month" title="Link to this definition"></a></dt>
+<dd><p>Calcula el costo proyectado (CPAE) para un mes, basado en actividades programadas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_cpae_to_budget_by_month">
+<span class="sig-name descname"><span class="pre">get_cpae_to_budget_by_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_by_activity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/planned_activities_manager.html#PlannedActivitiesManager.get_cpae_to_budget_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_cpae_to_budget_by_month" title="Link to this definition"></a></dt>
+<dd><p>Calcula el costo para el presupuesto (CPAE) de un mes, basado en actividades planeadas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_df_scheduled_executed_activities">
+<span class="sig-name descname"><span class="pre">get_df_scheduled_executed_activities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/planned_activities_manager.html#PlannedActivitiesManager.get_df_scheduled_executed_activities"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_df_scheduled_executed_activities" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame con el conteo mensual de actividades programadas.</p>
+<p>Obtiene las actividades programadas desde el mes actual en adelante,
+dejando los meses pasados en cero.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_df_scheduled_executed_activities_accumulated">
+<span class="sig-name descname"><span class="pre">get_df_scheduled_executed_activities_accumulated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_index_month</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/planned_activities_manager.html#PlannedActivitiesManager.get_df_scheduled_executed_activities_accumulated"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_df_scheduled_executed_activities_accumulated" title="Link to this definition"></a></dt>
+<dd><p>Genera el acumulado de actividades proyectadas (ejecutadas + programadas).</p>
+<p>Combina el último valor de actividades ejecutadas (<cite>last_value</cite>) con las
+actividades programadas a partir del mes siguiente al último ejecutado
+(<cite>last_index_month</cite>), creando una proyección acumulada para el resto del año.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_df_scheduled_executed_activities_accumulated_varillera">
+<span class="sig-name descname"><span class="pre">get_df_scheduled_executed_activities_accumulated_varillera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_scheduled_executed_activities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_index_month</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/planned_activities_manager.html#PlannedActivitiesManager.get_df_scheduled_executed_activities_accumulated_varillera"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_df_scheduled_executed_activities_accumulated_varillera" title="Link to this definition"></a></dt>
+<dd><p>Genera el acumulado de actividades proyectadas, específico para “Varillera”.</p>
+<p>Aplica la misma lógica de acumulación que el método general, pero utiliza un
+DataFrame de actividades programadas ya procesado, en lugar de generarlo
+a través de la <cite>PlanningServiceFactory</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_scheduled_executed_activities_by_month">
+<span class="sig-name descname"><span class="pre">get_scheduled_executed_activities_by_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/planned_activities_manager.html#PlannedActivitiesManager.get_scheduled_executed_activities_by_month"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.planned_activities_manager.PlannedActivitiesManager.get_scheduled_executed_activities_by_month" title="Link to this definition"></a></dt>
+<dd><p>Obtiene el número de actividades programadas/ejecutadas para un mes específico.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-services.field_lines_services.field_activities_coordinator">
+<dt class="sig sig-object py" id="services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">services.field_lines_services.field_activities_coordinator.</span></span><span class="sig-name descname"><span class="pre">FieldActivitiesCoordinator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">planned_activities_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">executed_activities_manager</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/field_activities_coordinator.html#FieldActivitiesCoordinator"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator" title="Link to this definition"></a></dt>
+<dd><p>Coordina los datos de actividades planeadas y ejecutadas para generar proyecciones.</p>
+<p>Esta clase actúa como un intermediario entre el <cite>PlannedActivitiesManager</cite> y el
+<cite>ExecutedActivitiesManager</cite> para crear un DataFrame de “Forecast” que combina
+los costos reales ya incurridos con los costos proyectados para el futuro.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator.apply_projected_adjustment_logic">
+<span class="sig-name descname"><span class="pre">apply_projected_adjustment_logic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_projected_cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/field_activities_coordinator.html#FieldActivitiesCoordinator.apply_projected_adjustment_logic"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator.apply_projected_adjustment_logic" title="Link to this definition"></a></dt>
+<dd><p>Aplica la lógica de ajuste para crear el forecast final acumulado.</p>
+<p>Reemplaza los valores proyectados de los meses pasados con el costo real
+acumulado. Para los meses futuros, continúa la acumulación a partir del
+último costo real, sumando los costos proyectados de cada mes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator.generate_projected_data_frame">
+<span class="sig-name descname"><span class="pre">generate_projected_data_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/field_activities_coordinator.html#FieldActivitiesCoordinator.generate_projected_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator.generate_projected_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Genera un DataFrame de proyección inicial combinando costos reales y planeados.</p>
+<p>Crea una serie de costos mensuales («Projected») donde:
+- Para los meses con costos reales, se usa el costo real.
+- Para los meses futuros (sin costo real), se usa el forecast inicial</p>
+<blockquote>
+<div><p>obtenido del <cite>planned_activities_manager</cite>.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator.get_projected_adjusted_data_frame">
+<span class="sig-name descname"><span class="pre">get_projected_adjusted_data_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/field_activities_coordinator.html#FieldActivitiesCoordinator.get_projected_adjusted_data_frame"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.field_activities_coordinator.FieldActivitiesCoordinator.get_projected_adjusted_data_frame" title="Link to this definition"></a></dt>
+<dd><p>Orquesta la generación del DataFrame de forecast ajustado.</p>
+<p>Primero genera una proyección inicial y luego le aplica la lógica de ajuste
+con los costos reales acumulados.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-services.field_lines_services.leader_line_service">
+<dt class="sig sig-object py" id="services.field_lines_services.leader_line_service.LeaderLineService">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">services.field_lines_services.leader_line_service.</span></span><span class="sig-name descname"><span class="pre">LeaderLineService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_report_instances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">completion_service</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/leader_line_service.html#LeaderLineService"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.leader_line_service.LeaderLineService" title="Link to this definition"></a></dt>
+<dd><p>Servicio dedicado a agregar datos de múltiples reportes de campo
+para generar el DataFrame consolidado de la «Línea Líder».</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.leader_line_service.LeaderLineService.generate_aggregated_dataframe">
+<span class="sig-name descname"><span class="pre">generate_aggregated_dataframe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/services/field_lines_services/leader_line_service.html#LeaderLineService.generate_aggregated_dataframe"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.leader_line_service.LeaderLineService.generate_aggregated_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Agrega los resúmenes mensuales de todos los reportes de campo completados en un único DataFrame.</p>
+<p>Esta es la lógica de negocio principal del servicio. Realiza los siguientes pasos:
+1. Obtiene la lista de títulos de línea “completados” desde el servicio de completitud.
+2. Filtra las instancias de reporte para incluir solo aquellas que están completadas.
+3. Para cada reporte completado, genera un DataFrame de resumen mensual detallado.
+4. Concatena todos los DataFrames de resumen individuales en un único DataFrame grande.
+5. Agrupa los datos combinados por “Month” y calcula la suma para todas las columnas numéricas,</p>
+<blockquote>
+<div><p>creando así los datos agregados de la línea líder.</p>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>Ordena el DataFrame final cronológicamente por mes.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Devuelve<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Un DataFrame que contiene los datos mensuales agregados para la línea líder.</dt><dd><p>Devuelve un DataFrame vacío si no hay líneas completadas o si no se generan resúmenes.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Tipo del valor devuelto<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-services.field_lines_services.field_graph_generator_service">
+<dt class="sig sig-object py" id="services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">services.field_lines_services.field_graph_generator_service.</span></span><span class="sig-name descname"><span class="pre">FieldGraphGeneratorService</span></span><a class="reference internal" href="_modules/services/field_lines_services/field_graph_generator_service.html#FieldGraphGeneratorService"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService" title="Link to this definition"></a></dt>
+<dd><p>Servicio para generar un gráfico de pronóstico de campo complejo usando Matplotlib.</p>
+<p>Combina múltiples fuentes de datos para visualizar costos (presupuesto, pronóstico, real)
+y actividades (planeadas, ejecutadas, programadas) en un solo gráfico interactivo
+con ejes dinámicos, anotaciones y cuadros de información.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService.generate_field_forecast_graph">
+<span class="sig-name descname"><span class="pre">generate_field_forecast_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data_sources</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/field_graph_generator_service.html#FieldGraphGeneratorService.generate_field_forecast_graph"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService.generate_field_forecast_graph" title="Link to this definition"></a></dt>
+<dd><p>Genera y devuelve una figura de Matplotlib con el gráfico de pronóstico completo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<em>str</em>) – El título que se mostrará en el gráfico.</p></li>
+<li><p><strong>**data_sources</strong> (<em>dict</em>) – Un diccionario de DataFrames de pandas que contienen
+los datos a graficar. Las claves esperadas incluyen:
+“budget”, “forecast”, “real_cost_accumulated”,
+“executed_activities”, “planned_activities”, etc.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>La figura de Matplotlib que contiene el gráfico generado,</dt><dd><p>lista para ser mostrada en una interfaz de usuario.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Tipo del valor devuelto<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.figure.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService.toggle_initial_cost">
+<span class="sig-name descname"><span class="pre">toggle_initial_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/services/field_lines_services/field_graph_generator_service.html#FieldGraphGeneratorService.toggle_initial_cost"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService.toggle_initial_cost" title="Link to this definition"></a></dt>
+<dd><p>Función para alternar la visibilidad del costo inicial</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="index.html" class="btn btn-neutral float-left" title="Budget Tool Phase II documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2025, Cristian Zambrano.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

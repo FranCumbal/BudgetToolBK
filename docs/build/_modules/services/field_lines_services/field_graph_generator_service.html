@@ -1,0 +1,673 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>services.field_lines_services.field_graph_generator_service &mdash; documentación de Budget Tool Phase II - 2025</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7005c00d"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=f85f4cfb"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Budget Tool Phase II
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contenidos:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../reports.html">Reportes de Campo</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Budget Tool Phase II</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Código de módulo</a></li>
+      <li class="breadcrumb-item active">services.field_lines_services.field_graph_generator_service</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fuente para services.field_lines_services.field_graph_generator_service</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">Button</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">FancyBboxPatch</span>
+
+<div class="viewcode-block" id="FieldGraphGeneratorService">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService">[documentos]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FieldGraphGeneratorService</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Servicio para generar un gráfico de pronóstico de campo complejo usando Matplotlib.</span>
+
+<span class="sd">    Combina múltiples fuentes de datos para visualizar costos (presupuesto, pronóstico, real)</span>
+<span class="sd">    y actividades (planeadas, ejecutadas, programadas) en un solo gráfico interactivo</span>
+<span class="sd">    con ejes dinámicos, anotaciones y cuadros de información.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicializa el servicio, estableciendo el estado de visibilidad inicial</span>
+<span class="sd">        para elementos interactivos del gráfico, como la línea de costo inicial.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_cost_visible</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="FieldGraphGeneratorService.generate_field_forecast_graph">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService.generate_field_forecast_graph">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_field_forecast_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">data_sources</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Genera y devuelve una figura de Matplotlib con el gráfico de pronóstico completo.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            title (str): El título que se mostrará en el gráfico.</span>
+<span class="sd">            **data_sources (dict): Un diccionario de DataFrames de pandas que contienen</span>
+<span class="sd">                                   los datos a graficar. Las claves esperadas incluyen:</span>
+<span class="sd">                                   &#39;budget&#39;, &#39;forecast&#39;, &#39;real_cost_accumulated&#39;,</span>
+<span class="sd">                                   &#39;executed_activities&#39;, &#39;planned_activities&#39;, etc.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            matplotlib.figure.Figure: La figura de Matplotlib que contiene el gráfico generado,</span>
+<span class="sd">                                      lista para ser mostrada en una interfaz de usuario.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">forecast_color</span> <span class="o">=</span> <span class="s1">&#39;#8e44ad&#39;</span>
+        <span class="n">budget_color</span> <span class="o">=</span> <span class="s1">&#39;#008FF6&#39;</span>
+        <span class="n">real_cost_color</span> <span class="o">=</span> <span class="s1">&#39;#27ae60&#39;</span>
+        <span class="n">text_color</span> <span class="o">=</span> <span class="s1">&#39;#2c3e50&#39;</span>
+        
+        <span class="c1"># 1. Preparar meses base</span>
+        <span class="n">months</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;january&#39;</span><span class="p">,</span> <span class="s1">&#39;february&#39;</span><span class="p">,</span> <span class="s1">&#39;march&#39;</span><span class="p">,</span> <span class="s1">&#39;april&#39;</span><span class="p">,</span> <span class="s1">&#39;may&#39;</span><span class="p">,</span> <span class="s1">&#39;june&#39;</span><span class="p">,</span> 
+                <span class="s1">&#39;july&#39;</span><span class="p">,</span> <span class="s1">&#39;august&#39;</span><span class="p">,</span> <span class="s1">&#39;september&#39;</span><span class="p">,</span> <span class="s1">&#39;october&#39;</span><span class="p">,</span> <span class="s1">&#39;november&#39;</span><span class="p">,</span> <span class="s1">&#39;december&#39;</span><span class="p">]</span>
+        <span class="n">all_months</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;MONTH&#39;</span><span class="p">:</span> <span class="n">months</span><span class="p">})</span>
+        
+        <span class="c1"># 2. Función para procesar DataFrames</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">prepare_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">rename_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">all_months</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">VALUE</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># DataFrame vacío seguro</span>
+            <span class="k">if</span> <span class="n">rename_dict</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">rename_dict</span><span class="p">)</span>
+            
+            <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">all_months</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;MONTH&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># 3. Procesar DataFrames esenciales con nombres esperados</span>
+        <span class="n">df_budget</span> <span class="o">=</span> <span class="n">prepare_df</span><span class="p">(</span><span class="n">data_sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;budget&quot;</span><span class="p">))</span>
+        <span class="n">df_forecast</span> <span class="o">=</span> <span class="n">prepare_df</span><span class="p">(</span><span class="n">data_sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;forecast&quot;</span><span class="p">))</span>
+        <span class="n">df_real_cost_accumulated</span> <span class="o">=</span> <span class="n">prepare_df</span><span class="p">(</span>
+            <span class="n">data_sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;real_cost_accumulated&quot;</span><span class="p">),</span> 
+            <span class="n">rename_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;TotalAccumulatedCost&quot;</span><span class="p">:</span> <span class="s2">&quot;Actual Cost&quot;</span><span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="n">non_zero_indices</span> <span class="o">=</span> <span class="n">df_real_cost_accumulated</span><span class="p">[</span><span class="n">df_real_cost_accumulated</span><span class="p">[</span><span class="s2">&quot;ACTUAL COST&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+        <span class="n">df_executed_activities</span> <span class="o">=</span> <span class="n">prepare_df</span><span class="p">(</span><span class="n">data_sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;executed_activities&quot;</span><span class="p">))</span>
+        <span class="n">df_planned_activities</span> <span class="o">=</span> <span class="n">prepare_df</span><span class="p">(</span><span class="n">data_sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;planned_activities&quot;</span><span class="p">))</span>
+        
+        <span class="c1"># Crear diccionario base de series</span>
+        <span class="n">graph_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;BUDGET&quot;</span><span class="p">:</span> <span class="n">df_budget</span><span class="p">,</span>
+            <span class="s2">&quot;FORECAST&quot;</span><span class="p">:</span> <span class="n">df_forecast</span><span class="p">,</span>
+            <span class="s2">&quot;ACTUAL COST&quot;</span><span class="p">:</span> <span class="n">df_real_cost_accumulated</span><span class="p">,</span>
+            <span class="s2">&quot;EXECUTED ACTIVITIES&quot;</span><span class="p">:</span> <span class="n">df_executed_activities</span><span class="p">,</span>
+            <span class="s2">&quot;PLANNED ACTIVITIES&quot;</span><span class="p">:</span> <span class="n">df_planned_activities</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="c1"># Procesar el valor inicial planeado si está disponible</span>
+        <span class="n">initial_planned_cost</span> <span class="o">=</span> <span class="n">data_sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;initial_approved_cost&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">initial_planned_cost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">graph_data</span><span class="p">[</span><span class="s2">&quot;INITIAL APPROVED COST&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prepare_df</span><span class="p">(</span>
+                <span class="n">initial_planned_cost</span><span class="p">,</span> 
+                <span class="n">rename_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;VALUE&quot;</span><span class="p">:</span> <span class="s2">&quot;VALUE&quot;</span><span class="p">}</span>
+            <span class="p">)</span>
+        
+        <span class="c1"># Incluir cualquier otro DataFrame adicional (ej. barras extra)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">data_sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">,</span> <span class="s2">&quot;forecast&quot;</span><span class="p">,</span> <span class="s2">&quot;real_cost_accumulated&quot;</span><span class="p">,</span> <span class="s2">&quot;executed_activities&quot;</span><span class="p">,</span> <span class="s2">&quot;planned_activities&quot;</span><span class="p">]:</span>
+                <span class="k">continue</span>  <span class="c1"># Ya están procesados</span>
+            <span class="n">graph_data</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">prepare_df</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        
+        <span class="c1"># Obtener índices de meses</span>
+        <span class="c1">#current_month_str = datetime.now().strftime(&quot;%B&quot;).upper()</span>
+        <span class="n">non_zero_indices</span> <span class="o">=</span> <span class="n">df_real_cost_accumulated</span><span class="p">[</span><span class="n">df_real_cost_accumulated</span><span class="p">[</span><span class="s2">&quot;ACTUAL COST&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+        <span class="n">last_valid_idx</span> <span class="o">=</span> <span class="n">non_zero_indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">non_zero_indices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">current_idx</span> <span class="o">=</span> <span class="n">last_valid_idx</span>
+        <span class="n">closing_idx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">current_idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">next_idx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="n">current_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        
+        <span class="c1"># =========================================================================</span>
+        <span class="c1"># 1. CALCULAR MÁXIMOS PARA ESCALA DINÁMICA</span>
+        <span class="c1"># =========================================================================</span>
+        <span class="c1"># Calcular valores máximos entre todas las series de costos</span>
+        <span class="n">max_budget</span> <span class="o">=</span> <span class="n">df_budget</span><span class="p">[</span><span class="s1">&#39;BUDGET&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">max_forecast</span> <span class="o">=</span> <span class="n">df_forecast</span><span class="p">[</span><span class="s1">&#39;FORECAST&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">max_actual</span> <span class="o">=</span> <span class="n">df_real_cost_accumulated</span><span class="p">[</span><span class="s1">&#39;ACTUAL COST&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        
+        <span class="c1"># Encontrar el máximo global (con un mínimo de 100,000 para buena visualización)</span>
+        <span class="n">global_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_budget</span><span class="p">,</span> <span class="n">max_forecast</span><span class="p">,</span> <span class="n">max_actual</span><span class="p">,</span> <span class="mi">100_000</span><span class="p">)</span>
+        
+        <span class="c1"># Crear figura</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+        
+        <span class="c1"># =========================================================================</span>
+        <span class="c1"># 2. CONFIGURACIÓN DE EJES DINÁMICOS</span>
+        <span class="c1"># =========================================================================</span>
+        <span class="c1"># Eje Y de costos con escala dinámica</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Month&#39;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Cost (MUSD)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">budget_color</span><span class="p">)</span>
+        
+        <span class="c1"># Establecer límites con margen del 20%</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">global_max</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">)</span>
+        
+        <span class="c1"># Crear ticks dinámicos con mejor resolución para valores pequeños</span>
+        <span class="k">if</span> <span class="n">global_max</span> <span class="o">&lt;=</span> <span class="mi">100_000</span><span class="p">:</span>  <span class="c1"># Menor a 0.1M</span>
+            <span class="n">tick_step</span> <span class="o">=</span> <span class="mi">25_000</span>  <span class="c1"># Cada 0.05M para mejor visualización</span>
+        <span class="k">elif</span> <span class="n">global_max</span> <span class="o">&lt;</span> <span class="mi">500_000</span><span class="p">:</span>  <span class="c1"># Entre 0.1M y 0.5M</span>
+            <span class="n">tick_step</span> <span class="o">=</span> <span class="mi">100_000</span>  <span class="c1"># Cada 0.1M</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># Mayor a 0.5M</span>
+            <span class="n">tick_step</span> <span class="o">=</span> <span class="mi">500_000</span>  <span class="c1"># Cada 0.5M</span>
+        <span class="n">y_ticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">global_max</span> <span class="o">*</span> <span class="mf">1.2</span> <span class="o">+</span> <span class="n">tick_step</span><span class="p">,</span> <span class="n">tick_step</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y_ticks</span><span class="p">)</span>
+        
+        <span class="c1"># Formateador para mostrar en millones</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x</span><span class="o">/</span><span class="mi">1_000_000</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelcolor</span><span class="o">=</span><span class="n">budget_color</span><span class="p">)</span>
+        
+        <span class="c1"># Calcular el max de actividades para dinamización del grafico</span>
+        <span class="n">max_activities</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="n">df_planned_activities</span><span class="p">[</span><span class="s1">&#39;PLANNED ACTIVITIES&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+            <span class="n">df_executed_activities</span><span class="p">[</span><span class="s1">&#39;EXECUTED ACTIVITIES&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Si hay actividades programadas, incluirlas en el cálculo</span>
+        <span class="k">if</span> <span class="s2">&quot;scheduled_executed_activities&quot;</span> <span class="ow">in</span> <span class="n">data_sources</span><span class="p">:</span>
+            <span class="n">df_scheduled</span> <span class="o">=</span> <span class="n">prepare_df</span><span class="p">(</span><span class="n">data_sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scheduled_executed_activities&quot;</span><span class="p">))</span>
+            <span class="n">max_activities</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_activities</span><span class="p">,</span> <span class="n">df_scheduled</span><span class="p">[</span><span class="s1">&#39;SCHEDULED ACTIVITIES&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+        <span class="c1"># Ajuste especial para casos con muchas actividades (175+)</span>
+        <span class="k">if</span> <span class="n">max_activities</span> <span class="o">&gt;=</span> <span class="mi">175</span><span class="p">:</span>
+            <span class="c1"># Para casos extremos, usar escala más comprimida</span>
+            <span class="n">y2_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_activities</span> <span class="o">*</span> <span class="mf">5.3</span><span class="p">)</span>  <span class="c1"># Factor más bajo para comprimir</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">y2_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_activities</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="c1"># Eje secundario para actividades</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;# Activities&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">forecast_color</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y2_max</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelcolor</span><span class="o">=</span><span class="n">forecast_color</span><span class="p">)</span>
+        
+        <span class="c1"># =========================================================================</span>
+        <span class="c1"># 3. GRAFICAR DATOS (AJUSTADO A MILLONES)</span>
+        <span class="c1"># =========================================================================</span>
+        <span class="c1"># Valores de X</span>
+        <span class="n">x_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+        
+        <span class="c1"># Budget line</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">df_budget</span><span class="p">[</span><span class="s1">&#39;BUDGET&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Planned Cost&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">budget_color</span><span class="p">,</span> 
+                <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="c1"># Forecast line</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">df_forecast</span><span class="p">[</span><span class="s1">&#39;FORECAST&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Forecast EOY&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">forecast_color</span><span class="p">,</span> 
+                <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Encuentra índices donde ACTUAL COST no es cero</span>
+        <span class="n">non_zero_indices</span> <span class="o">=</span> <span class="n">df_real_cost_accumulated</span><span class="p">[</span><span class="n">df_real_cost_accumulated</span><span class="p">[</span><span class="s1">&#39;ACTUAL COST&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+        <span class="n">last_valid_idx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">annotate_point</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">text</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">M&quot;</span><span class="p">,</span>  <span class="c1"># Mostrar en millones</span>
+                    <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> 
+                    <span class="n">xytext</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
+                    <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">,</span> 
+                    <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> 
+                    <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                    <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+                    <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span>
+                    <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">non_zero_indices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">last_valid_idx</span> <span class="o">=</span> <span class="n">non_zero_indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            
+            <span class="c1"># Grafica solo hasta el último valor no nulo (inclusive)</span>
+            <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                <span class="n">x_values</span><span class="p">[:</span><span class="n">last_valid_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">df_real_cost_accumulated</span><span class="p">[</span><span class="s1">&#39;ACTUAL COST&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">last_valid_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Actual Cost&#39;</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">real_cost_color</span><span class="p">,</span>
+                <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span>
+                <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
+                <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
+            <span class="n">annotate_point</span><span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">last_valid_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> 
+               <span class="n">df_real_cost_accumulated</span><span class="p">[</span><span class="s1">&#39;ACTUAL COST&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">last_valid_idx</span><span class="p">],</span> 
+               <span class="n">df_real_cost_accumulated</span><span class="p">[</span><span class="s1">&#39;ACTUAL COST&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">last_valid_idx</span><span class="p">]</span><span class="o">/</span><span class="mi">1_000_000</span><span class="p">,</span> 
+               <span class="n">real_cost_color</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No hay valores no-cero para graficar&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Initial Planned Cost line (con interactividad)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_line</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Referencia para la línea</span>
+        <span class="k">if</span> <span class="s2">&quot;INITIAL APPROVED COST&quot;</span> <span class="ow">in</span> <span class="n">graph_data</span><span class="p">:</span>
+            <span class="n">df_initial_planned_cost</span> <span class="o">=</span> <span class="n">graph_data</span><span class="p">[</span><span class="s2">&quot;INITIAL APPROVED COST&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initial_line</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                <span class="n">x_values</span><span class="p">,</span> 
+                <span class="n">df_initial_planned_cost</span><span class="p">[</span><span class="s1">&#39;VALUE&#39;</span><span class="p">],</span>
+                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Initial Approved Cost&#39;</span><span class="p">,</span> 
+                <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> 
+                <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> 
+                <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">visible</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cost_visible</span>  <span class="c1"># Estado inicial</span>
+            <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Guardar referencia al objeto Line2D</span>
+            
+            <span class="c1"># Anotación solo si está visible</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cost_visible</span><span class="p">:</span>
+                <span class="n">last_value</span> <span class="o">=</span> <span class="n">df_initial_planned_cost</span><span class="p">[</span><span class="s1">&#39;VALUE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">initial_annotation</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">last_value</span><span class="o">/</span><span class="mi">1_000_000</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">M&quot;</span><span class="p">,</span> 
+                    <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">last_value</span><span class="p">),</span>
+                    <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">),</span> 
+                    <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">,</span>
+                    <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                    <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+                    <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">initial_annotation</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># =========================================================================</span>
+        <span class="c1"># 4. ANOTACIONES (AJUSTADAS A MILLONES)</span>
+        <span class="c1"># =========================================================================</span>
+        
+        <span class="k">if</span> <span class="n">current_idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_forecast</span><span class="p">):</span>
+            <span class="n">forecast_val</span> <span class="o">=</span> <span class="n">df_forecast</span><span class="p">[</span><span class="s1">&#39;FORECAST&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">current_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>  
+            <span class="n">budget_val</span> <span class="o">=</span> <span class="n">df_budget</span><span class="p">[</span><span class="s1">&#39;BUDGET&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">current_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            
+            <span class="c1"># Determinar offsets para evitar superposición</span>
+            <span class="k">if</span> <span class="n">budget_val</span> <span class="o">&gt;=</span> <span class="n">forecast_val</span><span class="p">:</span>
+                <span class="n">forecast_offset</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">)</span>
+                <span class="n">budget_offset</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">forecast_offset</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+                <span class="n">budget_offset</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">)</span>
+
+            <span class="c1"># Anotar forecast (ahora usando next_idx + 1 para la posición en X)pr</span>
+            <span class="n">annotate_point</span><span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">current_idx</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> 
+                        <span class="n">forecast_val</span><span class="p">,</span> 
+                        <span class="n">forecast_val</span> <span class="o">/</span> <span class="mi">1_000_000</span><span class="p">,</span> 
+                        <span class="n">forecast_color</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">forecast_offset</span><span class="p">)</span>
+
+            <span class="c1"># Anotar budget</span>
+            <span class="n">annotate_point</span><span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">current_idx</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> 
+                        <span class="n">budget_val</span><span class="p">,</span> 
+                        <span class="n">budget_val</span> <span class="o">/</span> <span class="mi">1_000_000</span><span class="p">,</span> 
+                        <span class="n">budget_color</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">budget_offset</span><span class="p">)</span>
+
+        <span class="c1"># Anotaciones finales (último punto)</span>
+        <span class="n">forecast_final</span> <span class="o">=</span> <span class="n">df_forecast</span><span class="p">[</span><span class="s1">&#39;FORECAST&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">budget_final</span> <span class="o">=</span> <span class="n">df_budget</span><span class="p">[</span><span class="s1">&#39;BUDGET&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Determinar offsets finales</span>
+        <span class="k">if</span> <span class="n">budget_final</span> <span class="o">&gt;=</span> <span class="n">forecast_final</span><span class="p">:</span>
+            <span class="n">forecast_offset</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">)</span>
+            <span class="n">budget_offset</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">forecast_offset</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="n">budget_offset</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">)</span>
+
+        <span class="c1"># Usar índice final (por ejemplo, 12) o ajustarlo según el contexto</span>
+        <span class="n">final_idx</span> <span class="o">=</span> <span class="mi">12</span>
+
+        <span class="c1"># Anotar forecast final</span>
+        <span class="n">annotate_point</span><span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">final_idx</span><span class="p">,</span> 
+                    <span class="n">forecast_final</span><span class="p">,</span> 
+                    <span class="n">forecast_final</span> <span class="o">/</span> <span class="mi">1_000_000</span><span class="p">,</span> 
+                    <span class="n">forecast_color</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">forecast_offset</span><span class="p">)</span>
+
+        <span class="c1"># Anotar budget final</span>
+        <span class="n">annotate_point</span><span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">final_idx</span><span class="p">,</span> 
+                    <span class="n">budget_final</span><span class="p">,</span> 
+                    <span class="n">budget_final</span> <span class="o">/</span> <span class="mi">1_000_000</span><span class="p">,</span> 
+                    <span class="n">budget_color</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">budget_offset</span><span class="p">)</span>
+
+        <span class="c1"># 5. Barras</span>
+        <span class="c1"># --- MODIFICACIÓN: Definir tamaños de fuente para las etiquetas ---</span>
+        <span class="n">normal_fontsize</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">reduced_fontsize</span> <span class="o">=</span> <span class="mf">6.5</span> <span class="c1"># Tamaño más pequeño para valores &gt;= 300</span>
+
+        <span class="c1"># --- Anchos y un espacio (gap) para evitar colisiones ---</span>
+        <span class="n">base_width</span> <span class="o">=</span> <span class="mf">0.25</span>
+        <span class="n">increased_width</span> <span class="o">=</span> <span class="mf">0.30</span>
+        <span class="n">gap</span> <span class="o">=</span> <span class="mf">0.03</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+        <span class="c1"># Verificar si tenemos datos de actividades programadas</span>
+        <span class="n">has_scheduled</span> <span class="o">=</span> <span class="s2">&quot;scheduled_executed_activities&quot;</span> <span class="ow">in</span> <span class="n">data_sources</span>
+        <span class="k">if</span> <span class="n">has_scheduled</span><span class="p">:</span>
+            <span class="n">df_scheduled</span> <span class="o">=</span> <span class="n">prepare_df</span><span class="p">(</span><span class="n">data_sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scheduled_executed_activities&quot;</span><span class="p">))</span>
+            <span class="n">df_scheduled_display</span> <span class="o">=</span> <span class="n">df_scheduled</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">df_scheduled_display</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="n">current_idx</span><span class="p">,</span> <span class="s1">&#39;SCHEDULED ACTIVITIES&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="c1"># Procesar datos mensuales (el código de preparación no cambia)</span>
+        <span class="n">df_scheduled_monthly</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s2">&quot;scheduled_executed_activities_monthly&quot;</span> <span class="ow">in</span> <span class="n">data_sources</span><span class="p">:</span>
+            <span class="n">df_scheduled_monthly</span> <span class="o">=</span> <span class="n">prepare_df</span><span class="p">(</span><span class="n">data_sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scheduled_executed_activities_monthly&quot;</span><span class="p">))</span>
+
+        <span class="n">df_executed_monthly</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s2">&quot;executed_activities_monthly&quot;</span> <span class="ow">in</span> <span class="n">data_sources</span><span class="p">:</span>
+            <span class="n">df_executed_monthly</span> <span class="o">=</span> <span class="n">prepare_df</span><span class="p">(</span><span class="n">data_sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;executed_activities_monthly&quot;</span><span class="p">))</span>
+            <span class="n">df_executed_monthly</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">current_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:,</span> <span class="s1">&#39;EXECUTED ACTIVITIES&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="n">df_planned_monthly</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s2">&quot;planned_activities_monthly&quot;</span> <span class="ow">in</span> <span class="n">data_sources</span><span class="p">:</span>
+            <span class="n">df_planned_monthly</span> <span class="o">=</span> <span class="n">prepare_df</span><span class="p">(</span><span class="n">data_sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;planned_activities_monthly&quot;</span><span class="p">))</span>
+
+        <span class="n">df_executed_activities_display</span> <span class="o">=</span> <span class="n">df_executed_activities</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">df_executed_activities_display</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">current_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:,</span> <span class="s1">&#39;EXECUTED ACTIVITIES&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="n">labels_added</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;planned&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;executed&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;scheduled&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">month_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
+            <span class="n">month_x</span> <span class="o">=</span> <span class="n">month_idx</span> <span class="o">+</span> <span class="mi">1</span>
+            
+            <span class="c1"># Obtener valores para este mes</span>
+            <span class="n">has_scheduled_this_month</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">scheduled_value</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">has_scheduled</span><span class="p">:</span>
+                <span class="n">scheduled_value</span> <span class="o">=</span> <span class="n">df_scheduled_display</span><span class="p">[</span><span class="s1">&#39;SCHEDULED ACTIVITIES&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">month_idx</span><span class="p">]</span>
+                <span class="n">has_scheduled_this_month</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">scheduled_value</span><span class="p">)</span> <span class="ow">and</span> <span class="n">scheduled_value</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            
+            <span class="n">planned_value</span> <span class="o">=</span> <span class="n">df_planned_activities</span><span class="p">[</span><span class="s1">&#39;PLANNED ACTIVITIES&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">month_idx</span><span class="p">]</span>
+            <span class="n">executed_value</span> <span class="o">=</span> <span class="n">df_executed_activities_display</span><span class="p">[</span><span class="s1">&#39;EXECUTED ACTIVITIES&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">month_idx</span><span class="p">]</span>
+
+            <span class="c1"># --- LÓGICA DE POSICIONAMIENTO PRECISO ---</span>
+
+            <span class="c1"># 1. Determinar el ancho de cada barra ANTES de calcular su posición</span>
+            <span class="n">planned_bar_width</span> <span class="o">=</span> <span class="n">increased_width</span> <span class="k">if</span> <span class="n">planned_value</span> <span class="o">&gt;</span> <span class="mi">100</span> <span class="k">else</span> <span class="n">base_width</span>
+            
+            <span class="n">is_executed_valid</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">executed_value</span><span class="p">)</span> <span class="ow">and</span> <span class="n">executed_value</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+            <span class="n">executed_bar_width</span> <span class="o">=</span> <span class="n">increased_width</span> <span class="k">if</span> <span class="n">is_executed_valid</span> <span class="ow">and</span> <span class="n">executed_value</span> <span class="o">&gt;</span> <span class="mi">100</span> <span class="k">else</span> <span class="n">base_width</span>
+            
+            <span class="n">scheduled_bar_width</span> <span class="o">=</span> <span class="n">increased_width</span> <span class="k">if</span> <span class="n">has_scheduled_this_month</span> <span class="ow">and</span> <span class="n">scheduled_value</span> <span class="o">&gt;</span> <span class="mi">100</span> <span class="k">else</span> <span class="n">base_width</span>
+
+            <span class="c1"># 2. Calcular la posición X de cada barra basado en los anchos finales</span>
+            <span class="n">x_planned</span><span class="p">,</span> <span class="n">x_scheduled</span><span class="p">,</span> <span class="n">x_executed</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">has_scheduled_this_month</span><span class="p">:</span>
+                <span class="n">x_scheduled</span> <span class="o">=</span> <span class="n">month_x</span>
+                <span class="n">x_planned</span> <span class="o">=</span> <span class="n">month_x</span> <span class="o">-</span> <span class="p">(</span><span class="n">scheduled_bar_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">gap</span> <span class="o">-</span> <span class="p">(</span><span class="n">planned_bar_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">x_executed</span> <span class="o">=</span> <span class="n">month_x</span> <span class="o">+</span> <span class="p">(</span><span class="n">scheduled_bar_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">gap</span> <span class="o">+</span> <span class="p">(</span><span class="n">executed_bar_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">x_planned</span> <span class="o">=</span> <span class="n">month_x</span> <span class="o">-</span> <span class="p">(</span><span class="n">gap</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">planned_bar_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">x_executed</span> <span class="o">=</span> <span class="n">month_x</span> <span class="o">+</span> <span class="p">(</span><span class="n">gap</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">executed_bar_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+            <span class="c1"># 3. Dibujar las barras en sus posiciones calculadas</span>
+            <span class="k">if</span> <span class="n">planned_value</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ax2</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x_planned</span><span class="p">,</span> <span class="n">planned_value</span><span class="p">,</span> <span class="n">planned_bar_width</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">budget_color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+                        <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Planned Activities&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">labels_added</span><span class="p">[</span><span class="s2">&quot;planned&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">labels_added</span><span class="p">[</span><span class="s2">&quot;planned&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">is_executed_valid</span><span class="p">:</span>
+                <span class="n">ax2</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x_executed</span><span class="p">,</span> <span class="n">executed_value</span><span class="p">,</span> <span class="n">executed_bar_width</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">real_cost_color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+                        <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Executed Activities&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">labels_added</span><span class="p">[</span><span class="s2">&quot;executed&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">labels_added</span><span class="p">[</span><span class="s2">&quot;executed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">has_scheduled_this_month</span><span class="p">:</span>
+                <span class="n">ax2</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x_scheduled</span><span class="p">,</span> <span class="n">scheduled_value</span><span class="p">,</span> <span class="n">scheduled_bar_width</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">forecast_color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+                        <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Scheduled Activities&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">labels_added</span><span class="p">[</span><span class="s2">&quot;scheduled&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">labels_added</span><span class="p">[</span><span class="s2">&quot;scheduled&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># --- Lógica de Etiquetas (Usa las posiciones X ya calculadas) ---</span>
+            <span class="n">y_offset</span> <span class="o">=</span> <span class="n">y2_max</span> <span class="o">*</span> <span class="mf">0.01</span>
+
+            <span class="c1"># Etiqueta para &#39;planned&#39;</span>
+            <span class="k">if</span> <span class="n">planned_value</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">x_planned</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># MODIFICACIÓN: Determinar tamaño de fuente dinámicamente</span>
+                <span class="n">font_size_planned</span> <span class="o">=</span> <span class="n">reduced_fontsize</span> <span class="k">if</span> <span class="n">planned_value</span> <span class="o">&gt;=</span> <span class="mi">250</span> <span class="k">else</span> <span class="n">normal_fontsize</span>
+                <span class="n">ax2</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_planned</span><span class="p">,</span> <span class="n">planned_value</span> <span class="o">+</span> <span class="n">y_offset</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">planned_value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size_planned</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">text_color</span><span class="p">)</span> <span class="c1"># &lt;-- Usar variable</span>
+                <span class="k">if</span> <span class="n">df_planned_monthly</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">planned_monthly</span> <span class="o">=</span> <span class="n">df_planned_monthly</span><span class="p">[</span><span class="s1">&#39;PLANNED ACTIVITIES&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">month_idx</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">planned_monthly</span><span class="p">):</span>
+                        <span class="n">ax2</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_planned</span><span class="p">,</span> <span class="n">planned_value</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">planned_monthly</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;semibold&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Etiqueta para &#39;executed&#39;</span>
+            <span class="k">if</span> <span class="n">is_executed_valid</span> <span class="ow">and</span> <span class="n">x_executed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># MODIFICACIÓN: Determinar tamaño de fuente dinámicamente</span>
+                <span class="n">font_size_executed</span> <span class="o">=</span> <span class="n">reduced_fontsize</span> <span class="k">if</span> <span class="n">executed_value</span> <span class="o">&gt;=</span> <span class="mi">250</span> <span class="k">else</span> <span class="n">normal_fontsize</span>
+                <span class="n">ax2</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_executed</span><span class="p">,</span> <span class="n">executed_value</span> <span class="o">+</span> <span class="n">y_offset</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">executed_value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size_executed</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">text_color</span><span class="p">)</span> <span class="c1"># &lt;-- Usar variable</span>
+                <span class="k">if</span> <span class="n">df_executed_monthly</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">monthly_activities</span> <span class="o">=</span> <span class="n">df_executed_monthly</span><span class="p">[</span><span class="s1">&#39;EXECUTED ACTIVITIES&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">month_idx</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">monthly_activities</span><span class="p">):</span>
+                        <span class="n">ax2</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_executed</span><span class="p">,</span> <span class="n">executed_value</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">monthly_activities</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;semibold&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># Etiqueta para &#39;scheduled&#39;</span>
+            <span class="k">if</span> <span class="n">has_scheduled_this_month</span> <span class="ow">and</span> <span class="n">x_scheduled</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># MODIFICACIÓN: Determinar tamaño de fuente dinámicamente</span>
+                <span class="n">font_size_scheduled</span> <span class="o">=</span> <span class="n">reduced_fontsize</span> <span class="k">if</span> <span class="n">scheduled_value</span> <span class="o">&gt;=</span> <span class="mi">250</span> <span class="k">else</span> <span class="n">normal_fontsize</span>
+                <span class="n">ax2</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_scheduled</span><span class="p">,</span> <span class="n">scheduled_value</span> <span class="o">+</span> <span class="n">y_offset</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">scheduled_value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size_scheduled</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">text_color</span><span class="p">)</span> <span class="c1"># &lt;-- Usar variable</span>
+                <span class="k">if</span> <span class="n">df_scheduled_monthly</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">scheduled_monthly</span> <span class="o">=</span> <span class="n">df_scheduled_monthly</span><span class="p">[</span><span class="s1">&#39;SCHEDULED ACTIVITIES&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">month_idx</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">scheduled_monthly</span><span class="p">):</span>
+                        <span class="n">ax2</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_scheduled</span><span class="p">,</span> <span class="n">scheduled_value</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">scheduled_monthly</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;semibold&#39;</span><span class="p">)</span>
+        <span class="c1"># =========================================================================</span>
+        <span class="c1"># 6. CUADRO DE INFORMACIÓN (AJUSTADO A MILLONES)</span>
+        <span class="c1"># =========================================================================</span>
+        <span class="n">closing_month_name</span> <span class="o">=</span> <span class="n">all_months</span><span class="p">[</span><span class="s1">&#39;MONTH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">current_idx</span><span class="p">]</span>
+        <span class="n">current_month_name</span> <span class="o">=</span> <span class="n">all_months</span><span class="p">[</span><span class="s1">&#39;MONTH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">current_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">next_month_name</span> <span class="o">=</span> <span class="n">all_months</span><span class="p">[</span><span class="s1">&#39;MONTH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">next_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        
+        <span class="n">current_real</span> <span class="o">=</span> <span class="n">df_real_cost_accumulated</span><span class="p">[</span><span class="s1">&#39;ACTUAL COST&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">current_idx</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1_000_000</span>
+        <span class="n">current_fc</span> <span class="o">=</span> <span class="n">df_forecast</span><span class="p">[</span><span class="s1">&#39;FORECAST&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">current_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1_000_000</span>
+        <span class="n">next_fc</span> <span class="o">=</span> <span class="n">df_forecast</span><span class="p">[</span><span class="s1">&#39;FORECAST&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">next_idx</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1_000_000</span>
+        <span class="n">eoy_fc</span> <span class="o">=</span> <span class="n">df_forecast</span><span class="p">[</span><span class="s1">&#39;FORECAST&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1_000_000</span>
+        <span class="n">eoy_budget</span> <span class="o">=</span> <span class="n">df_budget</span><span class="p">[</span><span class="s1">&#39;BUDGET&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1_000_000</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">eoy_fc</span> <span class="o">-</span> <span class="n">eoy_budget</span>
+        <span class="n">delta_sign</span> <span class="o">=</span> <span class="s2">&quot;+&quot;</span> <span class="k">if</span> <span class="n">delta</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;-&quot;</span>
+        <span class="n">delta_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">delta_sign</span><span class="si">}{</span><span class="nb">abs</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> M&quot;</span>
+        
+        <span class="n">info_text</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">closing_month_name</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s2"> (closing): </span><span class="si">{</span><span class="n">current_real</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> M</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;===== Forecast =====</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">current_month_name</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">current_fc</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> M</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">next_month_name</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">next_fc</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> M</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;=== Year-End Summary: ===</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Forecast: </span><span class="si">{</span><span class="n">eoy_fc</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> M</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Planned: </span><span class="si">{</span><span class="n">eoy_budget</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> M</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Difference: </span><span class="si">{</span><span class="n">delta_text</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        
+        <span class="n">fancy_box</span> <span class="o">=</span> <span class="n">FancyBboxPatch</span><span class="p">((</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.68</span><span class="p">),</span> <span class="mf">0.32</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">,</span> <span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;round,pad=0.02&quot;</span><span class="p">,</span> 
+                                <span class="n">fc</span><span class="o">=</span><span class="n">budget_color</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">fancy_box</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.05</span> <span class="o">+</span> <span class="mf">0.32</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.68</span> <span class="o">+</span> <span class="mf">0.30</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">info_text</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> 
+                <span class="n">transform</span><span class="o">=</span><span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span><span class="c1">#, fontweight=&#39;bold&#39; </span>
+
+        <span class="c1"># ================= NUEVO CUADRO INFO CPI/SPI =====================</span>
+        <span class="n">cpi_spi_info</span> <span class="o">=</span> <span class="n">data_sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cpi_spi_info&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cpi_spi_info</span> <span class="ow">and</span> <span class="n">cpi_spi_info</span><span class="p">[</span><span class="s2">&quot;current_month&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tomato_color</span> <span class="o">=</span> <span class="s2">&quot;#F7492A&quot;</span>
+            <span class="c1"># Cuadro más pequeño y letras más pequeñas</span>
+            <span class="n">info_text_2</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;CPI </span><span class="si">{</span><span class="n">cpi_spi_info</span><span class="p">[</span><span class="s1">&#39;current_month&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cpi_spi_info</span><span class="p">[</span><span class="s1">&#39;cpi_current&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;SPI </span><span class="si">{</span><span class="n">cpi_spi_info</span><span class="p">[</span><span class="s1">&#39;current_month&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cpi_spi_info</span><span class="p">[</span><span class="s1">&#39;spi_current&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;CPI </span><span class="si">{</span><span class="n">cpi_spi_info</span><span class="p">[</span><span class="s1">&#39;next_month&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cpi_spi_info</span><span class="p">[</span><span class="s1">&#39;cpi_next&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;SPI </span><span class="si">{</span><span class="n">cpi_spi_info</span><span class="p">[</span><span class="s1">&#39;next_month&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cpi_spi_info</span><span class="p">[</span><span class="s1">&#39;spi_next&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="c1"># Cambia tamaño y posición del cuadro (height reducido)</span>
+            <span class="c1"># Mover el cuadro más arriba cambiando la coordenada Y (por ejemplo, de 0.76 a 0.82)</span>
+            <span class="n">fancy_box_2</span> <span class="o">=</span> <span class="n">FancyBboxPatch</span><span class="p">((</span><span class="mf">0.42</span><span class="p">,</span> <span class="mf">0.84</span><span class="p">),</span> <span class="mf">0.16</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;round,pad=0.02&quot;</span><span class="p">,</span>
+                                         <span class="n">fc</span><span class="o">=</span><span class="n">tomato_color</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+            <span class="n">ax1</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">fancy_box_2</span><span class="p">)</span>
+            <span class="n">ax1</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.42</span> <span class="o">+</span> <span class="mf">0.16</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.84</span> <span class="o">+</span> <span class="mf">0.13</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">info_text_2</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+                     <span class="n">transform</span><span class="o">=</span><span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+        <span class="c1"># =========================================================================</span>
+        <span class="c1"># 7. CONFIGURACIÓN FINAL</span>
+        <span class="c1"># =========================================================================</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="n">month</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">months</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+        
+        <span class="c1"># Leyendas combinadas</span>
+        <span class="n">lines</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+        <span class="n">bars</span><span class="p">,</span> <span class="n">bar_labels</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+
+        <span class="c1"># Ajustar ncol según si hay actividades programadas</span>
+        <span class="c1"># Leyendas por separado</span>
+        <span class="n">lines</span><span class="p">,</span> <span class="n">line_labels</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+        <span class="n">bars</span><span class="p">,</span> <span class="n">bar_labels</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+
+        <span class="c1"># Leyenda de líneas</span>
+        <span class="n">legend1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">line_labels</span><span class="p">,</span> 
+                            <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper center&#39;</span><span class="p">,</span> 
+                            <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.12</span><span class="p">),</span> 
+                            <span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+                            <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+
+        <span class="c1"># Leyenda de barras (debajo de la de líneas)</span>
+        <span class="n">legend2</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bars</span><span class="p">,</span> <span class="n">bar_labels</span><span class="p">,</span> 
+                            <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper center&#39;</span><span class="p">,</span> 
+                            <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.21</span><span class="p">),</span> 
+                            <span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+                            <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+
+        <span class="c1"># Añadir ambas leyendas al gráfico</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">legend1</span><span class="p">)</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;INITIAL APPROVED COST&quot;</span> <span class="ow">in</span> <span class="n">graph_data</span><span class="p">:</span>
+           <span class="c1"># Crear eje para el botón (posición más compacta)</span>
+            <span class="n">ax_button</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">])</span>  <span class="c1"># Tamaño más pequeño y posición ajustada</span>
+
+            <span class="c1"># Crear el botón con un diseño compacto</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">toggle_button</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
+                <span class="n">ax_button</span><span class="p">,</span> 
+                <span class="s1">&#39;Hide Approved&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cost_visible</span> <span class="k">else</span> <span class="s1">&#39;Show Approved&#39;</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#3d5db6&quot;</span><span class="p">,</span>  <span class="c1"># Fondo gris claro</span>
+                <span class="n">hovercolor</span><span class="o">=</span><span class="s2">&quot;#082864&quot;</span>  <span class="c1"># Fondo más oscuro al pasar el mouse</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Personalizar el texto del botón</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">toggle_button</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>  <span class="c1"># Tamaño de fuente más pequeño</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">toggle_button</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_fontweight</span><span class="p">(</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>  <span class="c1"># Negrita</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">toggle_button</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s2">&quot;#FFFFFF&quot;</span><span class="p">)</span>  <span class="c1"># Texto negro</span>
+
+            <span class="c1"># Conectar función de callback</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">toggle_button</span><span class="o">.</span><span class="n">on_clicked</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">toggle_initial_cost</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div>
+
+        
+<div class="viewcode-block" id="FieldGraphGeneratorService.toggle_initial_cost">
+<a class="viewcode-back" href="../../../reports.html#services.field_lines_services.field_graph_generator_service.FieldGraphGeneratorService.toggle_initial_cost">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">toggle_initial_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Función para alternar la visibilidad del costo inicial&quot;&quot;&quot;</span>
+        <span class="c1"># Cambiar estado</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_cost_visible</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cost_visible</span>
+        
+        <span class="c1"># Actualizar línea</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_line</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cost_visible</span><span class="p">)</span>
+        
+        <span class="c1"># Actualizar anotación</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cost_visible</span><span class="p">:</span>
+            <span class="c1"># Recuperar el último valor (necesitas acceso a los datos aquí)</span>
+            <span class="n">last_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_line</span><span class="o">.</span><span class="n">get_ydata</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initial_annotation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_line</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">last_value</span><span class="o">/</span><span class="mi">1_000_000</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">M&quot;</span><span class="p">,</span> 
+                <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">last_value</span><span class="p">),</span>
+                <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">),</span> 
+                <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">,</span>
+                <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+                <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;initial_annotation&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_annotation</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initial_annotation</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initial_annotation</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="c1"># Actualizar texto del botón</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toggle_button</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span>
+            <span class="s1">&#39;Hide Approved&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cost_visible</span> <span class="k">else</span> <span class="s1">&#39;Show Approved&#39;</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># Redibujar el canvas</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2025, Cristian Zambrano.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

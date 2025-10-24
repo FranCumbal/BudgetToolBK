@@ -1,0 +1,244 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>logic.field_lines.reports.slick_and_bacheo_report &mdash; documentación de Budget Tool Phase II - 2025</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=7005c00d"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/translations.js?v=f85f4cfb"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../../../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Budget Tool Phase II
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contenidos:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reports.html">Reportes de Campo</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Budget Tool Phase II</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Código de módulo</a></li>
+      <li class="breadcrumb-item active">logic.field_lines.reports.slick_and_bacheo_report</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fuente para logic.field_lines.reports.slick_and_bacheo_report</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">logic.field_lines.reports.field_report</span><span class="w"> </span><span class="kn">import</span> <span class="n">FieldReport</span>
+
+
+<div class="viewcode-block" id="SlickAndBacheoReport">
+<a class="viewcode-back" href="../../../../reports.html#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport">[documentos]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SlickAndBacheoReport</span><span class="p">(</span><span class="n">FieldReport</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reporte especializado para las líneas de servicio &#39;Slickline&#39; y &#39;Bacheo&#39;.</span>
+
+<span class="sd">    Hereda de FieldReport y añade lógica para calcular el presupuesto con un</span>
+<span class="sd">    CPAE estático y para categorizar las actividades ejecutadas según su costo.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">service_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">zone</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">line_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">categoria_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">categoria_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">categoria_3</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicializa una instancia del reporte para Slick and Bacheo.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            title (str): Título o nombre de la línea.</span>
+<span class="sd">            service_type (str): Tipo de servicio.</span>
+<span class="sd">            zone (str): Zona geográfica.</span>
+<span class="sd">            line_type (str): Tipo de línea.</span>
+<span class="sd">            categoria_1 (float): Límite superior de costo para la categoría 1.</span>
+<span class="sd">            categoria_2 (float): Límite superior de costo para la categoría 2.</span>
+<span class="sd">            categoria_3 (float): Límite superior de costo para la categoría 3.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">service_type</span><span class="o">=</span><span class="n">service_type</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">line_type</span><span class="o">=</span><span class="n">line_type</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">service_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CATEGORIA_1</span> <span class="o">=</span> <span class="n">categoria_1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CATEGORIA_2</span> <span class="o">=</span> <span class="n">categoria_2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CATEGORIA_3</span> <span class="o">=</span> <span class="n">categoria_3</span>
+
+<div class="viewcode-block" id="SlickAndBacheoReport.get_data_sources">
+<a class="viewcode-back" href="../../../../reports.html#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.get_data_sources">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_data_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sobrescribe el método base para usar un presupuesto con CPAE estático.</span>
+
+<span class="sd">        Reemplaza la fuente de datos &#39;budget&#39; por una versión calculada con un</span>
+<span class="sd">        costo por actividad (CPAE) distribuido uniformemente a lo largo del año.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sources</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_data_sources</span><span class="p">()</span>
+        <span class="n">sources</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_budget_with_static_cpae</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">static_cpae_value</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">sources</span></div>
+
+    
+<div class="viewcode-block" id="SlickAndBacheoReport.static_cpae_value">
+<a class="viewcode-back" href="../../../../reports.html#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.static_cpae_value">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">static_cpae_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calcula un valor de CPAE estático y distribuido uniformemente.</span>
+
+<span class="sd">        Obtiene el presupuesto total anual y lo divide entre los 12 meses para</span>
+<span class="sd">        obtener un costo mensual constante.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">anual_initial_planned_loader</span><span class="o">.</span><span class="n">get_budget_value_evently_distributed_by_year</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="SlickAndBacheoReport.generate_budget_with_static_cpae">
+<a class="viewcode-back" href="../../../../reports.html#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.generate_budget_with_static_cpae">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_budget_with_static_cpae</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cpae_value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Genera un DataFrame de presupuesto con el mismo valor CPAE para cada mes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">months</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_months_data</span><span class="p">()]</span>
+        <span class="n">static_cpae_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Month&quot;</span><span class="p">:</span> <span class="n">months</span><span class="p">,</span> <span class="s2">&quot;CPAE&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">cpae_value</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">months</span><span class="p">)})</span>
+        <span class="n">budget_df</span> <span class="o">=</span> <span class="n">static_cpae_dataframe</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">budget_df</span><span class="p">[</span><span class="s2">&quot;Budget&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">budget_df</span><span class="p">[</span><span class="s2">&quot;CPAE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">budget_df</span><span class="p">[[</span><span class="s2">&quot;Month&quot;</span><span class="p">,</span> <span class="s2">&quot;Budget&quot;</span><span class="p">]]</span></div>
+
+
+<div class="viewcode-block" id="SlickAndBacheoReport.get_executed_activities_data_frame_by_month">
+<a class="viewcode-back" href="../../../../reports.html#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.get_executed_activities_data_frame_by_month">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_executed_activities_data_frame_by_month</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">line_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Obtiene el DataFrame de actividades ejecutadas para un mes y línea específicos.</span>
+
+<span class="sd">        Delega la llamada al gestor de actividades ejecutadas.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">executed_activities_manager</span><span class="o">.</span><span class="n">get_executed_activities_data_frame_by_month</span><span class="p">(</span><span class="n">month</span><span class="p">,</span> <span class="n">line_name</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="SlickAndBacheoReport.get_categorizer_executed_activities_by_month">
+<a class="viewcode-back" href="../../../../reports.html#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.get_categorizer_executed_activities_by_month">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_categorizer_executed_activities_by_month</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">month</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Obtiene y categoriza las actividades ejecutadas para un mes dado.</span>
+
+<span class="sd">        Distingue entre &#39;Slickline&#39; (usa solo costos de servicios) y &#39;Bacheo&#39;</span>
+<span class="sd">        (suma costos de servicios y productos). Luego, clasifica el costo total</span>
+<span class="sd">        en categorías predefinidas.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">month</span> <span class="o">=</span> <span class="n">month</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_executed_activities_data_frame_by_month</span><span class="p">(</span><span class="n">month</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">servicios_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s1">_Servicios&#39;</span>
+        <span class="n">productos_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s1">_Productos&#39;</span>
+
+        <span class="k">if</span> <span class="n">servicios_col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Columna </span><span class="si">{</span><span class="n">servicios_col</span><span class="si">}</span><span class="s1"> no encontrada&#39;</span><span class="p">)</span>
+        <span class="n">productos_exists</span> <span class="o">=</span> <span class="n">productos_col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+        <span class="c1"># Si es Slickline, solo usar servicios_col</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;item 49 slick line&quot;</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Categoria_Total&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">servicios_col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clasificar_valor_servicio</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="c1"># Si es Bacheo, sumar servicios y productos si existen</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">calcular_total</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+            <span class="n">servicio</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">servicios_col</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span>
+            <span class="n">producto</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">productos_col</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">productos_exists</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">notnull</span><span class="p">(</span><span class="n">producto</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">servicio</span> <span class="o">+</span> <span class="n">producto</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">servicio</span>
+        <span class="n">df</span><span class="p">[</span><span class="n">servicios_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">servicios_col</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">productos_exists</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">productos_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">productos_col</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Costo_Total&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">calcular_total</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Categoria_Total&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Costo_Total&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clasificar_valor_servicio</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="SlickAndBacheoReport.clasificar_valor_servicio">
+<a class="viewcode-back" href="../../../../reports.html#logic.field_lines.reports.slick_and_bacheo_report.SlickAndBacheoReport.clasificar_valor_servicio">[documentos]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clasificar_valor_servicio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">valor</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clasifica un valor de costo en una categoría numérica.</span>
+
+<span class="sd">        Utiliza los umbrales (CATEGORIA_1, CATEGORIA_2, CATEGORIA_3) definidos</span>
+<span class="sd">        en la inicialización para asignar un número de categoría (1 a 4) a un</span>
+<span class="sd">        costo dado. Devuelve 0 si el valor es nulo o cero.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">valor</span><span class="p">)</span> <span class="ow">or</span> <span class="n">valor</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="n">valor</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CATEGORIA_1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">valor</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CATEGORIA_2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">2</span>
+        <span class="k">elif</span> <span class="n">valor</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CATEGORIA_3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">3</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">4</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2025, Cristian Zambrano.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
