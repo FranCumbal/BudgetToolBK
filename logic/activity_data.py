@@ -57,7 +57,7 @@ def build_activities_dataframe(data_loader, plan_actividades, year):
         print("MIRAAA")
         print(df)
         # Restar una actividad al mes de noviembre en la columna PLANNED ACTIVITIES
-        df.loc[df["MONTH"] == "November", "PLANNED_ACTIVITIES"] -= 1
+        #df.loc[df["MONTH"] == "November", "PLANNED_ACTIVITIES"] -= 1
 
         return df
 

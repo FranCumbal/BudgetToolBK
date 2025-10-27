@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import datetime
 from utils.dates import normalize_month_names, get_month_number, get_month_name
 
-class PlanAnualActividades:
+class PlanAnualActividades1:
     """
     Clase encargada de gestionar el plan anual de actividades. Esta clase permite:
     - Cargar los datos desde un archivo Excel predefinido usando el `DataLoader`.
@@ -20,7 +20,7 @@ class PlanAnualActividades:
         cdf_df (pd.DataFrame): DataFrame de actividades CDF cargado automáticamente.
     """
 
-    def __init__(self, data_loader, plan_path: str, sheet_name="Plan"+str(datetime.now().year)): # Esto es provisional, tratando de arreglar las cosas
+    def __init__(self, data_loader, plan_path: str, sheet_name="ForecastedPlan"+str(datetime.now().year)): # Esto es provisional, tratando de arreglar las cosas
         self.data_loader = data_loader
         self.plan_path = plan_path
         print("En el plan")
@@ -81,15 +81,23 @@ class PlanAnualActividades:
         - Actividades ya ejecutadas (histórico).
         - Actividades registradas desde CDF.
         - Actividades restantes distribuidas uniformemente.
+
+        Args:
+            year (int): Año en curso.
+
+        Returns:
+            pd.DataFrame: Plan ajustado con la distribución por mes.
         """
         distribucion_df = self.plan_df.copy()
+        print("AHORA?")
+        print(distribucion_df)
         done_counts = self.get_done_por_tipo(year)
-        
-        columnas_meses = [c for c in distribucion_df.columns if c not in ['No.', 'Tipo de Actividad', 'Total']]
+
+        columnas_meses = [c for c in distribucion_df.columns if c not in ['Tipo de Actividad', 'Total', 'No.']]
         mes_actual = datetime.now().month
         mes_siguiente = mes_actual + 1 if mes_actual < 12 else 12
 
-        # CDF interno
+        # 🆕 Usar el CDF interno
         cdf_counts_by_month = {}
         if self.cdf_df is not None:
             grouped = self.data_loader.group_cdf_by_month(self.cdf_df, col='activity_type')
@@ -100,7 +108,6 @@ class PlanAnualActividades:
                     if tipo not in cdf_counts_by_month:
                         cdf_counts_by_month[tipo] = {}
                     cdf_counts_by_month[tipo][mes] = lista.count(tipo)
-
         for idx, row in distribucion_df.iterrows():
             if row['Tipo de Actividad'] == 'TOTAL':
                 continue
@@ -111,29 +118,22 @@ class PlanAnualActividades:
 
             ejecutado_por_mes = done_counts.get(tipo_codigo, done_counts.get(tipo_nombre, {}))
 
-            # Colocar valores ejecutados
-            """for mes_nombre in columnas_meses:
+            for mes_nombre in columnas_meses:
                 valor = ejecutado_por_mes.get(mes_nombre, 0)
                 distribucion_df.at[idx, mes_nombre] = valor
 
-            # Cargar valores del CDF solo en mes actual o siguiente
             for mes_num in [mes_actual, mes_siguiente]:
                 mes_nombre = get_month_name(mes_num)
-                if mes_num < mes_actual:
-                    continue  # no llenar meses pasados
-
                 valor_cdf = cdf_counts_by_month.get(tipo_codigo, {}).get(mes_num, 0)
                 celda = distribucion_df.at[idx, mes_nombre]
                 if pd.isna(celda) or celda == 0:
-                    distribucion_df.at[idx, mes_nombre] = valor_cdf"""
+                    distribucion_df.at[idx, mes_nombre] = valor_cdf
 
-            # Calcular faltante
             definidos = sum(
                 int(distribucion_df.at[idx, mes]) for mes in columnas_meses if pd.notna(distribucion_df.at[idx, mes])
             )
             faltante = max(total_planificado - definidos, 0)
 
-            # Repartir el faltante solo en meses futuros
             meses_disponibles = [
                 mes for mes in columnas_meses
                 if get_month_number(mes) > mes_siguiente and (pd.isna(distribucion_df.at[idx, mes]) or distribucion_df.at[idx, mes] == 0)
@@ -145,13 +145,13 @@ class PlanAnualActividades:
                 for i, mes in enumerate(meses_disponibles):
                     distribucion_df.at[idx, mes] = base + (1 if i < extra else 0)
 
-        # Recalcular totales
         totales = distribucion_df[columnas_meses].drop(index=distribucion_df.shape[0]-1).sum(numeric_only=True)
         distribucion_df.loc[distribucion_df['Tipo de Actividad'] == 'TOTAL', columnas_meses] = totales.values
         distribucion_df.loc[distribucion_df['Tipo de Actividad'] == 'TOTAL', 'Total'] = int(totales.sum())
 
+        print("✅ Distribución final generada.")
+        print(distribucion_df)
         return distribucion_df
-
     
     def calcular_distribucion_hibrida(self, year=datetime.now().year, saved_excel_path=None, saved_sheet_name=None):
         """

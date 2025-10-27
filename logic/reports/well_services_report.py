@@ -2,12 +2,13 @@ import os
 import calendar
 from datetime import datetime
 import pandas as pd
+from logic.plan_actividades1 import PlanAnualActividades1
 
 from logic.reports.base_report import LineReport
 from utils.dates import normalize_month_names, get_all_months, get_month_number
 from logic.activity_mapping import map_services_and_costs
 from logic.forecasting import calculate_monthly_costs
-from utils.file_manager import get_catalog_path, get_template_path
+from utils.file_manager import get_catalog_path, get_template_path, get_forecasted_plan_path
 
 class WellServicesReport(LineReport):
     """
@@ -29,7 +30,10 @@ class WellServicesReport(LineReport):
 
     def generate_forecast(self):
         # 1️⃣ Obtener plan anual distribuido
-        distribucion_df = self.plan_actividades.calcular_distribucion_por_tipo(year=self.year)
+        plan_path = get_forecasted_plan_path(self.year)
+        plan_provider = PlanAnualActividades1(self.data_loader, plan_path)
+        distribucion_df = plan_provider.calcular_distribucion_por_tipo(year=self.year)
+
 
         # 2️⃣ Normalizar columnas de mes
         distribucion_df.columns = [

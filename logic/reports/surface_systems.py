@@ -1,12 +1,13 @@
 
 import calendar
 import pandas as pd
+from logic.plan_actividades1 import PlanAnualActividades1
 from datetime import datetime
 
 from logic.reports.base_report import LineReport
 from utils.dates import get_all_months, get_month_number, normalize_month_names
 from logic.activity_mapping import map_services_and_costs
-from utils.file_manager import get_catalog_path, get_template_path
+from utils.file_manager import get_catalog_path, get_template_path, get_forecasted_plan_path
 
 class SurfaceSystemsReport(LineReport):
     """
@@ -28,7 +29,9 @@ class SurfaceSystemsReport(LineReport):
 
     def generate_forecast(self):
         """Genera el forecast con costos proyectados y reales para Surface Systems."""
-        distribucion_df = self.plan_actividades.calcular_distribucion_por_tipo(year=self.year)
+        plan_path = get_forecasted_plan_path(self.year)
+        plan_provider = PlanAnualActividades1(self.data_loader, plan_path)
+        distribucion_df = plan_provider.calcular_distribucion_por_tipo(year=self.year)
         distribucion_df.columns = [
             normalize_month_names(pd.Series([col.strip()])).iloc[0]
             if col.strip() not in ['No.', 'Tipo de Actividad', 'Total'] else col.strip()

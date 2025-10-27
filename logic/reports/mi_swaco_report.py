@@ -1,11 +1,11 @@
 import pandas as pd
 import calendar
 # 🟢 Añade esta importación
-from logic.plan_actividades import PlanAnualActividades
+from logic.plan_actividades1 import PlanAnualActividades1
 from logic.reports.base_report import LineReport
 from utils.dates import get_all_months, get_month_number, normalize_month_names
 # 🟢 Añade esta importación
-from utils.file_manager import get_catalog_path, get_plan_path
+from utils.file_manager import get_catalog_path, get_forecasted_plan_path
 
 
 class MISwacoReport(LineReport):
@@ -53,8 +53,8 @@ class MISwacoReport(LineReport):
         """
         # 🟢 CAMBIO: Se crea una instancia de PlanAnualActividades para asegurar
         # que se cargue el plan correcto (CDFPlan) desde el disco.
-        plan_path = get_plan_path(self.year)
-        plan_provider = PlanAnualActividades(self.data_loader, plan_path)
+        plan_path = get_forecasted_plan_path(self.year)
+        plan_provider = PlanAnualActividades1(self.data_loader, plan_path)
         distribucion_df = plan_provider.calcular_distribucion_por_tipo(year=self.year)
 
         distribucion_df.columns = [
