@@ -7,7 +7,7 @@ import calendar
 from logic.activity_data import build_activities_dataframe
 from logic.reports.base_report import LineReport
 from utils.dates import normalize_month_names, get_month_number, get_all_months, calculate_duration
-from utils.file_manager import get_forecast_services_path_file, get_selected_services_wells_path
+from utils.file_manager import get_forecast_services_path_file, get_selected_services_wells_path, get_forecasted_plan_path
 
 
 class ServicesReport(LineReport):
@@ -389,6 +389,29 @@ class ServicesReport(LineReport):
         activities_data_dataframe = build_activities_dataframe(self.data_loader, self.plan_actividades, year=datetime.now().year)
         return activities_data_dataframe[["MONTH", "EXECUTED_ACTIVITIES"]]
          
+    def get_total_activities(self):
+        sheet_name = f"ForecastedPlan{self.year}"
+        forecasted_plan_path = get_forecasted_plan_path(self.year)
+        planned_activities_complete_df = self.plan_actividades.data_loader.load_plan_actividades_from_excel(
+                forecasted_plan_path,
+                sheet_name
+        )
+        list_provisional = []
+        if not planned_activities_complete_df.empty:
+            planned_activities_complete_df = planned_activities_complete_df.rename(columns={'Total': 'PLANNED_ACTIVITIES'})
+            # Sumar actividades por mes (todas las filas) para obtener un df de 12 filas (una por mes)
+            meses = [col for col in planned_activities_complete_df.columns if col not in ['No.', 'Tipo de Actividad', 'PLANNED_ACTIVITIES']]
+            monthly_totals = {mes: planned_activities_complete_df[mes].sum() for mes in meses}
+            
+            list_provisional = list(monthly_totals.values())
+        month_names = [m for m in planned_activities_complete_df.columns if m not in ['No.', 'Tipo de Actividad', 'PLANNED_ACTIVITIES']]
+        total_activities_by_month = list_provisional if list_provisional else [0] * len(month_names)
+        df_activities = pd.DataFrame({
+            "MONTH": month_names,
+            "TOTAL_ACTIVITIES": total_activities_by_month,
+        })
+        return df_activities
+
     def generate_graph(self, forecast, budget, activities_data):
         """Genera el gráfico comparativo Forecast vs Real vs Plan."""
         from services.graph_generator import create_budget_forecast_graph
@@ -396,11 +419,8 @@ class ServicesReport(LineReport):
         opex_budget = self.opex_manager.get_opex_for_line("1.10 Services")
         plan_data = self.generate_plan_data(opex_budget)
 
-        cap_df = self.operative_capacity[["Mes", "Numero tentativo de pozos OPEX"]].copy()
-        month_map = {i + 1: m for i, m in enumerate(get_all_months())}
-        cap_df["MONTH"] = cap_df["Mes"].map(month_map)
-        cap_df.rename(columns={"Numero tentativo de pozos OPEX": "FORECASTED_OPEX_ACT"}, inplace=True)
-        capacity_df = cap_df[["MONTH", "FORECASTED_OPEX_ACT"]]
+        capacity_df = self.get_total_activities()
+        capacity_df.rename(columns={'TOTAL_ACTIVITIES': 'FORECASTED_OPEX_ACT'}, inplace=True)
 
         return create_budget_forecast_graph(
             forecast=forecast,

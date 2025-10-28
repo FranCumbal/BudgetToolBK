@@ -15,7 +15,8 @@ from utils.dates import normalize_month_names, get_all_months
 from utils.file_manager import (
     get_single_excel_file_path,
     get_cotizacion_path,
-    get_budget_als_dir
+    get_budget_als_dir,
+    get_forecasted_plan_path
 )
 import pandas as pd
 
@@ -24,12 +25,13 @@ class ArtificialLiftReport(LineReport):
     """
     Reporte para la línea 1.13 Artificial LifT
     """
-    def __init__(self, data_loader, year, operative_capacity, opex_manager):
+    def __init__(self, data_loader, year, operative_capacity, opex_manager, plan_actividades):
         super().__init__(data_loader)
         self.year = year
         self.operative_capacity = pd.DataFrame(operative_capacity)
         self.opex_manager = opex_manager
         self.matched_data = None
+        self.plan_actividades = plan_actividades
 
     def load_and_match_data(self):
         """
@@ -200,9 +202,34 @@ class ArtificialLiftReport(LineReport):
         )
         deviations.to_excel("summary/als/deviations.xlsx")
         return deviations
+    
+    def get_total_activities(self):
+        sheet_name = f"ForecastedPlan{self.year}"
+        forecasted_plan_path = get_forecasted_plan_path(self.year)
+        planned_activities_complete_df = self.plan_actividades.data_loader.load_plan_actividades_from_excel(
+                forecasted_plan_path,
+                sheet_name
+        )
+        list_provisional = []
+        if not planned_activities_complete_df.empty:
+            planned_activities_complete_df = planned_activities_complete_df.rename(columns={'Total': 'PLANNED_ACTIVITIES'})
+            # Sumar actividades por mes (todas las filas) para obtener un df de 12 filas (una por mes)
+            meses = [col for col in planned_activities_complete_df.columns if col not in ['No.', 'Tipo de Actividad', 'PLANNED_ACTIVITIES']]
+            monthly_totals = {mes: planned_activities_complete_df[mes].sum() for mes in meses}
+            
+            list_provisional = list(monthly_totals.values())
+        month_names = [m for m in planned_activities_complete_df.columns if m not in ['No.', 'Tipo de Actividad', 'PLANNED_ACTIVITIES']]
+        total_activities_by_month = list_provisional if list_provisional else [0] * len(month_names)
+        df_activities = pd.DataFrame({
+            "month": month_names,
+            "total_activities": total_activities_by_month,
+        })
+        return df_activities
 
     def generate_graph(self, forecast_df, budget, activities_data, failures=None):
         """Genera el gráfico comparativo para Artificial Lift."""
+        capacity_df = self.get_total_activities()
         opex_budget = self.opex_manager.get_opex_for_line("1.13 Artificial Lift")
+        
         print(f"⚠️ OPEX Budget: {opex_budget}")
-        return generate_budget_graph_als(forecast_df, budget, activities_data, opex_budget=opex_budget)
+        return generate_budget_graph_als(forecast_df, budget, activities_data, capacity_df, opex_budget=opex_budget)

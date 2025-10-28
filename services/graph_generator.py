@@ -7,12 +7,12 @@ from utils.dates import get_all_months
 
 
 # Define the function as requested
-def generate_budget_graph_als(forecast, budget_data, activities_data, opex_budget):
+def generate_budget_graph_als(forecast, budget_data, activities_data, capacity_df, opex_budget):
     all_months = pd.DataFrame({
         "month": ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"]
     })
-
+    
     forecast.columns = forecast.columns.str.lower()
     budget_data.columns = budget_data.columns.str.lower()
     activities_data.columns = activities_data.columns.str.lower()
@@ -115,14 +115,14 @@ def generate_budget_graph_als(forecast, budget_data, activities_data, opex_budge
 
 
     activities_data['cumulative_planned'] = activities_data['planned_activities'].cumsum()
-    forecast['cumulative_estimated'] = forecast['plannedactivities'].cumsum()
+    capacity_df['cumulative_estimated'] = capacity_df['total_activities'].cumsum()
     activities_data['cumulative_executed'] = activities_data['executed_activities'].cumsum()
     activities_data['cumulative_fails'] = activities_data['fails'].cumsum()
     # Ocultar ejecutados y fallas después del mes de cierre
     activities_data.loc[closing_idx+1:, 'cumulative_executed'] = np.nan
     activities_data.loc[closing_idx+1:, 'cumulative_fails'] = np.nan
     # Ocultar actividades pronosticadas antes del mes actual
-    forecast.loc[:current_idx-1, 'cumulative_estimated'] = np.nan
+    capacity_df.loc[:current_idx-1, 'cumulative_estimated'] = np.nan
 
 
     ax2 = ax1.twinx()
@@ -135,7 +135,7 @@ def generate_budget_graph_als(forecast, budget_data, activities_data, opex_budge
     bars1 = ax2.bar(x - 1.5 * width, activities_data['cumulative_planned'], width,
                     label='Planned Activities', color='#95a5a6', alpha=0.7)
 
-    bars2 = ax2.bar(x - 0.5 * width, forecast['cumulative_estimated'], width,
+    bars2 = ax2.bar(x - 0.5 * width, capacity_df['cumulative_estimated'], width,
                     label='Forecasted Activities (statistics)', color=opex_act_color, alpha=0.7)
 
     bars3 = ax2.bar(x + 0.5 * width, activities_data['cumulative_executed'], width,
@@ -151,7 +151,7 @@ def generate_budget_graph_als(forecast, budget_data, activities_data, opex_budge
     for bar_group, values in zip(
         [bars1, bars2, bars3, bars4],
         [activities_data['cumulative_planned'],
-        forecast['cumulative_estimated'],
+        capacity_df['cumulative_estimated'],
         activities_data['cumulative_executed'],
         activities_data['cumulative_fails']]
     ):

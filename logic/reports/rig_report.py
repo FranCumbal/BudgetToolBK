@@ -1,6 +1,7 @@
 import pandas as pd
 from logic.reports.base_report import LineReport
 from utils.dates import  get_all_months
+from utils.file_manager import get_forecasted_plan_path
 
 class RigReport(LineReport):
     """
@@ -8,13 +9,14 @@ class RigReport(LineReport):
     Calcula el forecast de costos por mes utilizando tarifas promedio y capacidad operativa.
     """
 
-    def __init__(self, data_loader, year, merged_opex_data, operative_capacity, opex_manager):
+    def __init__(self, data_loader, year, merged_opex_data, operative_capacity, opex_manager, plan_actividades):
         super().__init__(data_loader)
         self.year = year
         self.merged_opex_data = merged_opex_data
         self.operative_capacity = operative_capacity
         self.opex_manager = opex_manager
         self.actual_budget_data = None
+        self.plan_actividades = plan_actividades
 
     def generate_forecast(self):
         """
@@ -101,6 +103,29 @@ class RigReport(LineReport):
     def generate_deviations(self):
         return pd.DataFrame()
 
+    def get_total_activities(self):
+        sheet_name = f"ForecastedPlan{self.year}"
+        forecasted_plan_path = get_forecasted_plan_path(self.year)
+        planned_activities_complete_df = self.plan_actividades.data_loader.load_plan_actividades_from_excel(
+                forecasted_plan_path,
+                sheet_name
+        )
+        list_provisional = []
+        if not planned_activities_complete_df.empty:
+            planned_activities_complete_df = planned_activities_complete_df.rename(columns={'Total': 'PLANNED_ACTIVITIES'})
+            # Sumar actividades por mes (todas las filas) para obtener un df de 12 filas (una por mes)
+            meses = [col for col in planned_activities_complete_df.columns if col not in ['No.', 'Tipo de Actividad', 'PLANNED_ACTIVITIES']]
+            monthly_totals = {mes: planned_activities_complete_df[mes].sum() for mes in meses}
+            
+            list_provisional = list(monthly_totals.values())
+        month_names = [m for m in planned_activities_complete_df.columns if m not in ['No.', 'Tipo de Actividad', 'PLANNED_ACTIVITIES']]
+        total_activities_by_month = list_provisional if list_provisional else [0] * len(month_names)
+        df_activities = pd.DataFrame({
+            "MONTH": month_names,
+            "TOTAL_ACTIVITIES": total_activities_by_month,
+        })
+        return df_activities
+    
     def generate_graph(self, forecast, budget, activities_data):
         """
         Genera el gráfico comparativo Forecast vs Real vs Plan.
@@ -110,11 +135,8 @@ class RigReport(LineReport):
         print(f"⚠️ OPEX Budget: {opex_budget}")
         plan_data = self.generate_plan_data(opex_budget)
 
-        capacity_df = self.operative_capacity[["Mes", "Numero tentativo de pozos OPEX"]].copy()
-        month_map = {i + 1: m for i, m in enumerate(get_all_months())}
-        capacity_df["MONTH"] = capacity_df["Mes"].map(month_map)
-        capacity_df.rename(columns={"Numero tentativo de pozos OPEX": "FORECASTED_OPEX_ACT"}, inplace=True)
-        capacity_df = capacity_df[["MONTH", "FORECASTED_OPEX_ACT"]]
+        capacity_df = self.get_total_activities()
+        capacity_df.rename(columns={'TOTAL_ACTIVITIES': 'FORECASTED_OPEX_ACT'}, inplace=True)
 
         return create_budget_forecast_graph(
             forecast=forecast,
