@@ -43,7 +43,6 @@ class PandasForecastedModel(QAbstractTableModel):
             return font
 
         return None
-
     def setData(self, index, value, role):
         if role == Qt.EditRole:
             try:
@@ -53,7 +52,7 @@ class PandasForecastedModel(QAbstractTableModel):
                 if row_tipo == "TOTAL":
                     return False
 
-                # Validación: solo enteros válidos
+                # ⚠️ Validación: solo enteros válidos
                 try:
                     nuevo_valor = int(float(value))
                 except ValueError:
@@ -94,6 +93,7 @@ class PandasForecastedModel(QAbstractTableModel):
                         int(self._df.at[row_idx, col]) for col in columnas_meses
                         if self.get_month_number(col) <= mes_limite
                     )
+
 
                     if nuevo_valor < ya_realizado:
                         self.invalid_cells.add((row_idx, index.column()))
@@ -181,6 +181,7 @@ class PandasForecastedModel(QAbstractTableModel):
 
     def get_restante(self, row_idx, exclude_col=None):
         columnas_meses = [col for col in self._df.columns if col not in ['No.', 'Tipo de Actividad', 'Total']]
+
         total = int(self._df.at[row_idx, "Total"])
         suma = 0
         for col in columnas_meses:
@@ -214,6 +215,26 @@ class PandasForecastedModel(QAbstractTableModel):
         for i, col in enumerate(meses_futuros):
             self._df.at[row_idx, col] = base + (1 if i < extra else 0)
 
+    def redistribuir_row(self, row_idx, nuevo_total):
+        columnas_meses = [col for col in self._df.columns if col not in ['No.', 'Tipo de Actividad', 'Total']]
+        mes_limite = self.get_month_number(self.next_month)
+
+        ya_definidos = sum(
+            self._df.at[row_idx, col] for col in columnas_meses
+            if self.get_month_number(col) <= mes_limite
+        )
+        faltante = max(nuevo_total - ya_definidos, 0)
+        meses_disponibles = [m for m in columnas_meses if self.get_month_number(m) > mes_limite]
+        n = len(meses_disponibles)
+        if n == 0:
+            return
+
+        base = faltante // n
+        extra = faltante % n
+
+        for i, mes in enumerate(meses_disponibles):
+            self._df.at[row_idx, mes] = base + (1 if i < extra else 0)
+
     def recalcular_total(self, row_idx):
         columnas_meses = [col for col in self._df.columns if col not in ['No.', 'Tipo de Actividad', 'Total']]
         return sum(float(self._df.at[row_idx, col]) for col in columnas_meses)
@@ -222,16 +243,21 @@ class PandasForecastedModel(QAbstractTableModel):
         columnas_meses = [col for col in self._df.columns if col not in ['No.', 'Tipo de Actividad', 'Total']]
         total_row_idx = self._df.shape[0] - 1
 
+
         for col in columnas_meses:
-            suma = sum(
-                float(self._df.at[row, col]) for row in range(total_row_idx)
-                if str(self._df.at[row, "Tipo de Actividad"]).upper() != "TOTAL"
-            )
+            suma = 0
+            for row in range(total_row_idx):
+                try:
+                    valor = float(self._df.at[row, col])
+                    suma += valor
+                except:
+                    pass
             self._df.at[total_row_idx, col] = int(suma)
 
         for row in range(total_row_idx):
             self._df.at[row, "Total"] = int(self.recalcular_total(row))
 
+        # Recalcular el total sumando solo las columnas de meses y solo en filas anteriores al total
         self._df.at[total_row_idx, "Total"] = int(
             self._df.loc[:total_row_idx - 1, columnas_meses].sum(axis=1).sum()
         )
@@ -241,10 +267,6 @@ class PandasForecastedModel(QAbstractTableModel):
     def show_warning(self, msg):
         QMessageBox.warning(None, "Advertencia", msg)
 
-
-# -------------------------------------------------------------------------
-# Ventana principal ForecastedPlanEditorWindow
-# -------------------------------------------------------------------------
 
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QPushButton, QTableView, QMessageBox, QLabel
@@ -267,12 +289,12 @@ class ForecastedPlanEditorWindow(QWidget):
 
         self.setup_menu()
 
-        # ✅ Restaurado el comportamiento original del label
-        total_actividades = self.df["Total"].sum()
-        self.label_actividades = QLabel(f"Actividades totales a planificar: <b>{total_actividades}</b>")
+       # Crear label de actividades totales basado en el valor pasado al constructor
+        self.label_actividades = QLabel(f"Actividades totales a planificar: <b>{self.pozos_sugeridos:.2f}</b>")
         self.label_actividades.setAlignment(Qt.AlignCenter)
         self.label_actividades.setStyleSheet("font-size: 22px; font-weight: bold; margin: 12px 0;")
         layout.addWidget(self.label_actividades)
+
 
         # Crear tabla
         self.table = QTableView()
@@ -281,7 +303,7 @@ class ForecastedPlanEditorWindow(QWidget):
         self.table.setModel(self.model)
         layout.addWidget(self.table)
 
-        # Conectar actualización del label
+        # Conectar la actualización del label cuando cambia la tabla
         self.model.layoutChanged.connect(self.update_label_actividades)
 
         # Botón guardar
@@ -293,20 +315,24 @@ class ForecastedPlanEditorWindow(QWidget):
         self.adjust_table_size()
 
     def update_label_actividades(self):
-        """Actualiza el label con la suma total (sin incluir fila TOTAL)."""
-        df_actual = self.model.get_dataframe()
-        total_actividades = df_actual[df_actual["Tipo de Actividad"] != "TOTAL"]["Total"].sum()
-        self.label_actividades.setText(f"Actividades totales a planificar: <b>{total_actividades}</b>")
+        """Actualiza el label con la suma de la columna Total excluyendo la fila TOTAL"""
+        print(["Se guardo Exitosamente"])
+
 
     def setup_menu(self):
+        """ Crea y configura la barra de menú para esta ventana.
+            Esto servira unicamente para Wireline, Tanks and Trunks y Testing. No se si esa logica apliquen las demas lineas
+        """
         menu_bar = QMenuBar(self)
         self.layout().setMenuBar(menu_bar)
+
         config_menu = menu_bar.addMenu("Configuración")
 
         capex_action = QAction("Configuración Capex", self)
+        # Conectar la acción al método del controlador
         capex_action.triggered.connect(self.controller.open_capex_config_editor)
         config_menu.addAction(capex_action)
-
+    
     def agregar_fila_total(self, df):
         df_copy = df.copy()
         columnas_meses = [c for c in df.columns if c not in ['No.', 'Tipo de Actividad', 'Total']]
@@ -324,20 +350,25 @@ class ForecastedPlanEditorWindow(QWidget):
         total_df = pd.DataFrame([total_row])
         return pd.concat([df_copy, total_df], ignore_index=True)
 
+
     def guardar_excel(self):
         try:
             df_to_save = self.model.get_dataframe().copy()
             df_to_save = df_to_save[df_to_save["Tipo de Actividad"] != "TOTAL"]
 
+            # Guardar toda la distribución mensual, no solo los totales
             with pd.ExcelWriter(self.excel_path, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                df_to_save.to_excel(writer, sheet_name="ForecastedPlan" + str(datetime.now().year), index=False)
+                df_to_save.to_excel(writer, sheet_name="ForecastedPlan"+str(datetime.now().year), index=False)
 
+            # Refrescar la vista de la tabla (sin recargar desde archivo)
             self.model.layoutChanged.emit()
             self.adjust_table_size()
+
             QMessageBox.information(self, "Éxito", "Plan completo guardado y la tabla actualizada.")
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Error al guardar la hoja: {e}")
+
 
     def adjust_table_size(self):
         self.table.resizeColumnsToContents()
