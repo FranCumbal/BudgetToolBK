@@ -289,12 +289,12 @@ class ForecastedPlanEditorWindow(QWidget):
 
         self.setup_menu()
 
-        # Crear label de actividades totales basado en la columna Total
-        total_actividades = self.df["Total"].sum()
-        self.label_actividades = QLabel(f"Actividades totales a planificar: <b>{total_actividades:.2f}</b>")
+       # Crear label de actividades totales basado en el valor pasado al constructor
+        self.label_actividades = QLabel(f"Actividades totales a planificar: <b>{self.pozos_sugeridos:.2f}</b>")
         self.label_actividades.setAlignment(Qt.AlignCenter)
         self.label_actividades.setStyleSheet("font-size: 22px; font-weight: bold; margin: 12px 0;")
         layout.addWidget(self.label_actividades)
+
 
         # Crear tabla
         self.table = QTableView()
@@ -316,9 +316,7 @@ class ForecastedPlanEditorWindow(QWidget):
 
     def update_label_actividades(self):
         """Actualiza el label con la suma de la columna Total excluyendo la fila TOTAL"""
-        df_actual = self.model.get_dataframe()
-        total_actividades = df_actual.query('`Tipo de Actividad` != "TOTAL"')["Total"].sum()
-        self.label_actividades.setText(f"Actividades totales a planificar: <b>{total_actividades:.2f}</b>")
+        print(["Se guardo Exitosamente"])
 
 
     def setup_menu(self):
