@@ -146,7 +146,7 @@ def match_jobs_with_budget(cotizacion, budget, group_mapping_budget, group_mappi
         "September": "Sep",
         "October": "Oct",
         "November": "Nov",
-        "December": "Dec"
+        "December": "Dic"
     }
     budget["MONTH"] = budget["MONTH"].str.strip().map(MONTH_NORMALIZATION)
 

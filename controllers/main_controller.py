@@ -40,6 +40,15 @@ from views.services_forecast_path_view import ServicesForecastPathView
 from utils.comments import load_comments, save_comment, load_field_line_comments
 from logic.opex_data_manager import OpexDataManager
 
+# ... (importaciones de nuevas vistas)
+from views.capex_config_view import CapexConfigDialog
+from views.field_views.avg_days_dialog import AvgDaysDialog
+# ...
+from views.tubulars_config import TubularsConfigDialog
+# --- AÑADIDO PARA MI SWACO Y COMPLETIONS ---
+from views.mi_swaco_config_view import MISwacoConfigDialog
+from views.completions_config_view import CompletionsConfigDialog
+
 from views.opex_editor import OpexEditorWindow
 from logic.plan_actividades import PlanAnualActividades
 
@@ -135,20 +144,20 @@ class MainController(QObject):
         # -------------------------
         self.reports = [
 
-            #{"class": RigReport, "title": "1.01 WI Rig", "type": "rig_schedule", "params": {"year": self.year_actual, "merged_opex_data": None, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            #{"class": MISwacoReport, "title": "1.02 MI Swaco", "type": "mi_swaco", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            #{"class": CompletionsReport, "title": "1.03 Completions", "type": "completions", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            #{"class": BitsDrillingTRemedialReport, "title": "1.04 Bits, Drilling Tools & Remedial", "type": "bits_d_tools_remedial", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            #{"class": SurfaceSystemsReport, "title": "1.05 Surface Systems", "type": "surface_systems", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            #{"class": WirelineReport, "title": "1.06 Wireline Report", "type": "wireline", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            #{"class": WellServicesReport, "title": "1.07 Well Services", "type": "well_services", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            #{"class": TestingFluidAnalysisReport, "title": "1.08 Testing and Fluid Analysis", "type": "well_services", "params": {"year": self.year_actual, "operative_capacity": None,  "opex_manager": None, "plan_actividades": None}},
-            #{"class": TubularsReport, "title": "1.09 Tubulars Report", "type": "tubulars", "params": {"year": self.year_actual, "operative_capacity": None, "plan_actividades": None, "opex_manager": None}},
+            {"class": RigReport, "title": "1.01 WI Rig", "type": "rig_schedule", "params": {"year": self.year_actual, "merged_opex_data": None, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            {"class": MISwacoReport, "title": "1.02 MI Swaco", "type": "mi_swaco", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            {"class": CompletionsReport, "title": "1.03 Completions", "type": "completions", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            {"class": BitsDrillingTRemedialReport, "title": "1.04 Bits, Drilling Tools & Remedial", "type": "bits_d_tools_remedial", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            {"class": SurfaceSystemsReport, "title": "1.05 Surface Systems", "type": "surface_systems", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            {"class": WirelineReport, "title": "1.06 Wireline Report", "type": "wireline", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            {"class": WellServicesReport, "title": "1.07 Well Services", "type": "well_services", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            {"class": TestingFluidAnalysisReport, "title": "1.08 Testing and Fluid Analysis", "type": "well_services", "params": {"year": self.year_actual, "operative_capacity": None,  "opex_manager": None, "plan_actividades": None}},
+            {"class": TubularsReport, "title": "1.09 Tubulars Report", "type": "tubulars", "params": {"year": self.year_actual, "operative_capacity": None, "plan_actividades": None, "opex_manager": None}},
             {"class": ServicesReport, "title": "1.10 Services", "type": "services", "params": {"year": self.year_actual, "operative_capacity": None, "plan_actividades": None, "opex_manager": None}},
-            #{"class": EnvironmentReport, "title": "1.11 Environment", "type": "environment", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            #{"class": ArtificialLiftReport, "title": "1.13 Artificial Lift", "type": "artificial_lift", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            #{"class": IntegratedServicesReport, "title": "1.14 Integrates Services Management", "type": "well_services", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            #{"class": TanksAndTrunksReport, "title": "1.15 Tanks and Trunks", "type": "tanks_and_trunks", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            {"class": EnvironmentReport, "title": "1.11 Environment", "type": "environment", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            {"class": ArtificialLiftReport, "title": "1.13 Artificial Lift", "type": "artificial_lift", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            {"class": IntegratedServicesReport, "title": "1.14 Integrates Services Management", "type": "well_services", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            {"class": TanksAndTrunksReport, "title": "1.15 Tanks and Trunks", "type": "tanks_and_trunks", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
 
         ]
         
@@ -158,6 +167,10 @@ class MainController(QObject):
         self.field_controller = FieldController(self.view)
 
     def generate_reports(self):
+
+        print("Recargando Plan Anual de Actividades (Oficina)...")
+        self.plan_actividades = PlanAnualActividades(self.data_loader, self.plan_path)
+
         activities_data = build_activities_dataframe(self.data_loader, self.plan_actividades, self.year_actual)
 
         for report_info in self.reports:
@@ -548,6 +561,39 @@ class MainController(QObject):
             df_updated.to_excel(config_path, index=False)
             print("✅ tubulars_config.xlsx actualizado.")
 
+            
+    def open_mi_swaco_config(self):
+        """
+        Abre la ventana de configuración del catálogo MI Swaco.
+        (Versión inicial)
+        """
+        try:
+            # Por ahora, solo abrimos el diálogo vacío
+            dlg = MISwacoConfigDialog(parent=self.view)
+            dlg.exec_()
+        except Exception as e:
+            QMessageBox.critical(
+                self.view, 
+                "Error", 
+                f"No se pudo abrir la configuración de MI Swaco: {e}"
+            )
+
+    def open_completions_config(self):
+        """
+        Abre la ventana de configuración del catálogo Completions.
+        (Versión inicial)
+        """
+        try:
+            # Por ahora, solo abrimos el diálogo vacío
+            dlg = CompletionsConfigDialog(parent=self.view)
+            dlg.exec_()
+        except Exception as e:
+            QMessageBox.critical(
+                self.view, 
+                "Error", 
+                f"No se pudo abrir la configuración de Completions: {e}"
+            )
+
     def open_activity_plan_viewer(self):
         from views.plan_editor import PlanEditorWindow
         try:
@@ -794,6 +840,8 @@ class MainController(QObject):
     
     def generate_field_reports(self):
         """Delega la generación de reportes de campo al FieldController."""
+        print("Recargando Plan Anual de Actividades (Campo)...")
+        self.plan_actividades = PlanAnualActividades(self.data_loader, self.plan_path)
         if self.field_controller:
             self.field_controller.generate_field_reports()
     
@@ -841,5 +889,7 @@ class MainController(QObject):
     
     def generate_leader_line_report(self):
         """Delega la generación del reporte líder visual al FieldController."""
+        print("Recargando Plan Anual de Actividades (Líder)...")
+        self.plan_actividades = PlanAnualActividades(self.data_loader, self.plan_path)
         if self.field_controller:
             self.field_controller.generate_leader_line_report()

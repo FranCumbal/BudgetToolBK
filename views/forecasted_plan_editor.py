@@ -68,7 +68,7 @@ class PandasForecastedModel(QAbstractTableModel):
                     suma_previos = sum(
                         int(self._df.at[row_idx, col]) for col in columnas_meses
                         if col != col_name and self.get_month_number(col) <= mes_limite
-                    )
+                    )   
                     max_permitido = plan_total - suma_previos
 
                     """if nuevo_valor > max_permitido:
