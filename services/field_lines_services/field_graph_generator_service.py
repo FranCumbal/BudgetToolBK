@@ -58,6 +58,7 @@ class FieldGraphGeneratorService:
         # 3. Procesar DataFrames esenciales con nombres esperados
         df_budget = prepare_df(data_sources.get("budget"))
         df_forecast = prepare_df(data_sources.get("forecast"))
+        print(df_forecast)
         df_real_cost_accumulated = prepare_df(
             data_sources.get("real_cost_accumulated"), 
             rename_dict={"TotalAccumulatedCost": "Actual Cost"}
@@ -422,19 +423,35 @@ class FieldGraphGeneratorService:
         # =========================================================================
         # 6. CUADRO DE INFORMACIÓN (AJUSTADO A MILLONES)
         # =========================================================================
-        closing_month_name = all_months['MONTH'].iloc[current_idx]
-        current_month_name = all_months['MONTH'].iloc[current_idx + 1]
-        next_month_name = all_months['MONTH'].iloc[next_idx + 1]
-        
-        current_real = df_real_cost_accumulated['ACTUAL COST'].iloc[current_idx] / 1_000_000
-        current_fc = df_forecast['FORECAST'].iloc[current_idx + 1] / 1_000_000
-        next_fc = df_forecast['FORECAST'].iloc[next_idx + 2] / 1_000_000
-        eoy_fc = df_forecast['FORECAST'].iloc[-1] / 1_000_000
-        eoy_budget = df_budget['BUDGET'].iloc[-1] / 1_000_000
+        # =========================================================================
+# 6. CUADRO DE INFORMACIÓN (AJUSTADO A MILLONES)
+# =========================================================================
+
+# Función auxiliar para evitar errores de índice fuera de rango
+        def safe_iloc(series, index, default=None):
+            try:
+                return series.iloc[index]
+            except IndexError:
+                return default
+
+# Obtener nombres de meses de forma segura
+        closing_month_name = safe_iloc(all_months['MONTH'], current_idx, "N/A")
+        current_month_name = safe_iloc(all_months['MONTH'], current_idx + 1, "N/A")
+        next_month_name = safe_iloc(all_months['MONTH'], next_idx + 1, "N/A")
+
+# Obtener valores numéricos de forma segura y convertir a millones
+        current_real = safe_iloc(df_real_cost_accumulated['ACTUAL COST'], current_idx, 0) / 1_000_000
+        current_fc = safe_iloc(df_forecast['FORECAST'], current_idx + 1, 0) / 1_000_000
+        next_fc = safe_iloc(df_forecast['FORECAST'], next_idx + 2, 0) / 1_000_000
+        eoy_fc = safe_iloc(df_forecast['FORECAST'], -1, 0) / 1_000_000
+        eoy_budget = safe_iloc(df_budget['BUDGET'], -1, 0) / 1_000_000
+
+# Calcular diferencia entre forecast y presupuesto
         delta = eoy_fc - eoy_budget
         delta_sign = "+" if delta >= 0 else "-"
         delta_text = f"{delta_sign}{abs(delta):.2f} M"
-        
+
+# Construir texto informativo
         info_text = (
             f"{closing_month_name.capitalize()} (closing): {current_real:.2f} M\n"
             f"===== Forecast =====\n"
@@ -445,12 +462,13 @@ class FieldGraphGeneratorService:
             f"Planned: {eoy_budget:.2f} M\n"
             f"Difference: {delta_text}"
         )
-        
+
+# Dibujar cuadro en el gráfico
         fancy_box = FancyBboxPatch((0.05, 0.68), 0.32, 0.30, boxstyle="round,pad=0.02", 
-                                fc=budget_color, ec="none", alpha=0.8, transform=ax1.transAxes)
+                           fc=budget_color, ec="none", alpha=0.8, transform=ax1.transAxes)
         ax1.add_patch(fancy_box)
         ax1.text(0.05 + 0.32/2, 0.68 + 0.30/2, info_text, ha='center', va='center', 
-                transform=ax1.transAxes, color='white', fontsize=11)#, fontweight='bold' 
+         transform=ax1.transAxes, color='white', fontsize=11)
 
         # ================= NUEVO CUADRO INFO CPI/SPI =====================
         cpi_spi_info = data_sources.get("cpi_spi_info")

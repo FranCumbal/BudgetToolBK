@@ -144,20 +144,20 @@ class MainController(QObject):
         # -------------------------
         self.reports = [
 
-            {"class": RigReport, "title": "1.01 WI Rig", "type": "rig_schedule", "params": {"year": self.year_actual, "merged_opex_data": None, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-          {"class": MISwacoReport, "title": "1.02 MI Swaco", "type": "mi_swaco", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            {"class": CompletionsReport, "title": "1.03 Completions", "type": "completions", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            {"class": BitsDrillingTRemedialReport, "title": "1.04 Bits, Drilling Tools & Remedial", "type": "bits_d_tools_remedial", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            {"class": SurfaceSystemsReport, "title": "1.05 Surface Systems", "type": "surface_systems", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            {"class": WirelineReport, "title": "1.06 Wireline Report", "type": "wireline", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            {"class": WellServicesReport, "title": "1.07 Well Services", "type": "well_services", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            {"class": TestingFluidAnalysisReport, "title": "1.08 Testing and Fluid Analysis", "type": "well_services", "params": {"year": self.year_actual, "operative_capacity": None,  "opex_manager": None, "plan_actividades": None}},
-            {"class": TubularsReport, "title": "1.09 Tubulars Report", "type": "tubulars", "params": {"year": self.year_actual, "operative_capacity": None, "plan_actividades": None, "opex_manager": None}},
+            #{"class": RigReport, "title": "1.01 WI Rig", "type": "rig_schedule", "params": {"year": self.year_actual, "merged_opex_data": None, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            #{"class": MISwacoReport, "title": "1.02 MI Swaco", "type": "mi_swaco", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            #{"class": CompletionsReport, "title": "1.03 Completions", "type": "completions", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            #{"class": BitsDrillingTRemedialReport, "title": "1.04 Bits, Drilling Tools & Remedial", "type": "bits_d_tools_remedial", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            #{"class": SurfaceSystemsReport, "title": "1.05 Surface Systems", "type": "surface_systems", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            #{"class": WirelineReport, "title": "1.06 Wireline Report", "type": "wireline", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            #{"class": WellServicesReport, "title": "1.07 Well Services", "type": "well_services", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            #{"class": TestingFluidAnalysisReport, "title": "1.08 Testing and Fluid Analysis", "type": "well_services", "params": {"year": self.year_actual, "operative_capacity": None,  "opex_manager": None, "plan_actividades": None}},
+            #{"class": TubularsReport, "title": "1.09 Tubulars Report", "type": "tubulars", "params": {"year": self.year_actual, "operative_capacity": None, "plan_actividades": None, "opex_manager": None}},
             {"class": ServicesReport, "title": "1.10 Services", "type": "services", "params": {"year": self.year_actual, "operative_capacity": None, "plan_actividades": None, "opex_manager": None}},
-            {"class": EnvironmentReport, "title": "1.11 Environment", "type": "environment", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            {"class": ArtificialLiftReport, "title": "1.13 Artificial Lift", "type": "artificial_lift", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            {"class": IntegratedServicesReport, "title": "1.14 Integrates Services Management", "type": "well_services", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
-            {"class": TanksAndTrunksReport, "title": "1.15 Tanks and Trunks", "type": "tanks_and_trunks", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            #{"class": EnvironmentReport, "title": "1.11 Environment", "type": "environment", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            #{"class": ArtificialLiftReport, "title": "1.13 Artificial Lift", "type": "artificial_lift", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            #{"class": IntegratedServicesReport, "title": "1.14 Integrates Services Management", "type": "well_services", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
+            #{"class": TanksAndTrunksReport, "title": "1.15 Tanks and Trunks", "type": "tanks_and_trunks", "params": {"year": self.year_actual, "operative_capacity": None, "opex_manager": None, "plan_actividades": None}},
 
         ]
         

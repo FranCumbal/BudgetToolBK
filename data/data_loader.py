@@ -129,12 +129,14 @@ class DataLoader:
         print("COLUMNAS DE LOS POZOS DE SERVICES")
         print(df)
 
-    def calcular_duracion_promedio(self):
-        query = """
-        SELECT ITEM_NAME, START_WO, END_WO
-        FROM VT_WELLJOBLOG_en_US
-        WHERE YEAR(END_WO) = 2025
-        AND PLAN_TYPE_TEXT = 'Opex'
+    
+    #def calcular_duracion_promedio(self):
+        #query = """
+        #SELECT ITEM_NAME, START_WO, END_WO
+        #FROM VT_WELLJOBLOG_en_US
+        #WHERE YEAR(END_WO) = 2025
+        #AND PLAN_TYPE_TEXT = 'Opex'
+        #"""
         """
         df = self.load_from_sql(query)
         print(df)
@@ -150,7 +152,7 @@ class DataLoader:
         # Sumar 2 días adicionales
         df['DURACION_DIAS'] = df['DURACION_DIAS'] + self.DIAS_MOVILIZACION
 
-        print(df['DURACION_DIAS'])
+        #print(df['DURACION_DIAS'])
 
         # Filtrar duraciones válidas
         duraciones_validas = df['DURACION_DIAS'].dropna()
@@ -158,6 +160,48 @@ class DataLoader:
 
         df_result = df[["ITEM_NAME", "DURACION_DIAS"]].dropna()
         df_result = df_result[df_result["DURACION_DIAS"] >= 0]
+        print("HOLAAA")
+        print(df_result)
+        return df_result
+        """
+        
+    def calcular_duracion_promedio(self):
+        query = """
+        SELECT ITEM_NAME, START_WO, END_WO, START_SUSPEN, END_SUSPEN
+        FROM VT_WELLJOBLOG_en_US
+        WHERE YEAR(END_WO) = 2025
+        AND PLAN_TYPE_TEXT = 'Opex'
+        """
+        df = self.load_from_sql(query)
+        print(df)
+        print(self.calcular_duracion_movilizacion())
+        print(self.obtener_pozos_services())
+
+        # Asegurar que sean tipo datetime
+        for col in ['START_WO', 'END_WO', 'START_SUSPEN', 'END_SUSPEN']:
+            df[col] = pd.to_datetime(df[col], errors='coerce')
+
+        # Calcular duración según la lógica SQL
+        def calcular_duracion(row):
+            if pd.isna(row['START_SUSPEN']):
+                return (row['END_WO'] - row['START_WO']).days
+            elif pd.isna(row['END_SUSPEN']):
+                return (row['START_SUSPEN'] - row['START_WO']).days
+            else:
+                return (row['START_SUSPEN'] - row['START_WO']).days + (row['END_WO'] - row['END_SUSPEN']).days
+
+        df['DURACION_DIAS'] = df.apply(calcular_duracion, axis=1)
+
+        # Sumar días de movilización
+        df['DURACION_DIAS'] = df['DURACION_DIAS']+1 #+ self.DIAS_MOVILIZACION se mantiene uno por falta de datos en Avocet
+
+        # Filtrar duraciones válidas
+        duraciones_validas = df['DURACION_DIAS'].dropna()
+        duraciones_validas = duraciones_validas[duraciones_validas >= 0]
+
+        df_result = df[["ITEM_NAME", "DURACION_DIAS"]].dropna()
+        df_result = df_result[df_result["DURACION_DIAS"] >= 0]
+
         print("HOLAAA")
         print(df_result)
         return df_result
@@ -623,8 +667,8 @@ class DataLoader:
         try:
             data = pd.read_excel(file_path, sheet_name=sheet_name)
             #data = data[data['YEAR'] == year]
-            print("Budget data:")
-            print(data.head(5))
+            #print("Budget data:")
+            #print(data)
             return data
         except Exception as e:
             raise ValueError(f"Error al procesar el archivo Excel: {e}")
