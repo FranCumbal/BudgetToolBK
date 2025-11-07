@@ -15,6 +15,8 @@ class CatalogViewerDialog(QDialog):
 
         self.fixed_catalog_path = get_catalog_path()
         self.sheet_map = {
+            "1.02 MI Swaco (MISWACO)": "MI Swaco",
+            "1.03 Completions (COMPLETIONS)": "COMPLETIONS",
             "1.04 Bits, Drilling Tools & Remedial (B,D &R)": "Bits, Drilling Tools",
             "1.05 Surface Systems (CSUR)": "Surface Systems",
             "1.06 Wireline (WL)": "Wireline",

@@ -96,7 +96,16 @@ class MainWindow(QMainWindow):
         open_table_action = QAction("Abrir tabla de capacidad operativa", self)
         open_table_action.triggered.connect(self.controller.open_table_popup)
         tools_menu.addAction(open_table_action)
-        
+
+        # --- SE AÑADE LA OPCION DE ACCEDER A LOS 2 NUEVOS CATALOGOS ---
+        mi_swaco_config_action = QAction("Line 1.02 - Configurar MI Swaco", self)
+        mi_swaco_config_action.triggered.connect(self.controller.open_mi_swaco_config)
+        tools_menu.addAction(mi_swaco_config_action)
+
+        completions_config_action = QAction("Line 1.03 - Configurar Completions", self)
+        completions_config_action.triggered.connect(self.controller.open_completions_config)
+        tools_menu.addAction(completions_config_action)
+
         tubulars_config_action = QAction("Line 1.09 - Configurar Tuberías", self)
         tubulars_config_action.triggered.connect(self.controller.open_tubulars_config)
         tools_menu.addAction(tubulars_config_action)

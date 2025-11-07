@@ -40,6 +40,15 @@ from views.services_forecast_path_view import ServicesForecastPathView
 from utils.comments import load_comments, save_comment, load_field_line_comments
 from logic.opex_data_manager import OpexDataManager
 
+# ... (importaciones de nuevas vistas)
+from views.capex_config_view import CapexConfigDialog
+from views.field_views.avg_days_dialog import AvgDaysDialog
+# ...
+from views.tubulars_config import TubularsConfigDialog
+# --- AÑADIDO PARA MI SWACO Y COMPLETIONS ---
+from views.mi_swaco_config_view import MISwacoConfigDialog
+from views.completions_config_view import CompletionsConfigDialog
+
 from views.opex_editor import OpexEditorWindow
 from logic.plan_actividades import PlanAnualActividades
 
@@ -547,6 +556,39 @@ class MainController(QObject):
             df_updated = dlg.get_updated_df()
             df_updated.to_excel(config_path, index=False)
             print("✅ tubulars_config.xlsx actualizado.")
+
+            
+    def open_mi_swaco_config(self):
+        """
+        Abre la ventana de configuración del catálogo MI Swaco.
+        (Versión inicial)
+        """
+        try:
+            # Por ahora, solo abrimos el diálogo vacío
+            dlg = MISwacoConfigDialog(parent=self.view)
+            dlg.exec_()
+        except Exception as e:
+            QMessageBox.critical(
+                self.view, 
+                "Error", 
+                f"No se pudo abrir la configuración de MI Swaco: {e}"
+            )
+
+    def open_completions_config(self):
+        """
+        Abre la ventana de configuración del catálogo Completions.
+        (Versión inicial)
+        """
+        try:
+            # Por ahora, solo abrimos el diálogo vacío
+            dlg = CompletionsConfigDialog(parent=self.view)
+            dlg.exec_()
+        except Exception as e:
+            QMessageBox.critical(
+                self.view, 
+                "Error", 
+                f"No se pudo abrir la configuración de Completions: {e}"
+            )
 
     def open_activity_plan_viewer(self):
         from views.plan_editor import PlanEditorWindow
