@@ -37,22 +37,25 @@ class MainWindow(QMainWindow):
         button_group = QGroupBox("Acciones disponibles")
         button_layout = QHBoxLayout()
 
+        # --- Botón Generar Reportes (Oficina) ---
         generate_button = QPushButton("Generar reportes")
         generate_button.setMinimumHeight(40)
-        generate_button.clicked.connect(self.controller.generate_reports)
+        generate_button.clicked.connect(self.on_generate_reports_clicked) # Conexión NUEVA
         button_layout.addWidget(generate_button)
 
-        #Para las lineas de campo
+        # --- Botón Generar Reportes de Campo ---
         generate_field_button = QPushButton("Generate Field Reports")
         generate_field_button.setMinimumHeight(40)
-        generate_field_button.clicked.connect(self.controller.generate_field_reports)
+        generate_field_button.clicked.connect(self.on_generate_field_reports_clicked) # Conexión NUEVA
         button_layout.addWidget(generate_field_button)
 
+        # --- Botón Generar Reporte Líder de Línea ---
         generate_lead_field_button = QPushButton("Generate Lead Field Report")
         generate_lead_field_button.setMinimumHeight(40)
-        generate_lead_field_button.clicked.connect(self.controller.generate_leader_line_report)
+        generate_lead_field_button.clicked.connect(self.on_generate_leader_line_report_clicked) # Conexión NUEVA
         button_layout.addWidget(generate_lead_field_button)
 
+        # --- Otros botones (conexiones originales) ---
         open_table_button = QPushButton("Abrir tabla de capacidad operativa")
         open_table_button.setMinimumHeight(40)
         open_table_button.clicked.connect(self.controller.open_table_popup)
@@ -240,14 +243,52 @@ class MainWindow(QMainWindow):
         catalog_dialog = CatalogViewerDialog(self)
         catalog_dialog.exec_()
 
+    def on_generate_reports_clicked(self):
+        """Limpia la UI y luego genera los reportes de oficina."""
+        print("Limpiando gráficos anteriores (Oficina)...")
+        self.clear_layout(self.plot_layout)
+        self.plot_frame.setVisible(False)
+        self.comments_by_title.clear()
+        self.controller.generate_reports()
+
+    def on_generate_field_reports_clicked(self):
+        """Limpia la UI y luego genera los reportes de campo."""
+        print("Limpiando gráficos anteriores (Campo)...")
+        self.clear_layout(self.plot_layout)
+        self.plot_frame.setVisible(False)
+        self.comments_by_title.clear()
+        self.controller.generate_field_reports()
+
+    def on_generate_leader_line_report_clicked(self):
+        """Limpia la UI y luego genera el reporte de líder de línea."""
+        print("Limpiando gráficos anteriores (Líder)...")
+        self.clear_layout(self.plot_layout)
+        self.plot_frame.setVisible(False)
+        self.comments_by_title.clear()
+        self.controller.generate_leader_line_report()
+
+    def clear_layout(self, layout):
+        """
+        Limpia un layout (QLayout) de todos sus widgets, 
+        eliminándolos de forma segura.
+        """
+        if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    # Elimina el widget de forma segura
+                    widget.deleteLater()
+                else:
+                    # Maneja el caso de que sea un layout anidado
+                    nested_layout = item.layout()
+                    if nested_layout is not None:
+                        self.clear_layout(nested_layout)
 
 from PyQt5.QtWidgets import (
     QDialog, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton,
     QFileDialog, QMessageBox, QAbstractScrollArea
 )
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont, QColor
-
 
 class TableDialog(QDialog):
     def __init__(self, data, controller, parent=None):

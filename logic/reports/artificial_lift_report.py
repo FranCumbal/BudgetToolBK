@@ -163,7 +163,7 @@ class ArtificialLiftReport(LineReport):
             (matched_data["MONTH"] == "Sep", 9),
             (matched_data["MONTH"] == "Oct", 10),
             (matched_data["MONTH"] == "Nov", 11),
-            (matched_data["MONTH"] == "Dec", 12)
+            (matched_data["MONTH"] == "Dec", 12),
             (matched_data["MONTH"] == "Dec", 12)
         ]
         )
