@@ -71,11 +71,11 @@ class PandasForecastedModel(QAbstractTableModel):
                     )
                     max_permitido = plan_total - suma_previos
 
-                    if nuevo_valor > max_permitido:
+                    """if nuevo_valor > max_permitido:
                         self.invalid_cells.add((row_idx, index.column()))
                         self.show_warning(f"No puedes asignar más de {max_permitido} actividades en este mes.")
                         self.dataChanged.emit(index, index)
-                        return False
+                        return False"""
 
                     self._df.at[row_idx, col_name] = nuevo_valor
                     self.invalid_cells.discard((row_idx, index.column()))
@@ -87,7 +87,7 @@ class PandasForecastedModel(QAbstractTableModel):
                 elif col_name == "Total":
                     nuevo_valor = int(float(value))
                     columnas_meses = [col for col in self._df.columns if col not in ['No.', 'Tipo de Actividad', 'Total']]
-                    mes_limite = self.get_month_number(self.next_month)
+                    mes_limite = self.get_month_number(self.current_month)
 
                     ya_realizado = sum(
                         int(self._df.at[row_idx, col]) for col in columnas_meses
@@ -115,14 +115,13 @@ class PandasForecastedModel(QAbstractTableModel):
 
     def redistribuir_futuros(self, row_idx, nuevo_total):
         columnas_meses = [col for col in self._df.columns if col not in ['No.', 'Tipo de Actividad', 'Total']]
-        mes_limite = self.get_month_number(self.next_month)
-
+        mes_limite = self.get_month_number(self.current_month)
+        
         ya_definidos = sum(
             int(self._df.at[row_idx, col]) for col in columnas_meses
             if self.get_month_number(col) <= mes_limite
         )
         faltante = max(nuevo_total - ya_definidos, 0)
-
         meses_futuros = [m for m in columnas_meses if self.get_month_number(m) > mes_limite]
         n = len(meses_futuros)
         if n == 0:
@@ -130,7 +129,6 @@ class PandasForecastedModel(QAbstractTableModel):
 
         base = faltante // n
         extra = faltante % n
-
         for i, mes in enumerate(meses_futuros):
             self._df.at[row_idx, mes] = base + (1 if i < extra else 0)
 
@@ -304,7 +302,7 @@ class ForecastedPlanEditorWindow(QWidget):
         layout.addWidget(self.table)
 
         # Conectar la actualización del label cuando cambia la tabla
-        self.model.layoutChanged.connect(self.update_label_actividades)
+        #self.model.layoutChanged.connect(self.update_label_actividades)
 
         # Botón guardar
         guardar_btn = QPushButton("Guardar cambios")
@@ -316,7 +314,7 @@ class ForecastedPlanEditorWindow(QWidget):
 
     def update_label_actividades(self):
         """Actualiza el label con la suma de la columna Total excluyendo la fila TOTAL"""
-        print(["Se guardo Exitosamente"])
+        print("Se guardo Exitosamente")
 
 
     def setup_menu(self):
