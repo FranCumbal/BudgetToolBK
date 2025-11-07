@@ -87,8 +87,8 @@ class OperativeCapacityManager:
         data = []
 
         for month, dias in dias_por_mes.items():
-            print(month)
-            print(dias)
+            #print(month)
+            #print(dias)
             data.append({
                 "Mes": month,
                 "Taladros": 3,

@@ -40,17 +40,17 @@ class ArtificialLiftReport(LineReport):
         """
         if self.matched_data is None:
             cotizacion_path = get_cotizacion_path(self.year)
-            print("###cotizacion")
-            print(cotizacion_path)
+            #print("###cotizacion")
+            #print(cotizacion_path)
             budget_path = get_single_excel_file_path(get_budget_als_dir())
-            print("########################path")
-            print(budget_path)
+            #print("########################path")
+            #print(budget_path)
             cotizacion_df = self.data_loader.load_cotizacion_data(cotizacion_path)
             budget_df = self.data_loader.load_budget_data_from_excel(
                 budget_path, "Detalle de pulling", year=self.year
             )
-            print("budget df")
-            print(budget_df)
+            #print("budget df")
+            #print(budget_df)
             self.matched_data = match_jobs_with_budget(
                 cotizacion_df, budget_df, BUDGET_GROUP_MAPPING, COTIZACION_GROUP_MAPPING
             )
@@ -62,30 +62,24 @@ class ArtificialLiftReport(LineReport):
         Si hay datos reales disponibles, se priorizan sobre las estimaciones.
         """
         print("=== Generación de Forecast para Artificial Lift ===")
+        print("=== Generación de Forecast para Artificial Lift ===")
         matched_data = self.load_and_match_data()
-        
-        matched_data['Numero_Mes']=0
-        matched_data["Numero_Mes"] = matched_data["MONTH"].case_when(
-        [
-            (matched_data["MONTH"] == "Jan", 1),
-            (matched_data["MONTH"] == "Feb", 2),
-            (matched_data["MONTH"] == "Mar", 3),
-            (matched_data["MONTH"] == "Apr", 4),
-            (matched_data["MONTH"] == "May", 5),
-            (matched_data["MONTH"] == "Jun", 6),
-            (matched_data["MONTH"] == "Jul", 7),
-            (matched_data["MONTH"] == "Aug", 8),
-            (matched_data["MONTH"] == "Sep", 9),
-            (matched_data["MONTH"] == "Oct", 10),
-            (matched_data["MONTH"] == "Nov", 11),
-            (matched_data["MONTH"] == "Dic", 12)
-        ]
-        )
+        print(matched_data)
+        print(self.load_and_match_data())
+# Diccionario de mapeo de meses
+        month_map = {
+            "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4,
+            "May": 5, "Jun": 6, "Jul": 7, "Aug": 8,
+            "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12
+        }
+
+# Aplicar el mapeo
+        matched_data["Numero_Mes"] = matched_data["MONTH"].map(month_map)
         print("=== RESUMEN FINAL DEL FORECAST === ALS")
         #print(matched_data)
         ###print(type(matched_data['Numero_Mes'] ))
         mes_actual = datetime.datetime.now().month   
-        print(matched_data)
+        #print(matched_data)
         matched_data['Numero_Mes'] = matched_data['Numero_Mes'].astype(int)
         matched_data = matched_data[~((matched_data['Numero_Mes'] >= mes_actual))]
         matched_data.to_excel("als-salida.xlsx")
@@ -169,7 +163,7 @@ class ArtificialLiftReport(LineReport):
             (matched_data["MONTH"] == "Sep", 9),
             (matched_data["MONTH"] == "Oct", 10),
             (matched_data["MONTH"] == "Nov", 11),
-            (matched_data["MONTH"] == "Dic", 12)
+            (matched_data["MONTH"] == "Dec", 12)
         ]
         )
         print("=== RESUMEN FINAL DEL FORECAST === ALS")

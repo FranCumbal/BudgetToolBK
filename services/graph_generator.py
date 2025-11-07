@@ -59,7 +59,7 @@ def generate_budget_graph_als(forecast, budget_data, activities_data, capacity_d
 
     annotation_months = {closing_idx, current_idx, next_idx}
 
-    for i in range(12):
+    for i in range(11):
         if i in annotation_months:
             x_coord = i + 1
             fc_val = forecast['cumulative forecast'].iloc[i]
@@ -70,24 +70,28 @@ def generate_budget_graph_als(forecast, budget_data, activities_data, capacity_d
             if i == closing_idx:
                 ax1.annotate(f"{ac_val / 1_000_000:.2f}",
                             xy=(x_coord, ac_val), xytext=(0, -20),
-                            textcoords='offset points', ha='center', color=actual_color,
-                            arrowprops=dict(arrowstyle='->', color=actual_color))
+                            textcoords='offset points', ha='center', color=actual_color
+                            ,arrowprops=dict(arrowstyle='->', color=actual_color)
+                            )
 
                 ax1.annotate(f"{bh_val / 1_000_000:.2f}",
                             xy=(x_coord, bh_val), xytext=(0, 5),
-                            textcoords='offset points', ha='center', color=b_h_color,
-                            arrowprops=dict(arrowstyle='->', color=b_h_color))
+                            textcoords='offset points', ha='center', color=b_h_color
+                            ,arrowprops=dict(arrowstyle='->', color=b_h_color)
+                            )
 
             elif i in [current_idx, next_idx]:
                 ax1.annotate(f"{fc_val / 1_000_000:.2f}",
                             xy=(x_coord, fc_val), xytext=(0, 10),
-                            textcoords='offset points', ha='center', color=forecast_color,
-                            arrowprops=dict(arrowstyle='->', color=forecast_color))
+                            textcoords='offset points', ha='center', color=forecast_color
+                            ,arrowprops=dict(arrowstyle='->', color=forecast_color)
+                            )
 
                 ax1.annotate(f"{op_val / 1_000_000:.2f}",
                             xy=(x_coord, op_val), xytext=(0, 30),
                             textcoords='offset points', ha='center', color=plan_color,
-                            arrowprops=dict(arrowstyle='->', color=plan_color))
+                            arrowprops=dict(arrowstyle='->', color=plan_color)
+                            )
 
 
     # 1️⃣ Etiquetas finales personalizadas (para evitar solapamiento)
@@ -97,7 +101,7 @@ def generate_budget_graph_als(forecast, budget_data, activities_data, capacity_d
     # Forecast desplazado hacia arriba
     ax1.annotate(f"{final_fc / 1_000_000:.2f}M",
                 xy=(12, final_fc), xytext=(10, 15),
-                textcoords='offset points', ha='left', color=forecast_color)
+               textcoords='offset points', ha='left', color=forecast_color)
 
     # Actual desplazado hacia abajo
     ax1.annotate(f"{final_ac / 1_000_000:.2f}M",
@@ -207,8 +211,6 @@ def generate_budget_graph_als(forecast, budget_data, activities_data, capacity_d
     )
 
 
-
-
     fancy_box = FancyBboxPatch((0.05, 0.68), 0.32, 0.30,
                                 boxstyle="round,pad=0.02", fc=plan_color, ec="none", alpha=0.8,
                                 transform=ax1.transAxes)
@@ -273,13 +275,23 @@ def create_budget_forecast_graph(forecast, budget_data, plan_data, activities_da
                     fontsize=9, arrowprops=dict(arrowstyle='->', color=color))
 
     annotate(ax1, closing_idx + 1, budget_data['CUMULATIVE ACTUAL COST'].iloc[closing_idx], budget_data['CUMULATIVE ACTUAL COST'].iloc[closing_idx]/1_000_000, actual_color, offset=(0, -30))
+    
     annotate(ax1, current_idx + 1, forecast['CUMULATIVE FORECAST'].iloc[current_idx], forecast['CUMULATIVE FORECAST'].iloc[current_idx]/1_000_000, forecast_color, offset=(20, 5))
     annotate(ax1, next_idx + 1, forecast['CUMULATIVE FORECAST'].iloc[next_idx], forecast['CUMULATIVE FORECAST'].iloc[next_idx]/1_000_000, forecast_color, offset=(20, -30))
-    annotate(ax1, 12, forecast['CUMULATIVE FORECAST'].iloc[-1], forecast['CUMULATIVE FORECAST'].iloc[-1]/1_000_000, forecast_color, offset=(10, -10))
+    #annotate(ax1, 12, forecast['CUMULATIVE FORECAST'].iloc[-1], forecast['CUMULATIVE FORECAST'].iloc[-1]/1_000_000, forecast_color, offset=(10, -10))
 
     annotate(ax1, current_idx + 1, plan_data['CUMULATIVE PLAN'].iloc[current_idx], plan_data['CUMULATIVE PLAN'].iloc[current_idx]/1_000_000, plan_color, offset=(-30, 5))
     annotate(ax1, next_idx + 1, plan_data['CUMULATIVE PLAN'].iloc[next_idx], plan_data['CUMULATIVE PLAN'].iloc[next_idx]/1_000_000, plan_color, offset=(-30, -30))
-    annotate(ax1, 12, plan_data['CUMULATIVE PLAN'].iloc[-1], plan_data['CUMULATIVE PLAN'].iloc[-1]/1_000_000, plan_color, offset=(10, 10))
+    #annotate(ax1, 12, plan_data['CUMULATIVE PLAN'].iloc[-1], plan_data['CUMULATIVE PLAN'].iloc[-1]/1_000_000, plan_color, offset=(10, 10))
+
+    
+# Obtener el mes actual (1 = enero, 11 = noviembre)
+    mes_actual = datetime.now().month
+
+# Ejecutar solo si el mes es anterior a noviembre (es decir, menor que 11)
+    if mes_actual < 11:
+        annotate(ax1, 12, forecast['CUMULATIVE FORECAST'].iloc[-1], forecast['CUMULATIVE FORECAST'].iloc[-1]/1_000_000, forecast_color, offset=(10, -10))
+        annotate(ax1, 12, plan_data['CUMULATIVE PLAN'].iloc[-1], plan_data['CUMULATIVE PLAN'].iloc[-1]/1_000_000, plan_color, offset=(10, 10))
 
     closing_month_name = all_months['MONTH'].iloc[closing_idx]
     current_month_name = all_months['MONTH'].iloc[current_idx]
