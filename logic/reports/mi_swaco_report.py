@@ -1,10 +1,8 @@
 import pandas as pd
 import calendar
-# 🟢 Añade esta importación
 from logic.plan_actividades1 import PlanAnualActividades1
 from logic.reports.base_report import LineReport
 from utils.dates import get_all_months, get_month_number, normalize_month_names
-# 🟢 Añade esta importación
 from utils.file_manager import get_catalog_path, get_forecasted_plan_path
 
 

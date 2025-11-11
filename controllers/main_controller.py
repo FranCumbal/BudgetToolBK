@@ -1,4 +1,5 @@
 # controller/main_controller.py
+
 import getpass
 import os
 import pandas as pd
@@ -564,13 +565,52 @@ class MainController(QObject):
             
     def open_mi_swaco_config(self):
         """
-        Abre la ventana de configuración del catálogo MI Swaco.
-        (Versión inicial)
+        Abre la ventana de configuración del plan manual de MI Swaco.
+        (Lógica replicada de open_tubulars_config)
         """
+        # --- Importaciones locales, igual que en open_tubulars_config ---
+        import pandas as pd
+        from utils.file_manager import get_mi_swaco_config_path, get_catalog_path
+        
         try:
-            # Por ahora, solo abrimos el diálogo vacío
-            dlg = MISwacoConfigDialog(parent=self.view)
-            dlg.exec_()
+            # 1️⃣ Ruta del config manual
+            config_path = get_mi_swaco_config_path() # Asumimos que esta función existe en file_manager
+
+            # 2️⃣ Cargar df_config (el plan manual guardado)
+            if os.path.exists(config_path):
+                df_config = pd.read_excel(config_path)
+            else:
+                # IMPORTANTE: Creamos el DF vacío con los nombres ANTIGUOS (en español)
+                # La vista (mi_swaco_config_view) ya está preparada para 
+                # leer estos nombres si no encuentra los nuevos (en inglés).
+                df_config = pd.DataFrame(columns=["MONTH", "TYPE", "ACTIVITIES", "AVG_QUANTITY"])
+
+            # 3️⃣ Cargar el catálogo maestro para obtener los ítems
+            cat_path = get_catalog_path()
+            df_catalog = self.data_loader.load_catalog_data(cat_path, sheet_name="MI SWACO")
+            
+            # (Añadimos la limpieza de columnas por si acaso)
+            if not df_catalog.empty:
+                df_catalog.columns = df_catalog.columns.str.strip()
+
+            # 4️⃣ Crear el diálogo (pasamos el plan guardado y el catálogo de precios)
+            dlg = MISwacoConfigDialog(df_config, df_catalog, parent=self.view) 
+            
+            # 5️⃣ Si el usuario guarda, actualizamos el archivo de config manual
+            if dlg.exec_() == dlg.Accepted:
+                df_updated = dlg.get_updated_df()
+                # El df_updated ahora se guardará con los nuevos nombres en INGLÉS
+                df_updated.to_excel(config_path, index=False)
+                QMessageBox.information(self.view, "Guardado", "Plan manual de MI Swaco actualizado.")
+                print("✅ mi_swaco_config.xlsx actualizado.")
+
+        except Exception as e:
+            QMessageBox.critical(
+                self.view, 
+                "Error", 
+                f"No se pudo abrir la configuración de MI Swaco: {e}"
+            )
+
         except Exception as e:
             QMessageBox.critical(
                 self.view, 
@@ -580,16 +620,49 @@ class MainController(QObject):
 
     def open_completions_config(self):
         """
-        Abre la ventana de configuración del catálogo Completions.
-        (Versión inicial)
+        Abre la ventana de configuración del plan manual de Completions.
+        (Lógica replicada de open_mi_swaco_config)
         """
+        # --- Importaciones locales ---
+        import pandas as pd
+        from utils.file_manager import get_completions_config_path, get_catalog_path
+
         try:
-            # Por ahora, solo abrimos el diálogo vacío
-            dlg = CompletionsConfigDialog(parent=self.view)
-            dlg.exec_()
+            # 1️⃣ Ruta del config manual
+            config_path = get_completions_config_path() # La función que creamos en file_manager
+
+            # 2️⃣ Cargar df_config (el plan manual guardado)
+            if os.path.exists(config_path):
+                df_config = pd.read_excel(config_path)
+            else:
+                # Creamos un DF vacío con los nombres ANTIGUOS (en español)
+                # La vista que acabamos de crear es compatible y puede leer esto.
+                df_config = pd.DataFrame(columns=["MONTH", "TYPE", "ACTIVITIES", "AVG_QUANTITY"])
+
+            # 3️⃣ Cargar el catálogo maestro para obtener los ítems
+            cat_path = get_catalog_path()
+            
+            # Usamos "COMPLETIONS" en mayúsculas, como está en tu Excel
+            df_catalog = self.data_loader.load_catalog_data(cat_path, sheet_name="COMPLETIONS")
+            
+            # (Añadimos la limpieza de columnas que causaba el error KeyError)
+            if not df_catalog.empty:
+                df_catalog.columns = df_catalog.columns.str.strip()
+
+            # 4️⃣ Crear el diálogo
+            dlg = CompletionsConfigDialog(df_config, df_catalog, parent=self.view)
+            
+            # 5️⃣ Si el usuario guarda, actualizamos el archivo de config manual
+            if dlg.exec_() == dlg.Accepted:
+                df_updated = dlg.get_updated_df()
+                # El df_updated ahora se guardará con los nuevos nombres en INGLÉS (MONTH, DESCRIPTION, etc.)
+                df_updated.to_excel(config_path, index=False)
+                QMessageBox.information(self.view, "Guardado", "Plan manual de Completions actualizado.")
+                print("✅ completions_config.xlsx actualizado.")
+
         except Exception as e:
             QMessageBox.critical(
-                self.view, 
+                self, 
                 "Error", 
                 f"No se pudo abrir la configuración de Completions: {e}"
             )

@@ -72,6 +72,12 @@ def get_operative_capacity_avg_days_file():
 def get_tubulars_config_path(filename="tubulars_config.xlsx") -> str:
     return os.path.join(get_catalog_dir(), filename)
 
+def get_mi_swaco_config_path(filename="mi_swaco_config.xlsx") -> str:
+    return os.path.join(get_catalog_dir(), filename)
+
+def get_completions_config_path(filename="completions_config.xlsx") -> str:
+    return os.path.join(get_catalog_dir(), filename)
+
 def get_selected_services_wells_path(filename="selected_services_wells.xlsx") -> str:
     return os.path.join(get_catalog_dir(), filename)
 
