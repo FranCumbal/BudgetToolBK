@@ -1,3 +1,5 @@
+#tubulars_report
+
 import os
 import pandas as pd
 from logic.reports.base_report import LineReport
