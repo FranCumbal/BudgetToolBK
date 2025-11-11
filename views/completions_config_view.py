@@ -171,40 +171,38 @@ class CompletionsConfigDialog(QDialog):
         combo_month.setCurrentIndex(max(0, idx_m))
         self.table_widget.setCellWidget(row_idx, 0, combo_month)
 
-        tipo_fijo = "Ofensor"
-        
+        if tipo_val and tipo_val in self.tipo_list:
+            tipo_fijo = tipo_val
+        else:
+            tipo_fijo = self.tipo_list[0] if self.tipo_list else ""
+
         item_tipo = QTableWidgetItem(tipo_fijo)
-        item_tipo.setFlags(Qt.ItemIsEnabled)  # Read-only
-        item_tipo.setTextAlignment(Qt.AlignCenter) # Opcional: Centrarlo
+        item_tipo.setFlags(Qt.ItemIsEnabled)  
+        item_tipo.setTextAlignment(Qt.AlignCenter) 
         self.table_widget.setItem(row_idx, 1, item_tipo)
         
-        # --- LÓGICA DE SINCRONIZACIÓN ---
-        # Obtenemos el TIPO que *realmente* quedó seleccionado
         current_selected_tipo = tipo_fijo
 
-        # Col 2: ACTIVITIES
         combo_act = QComboBox()
-        # Construimos la lista de actividades basándonos en el TIPO ya seleccionado
+
         current_act_list = [""] + self.catalog_map.get(current_selected_tipo, [])
         combo_act.addItems(current_act_list)
         
-        # Si la actividad guardada (act_val) no es válida para este tipo (o el tipo cambió),
-        # reseteamos al índice 0 (la opción en blanco "").
         idx_a = combo_act.findText(act_val) 
         if idx_a == -1:
              idx_a = 0
-             act_val = "" # Reseteamos el valor
+             act_val = "" 
              
         combo_act.setCurrentIndex(idx_a)
         self.table_widget.setCellWidget(row_idx, 2, combo_act)
 
-        # Col 3: AVG_QUANTITY (Read-Only)
-        # Recalculamos el AVG basado en el TIPO y ACTIVIDAD que quedaron seleccionados
         current_avg_val = self.avg_map.get((current_selected_tipo, act_val), 0.0)
         
         item_avg = QTableWidgetItem(str(current_avg_val))
         item_avg.setFlags(Qt.ItemIsEnabled)
-        self.table_widget.setItem(row_idx, 3, item_avg) # Columna 3
+        self.table_widget.setItem(row_idx, 3, item_avg) 
+        
+        combo_act.currentTextChanged.connect(lambda text, r=row_idx: self.handle_activity_change(text, r))
 
     def handle_tipo_change(self, tipo_text, row):
         """Actualiza el combo de ACTIVIDADES cuando TIPO cambia."""
@@ -226,7 +224,7 @@ class CompletionsConfigDialog(QDialog):
         """Actualiza el AVG_QUANTITY cuando ACTIVITIES cambia."""
         try:
             tipo_item = self.table_widget.item(row, 1) 
-            tipo_val = tipo_item.text() if tipo_item else "Ofensor"
+            tipo_val = tipo_item.text() if tipo_item else ""
             avg_item = self.table_widget.item(row, 3)
             avg_val = self.avg_map.get((tipo_val, activity_text), 0.0)
             avg_item.setText(str(avg_val))
@@ -255,7 +253,7 @@ class CompletionsConfigDialog(QDialog):
         for r in range(rows):
             month_val = self.table_widget.cellWidget(r, 0).currentText()
             tipo_item = self.table_widget.item(r, 1)
-            tipo_val = tipo_item.text() if tipo_item else "Ofensor"
+            tipo_val = tipo_item.text() if tipo_item else ""
             act_val = self.table_widget.cellWidget(r, 2).currentText()
             try:
                 avg_val = float(self.table_widget.item(r, 3).text())
