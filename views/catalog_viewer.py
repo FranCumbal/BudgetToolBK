@@ -2,7 +2,7 @@
 import pandas as pd
 from PyQt5.QtWidgets import (
     QDialog, QVBoxLayout, QTableWidget, QTableWidgetItem,
-    QPushButton, QLabel, QComboBox, QHBoxLayout, QMessageBox
+    QPushButton, QLabel, QComboBox, QHBoxLayout, QMessageBox, QHeaderView
 )
 from PyQt5.QtCore import Qt
 from utils.file_manager import get_catalog_path
@@ -15,7 +15,7 @@ class CatalogViewerDialog(QDialog):
 
         self.fixed_catalog_path = get_catalog_path()
         self.sheet_map = {
-            "1.02 MI Swaco (MISWACO)": "MI Swaco",
+            "1.02 MI Swaco (MISWACO)": "MI SWACO",
             "1.03 Completions (COMPLETIONS)": "COMPLETIONS",
             "1.04 Bits, Drilling Tools & Remedial (B,D &R)": "Bits, Drilling Tools",
             "1.05 Surface Systems (CSUR)": "Surface Systems",
@@ -90,36 +90,73 @@ class CatalogViewerDialog(QDialog):
     def populate_table(self, df):
         self.table_widget.setRowCount(len(df))
         self.table_widget.setColumnCount(len(df.columns))
-        self.table_widget.setHorizontalHeaderLabels([col.upper() for col in df.columns])
+        
+        # 1. Obtenemos los encabezados ORIGINALES (limpios y en mayúsculas)
+        #    Usamos .strip() para eliminar espacios (como en "Mes ")
+        col_headers = [col.strip().upper() for col in df.columns]
+        
+        # 2. Creamos los encabezados a MOSTRAR (empezamos con los originales)
+        display_headers = col_headers.copy()
 
+        # 3. Definimos el mapeo a Inglés
+        header_mapping = {
+            "TIPO": "TYPE",
+            "ACTIVIDADES": "ACTIVITIES",
+            "AVG POR ACTIVIDAD": "AVG_QUANTITY",
+        }
+
+        # Si es la hoja correcta, cambiamos los nombres a mostrar
+        if self.current_sheet in ["MI SWACO", "COMPLETIONS"]:
+            for i, header in enumerate(display_headers):
+                if header in header_mapping:
+                    display_headers[i] = header_mapping[header]
+        
+        # 4. Establecemos los encabezados a MOSTRAR (ya traducidos)
+        self.table_widget.setHorizontalHeaderLabels(display_headers)
+
+        # --- 5. Lógica de reinicio de columnas ---
+        for col_idx in range(len(df.columns)):
+            self.table_widget.setColumnHidden(col_idx, False)
+
+        # --- 6. Bucle de llenado de tabla ---
         for i in range(len(df)):
             for j in range(len(df.columns)):
-                header = df.columns[j].strip().lower()
+                
+                cell_value = df.iat[i, j]
+                item_text = str(cell_value) if pd.notna(cell_value) else ""
+                
+                item = QTableWidgetItem(item_text)
+                item.setFlags(item.flags() | Qt.ItemIsEditable)
+                self.table_widget.setItem(i, j, item) # <-- Esta línea es crucial
 
-                # Si estamos en la hoja COMPLETIONS y es la columna 'Mes' y fila 'Costo adicional'
-                if (self.current_sheet == "COMPLETIONS" and
-                    header == "mes" and
-                    str(df.iloc[i]["Descripción"]).strip().lower() == "costo adicional"):
-                    
-                    combo = QComboBox()
-                    combo.addItems([
-                        "January", "February", "March", "April", "May", "June",
-                        "July", "August", "September", "October", "November", "December"
-                    ])
-                    
-                    # Si ya existe un valor de mes, seleccionarlo
-                    current_value = str(df.iat[i, j]).strip()
-                    if current_value in combo.model().stringList():
-                        combo.setCurrentText(current_value)
+        # --- 7. Lógica para Ocultar Columnas ---
+        # (Buscamos usando los nombres ORIGINALES en 'col_headers')
+        columns_to_hide = {
+            "MI SWACO": ["DESCRIPCIÓN", "VALOR", "COST_TYPE"],
+            "COMPLETIONS": ["DESCRIPCIÓN", "VALOR", "MES", "COST_TYPE"]
+        }
 
-                    self.table_widget.setCellWidget(i, j, combo)
+        if self.current_sheet in columns_to_hide:
+            for col_name in columns_to_hide[self.current_sheet]:
+                try:
+                    # Usamos col_headers (limpios) para encontrar el índice
+                    col_index = col_headers.index(col_name)
+                    self.table_widget.setColumnHidden(col_index, True)
+                except ValueError:
+                    print(f"Advertencia: No se pudo ocultar la columna '{col_name}' (no encontrada).")
 
-                else:
-                    # Celda normal editable
-                    item = QTableWidgetItem(str(df.iat[i, j]))
-                    item.setFlags(item.flags() | Qt.ItemIsEditable)
-                    self.table_widget.setItem(i, j, item)
-
+        # --- 8. Lógica para Mover la columna LINE ---
+        if self.current_sheet in ["MI SWACO", "COMPLETIONS"]:
+            try:
+                # Buscamos el índice original de "LINE" (usando col_headers)
+                line_index = col_headers.index("LINE")
+                # Movemos esa sección a la primera posición (índice 0)
+                self.table_widget.horizontalHeader().moveSection(line_index, 0)
+            except ValueError:
+                # Esto pasará si la columna 'line' no existe en el Excel
+                print("Advertencia: No se encontró la columna 'LINE' para moverla al inicio.")
+        
+        self.table_widget.resizeColumnsToContents()
 
     def save_changes(self):
         try:
