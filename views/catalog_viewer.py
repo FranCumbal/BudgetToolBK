@@ -91,11 +91,8 @@ class CatalogViewerDialog(QDialog):
         self.table_widget.setRowCount(len(df))
         self.table_widget.setColumnCount(len(df.columns))
         
-        # 1. Obtenemos los encabezados ORIGINALES (limpios y en mayúsculas)
-        #    Usamos .strip() para eliminar espacios (como en "Mes ")
         col_headers = [col.strip().upper() for col in df.columns]
         
-        # 2. Creamos los encabezados a MOSTRAR (empezamos con los originales)
         display_headers = col_headers.copy()
 
         # 3. Definimos el mapeo a Inglés

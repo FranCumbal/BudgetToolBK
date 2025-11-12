@@ -12,23 +12,17 @@ class MISwacoConfigDialog(QDialog):
     Lógica de "Ofensor": Carga AVG_QUANTITY automáticamente.
     """
     
-    # --- 1. Constantes actualizadas ---
-    
     # Nombres de columna para MOSTRAR en la tabla y GUARDAR en el config
     COL_MONTH = "MONTH"
     COL_TIPO = "TYPE"
     COL_ACTIVIDAD = "ACTIVITIES"
     COL_AVG = "AVG_QUANTITY"
-    # COL_COST eliminado
 
     # Nombres de las columnas en el archivo 'catalogo_solo_valores.xlsx' (MAESTRO)
     SRC_COL_LINE = "line"
     SRC_COL_TIPO = "TIPO"
     SRC_COL_ACTIVIDAD = "ACTIVIDADES"
     SRC_COL_AVG = "AVG POR ACTIVIDAD" 
-    # (Asegúrate que 'AVG POR ACTIVIDAD' es el nombre correcto en tu Excel)
-    
-    # --- Fin Constantes ---
 
     def __init__(self, df_config, df_catalog, parent=None):
         super().__init__(parent)
@@ -58,15 +52,13 @@ class MISwacoConfigDialog(QDialog):
         2. self.avg_map: Un dict para buscar AVG_QUANTITY ((TYPE, ACTIVITY) -> AVG)
         """
         self.catalog_map = {}
-        self.avg_map = {} # Nuevo mapa para el AVG
+        self.avg_map = {}
         
         if self.df_catalog.empty:
             print("Advertencia: Catálogo MI Swaco está vacío.")
             return
 
         try:
-            # --- LÓGICA DE FILTRO CORREGIDA (Línea 77) ---
-            # Filtramos por la columna TIPO (SRC_COL_TIPO) buscando 'ofensor'
             df_ofensor = self.df_catalog[
                 self.df_catalog[self.SRC_COL_TIPO].fillna('').str.lower().str.contains('ofensor', na=False)
             ].copy()
@@ -147,9 +139,6 @@ class MISwacoConfigDialog(QDialog):
         self.btn_remove.clicked.connect(self.remove_row)
         self.btn_ok.clicked.connect(self.accept)
         self.btn_cancel.clicked.connect(self.reject)
-        
-        # Ya no se editan celdas, se quita handle_cell_change
-        # self.table_widget.cellChanged.connect(self.handle_cell_change)
 
     def populate_table(self):
         """Llena la tabla con los datos del df_config (el plan guardado)."""
@@ -157,7 +146,6 @@ class MISwacoConfigDialog(QDialog):
         
         for row_idx in range(len(self.df_config)):
             
-            # Lógica de carga compatible (NUEVO vs VIEJO)
             month_val = str(self.df_config.iloc[row_idx].get(self.COL_MONTH, 
                               self.df_config.iloc[row_idx].get("Month", "")))
             
@@ -168,13 +156,11 @@ class MISwacoConfigDialog(QDialog):
                              self.df_config.iloc[row_idx].get("ACTIVIDADES", "")))
             
             # --- 5. Lógica de carga para AVG ---
-            # Si el archivo guardado tiene el AVG, úsalo. Si no, búscalo.
             avg_val = self.df_config.iloc[row_idx].get(self.COL_AVG, 
                              self.df_config.iloc[row_idx].get("AVG POR ACTIVIDAD", None))
             
-            if avg_val is None: # Si no estaba en el archivo, buscarlo en el mapa
+            if avg_val is None: 
                 avg_val = self.avg_map.get((tipo_val, act_val), 0.0)
-            # --- Fin Lógica AVG ---
 
             self.insert_row_widgets(row_idx, month_val, tipo_val, act_val, avg_val)
         
@@ -184,7 +170,6 @@ class MISwacoConfigDialog(QDialog):
     def insert_row_widgets(self, row_idx, month_val, tipo_val, act_val, avg_val):
         """Helper para insertar todos los widgets en una fila (nueva o existente)."""
         
-        # --- Col 0: MONTH ---
         combo_month = QComboBox()
         combo_month.addItems(self.months_list)
         idx_m = combo_month.findText(month_val)
@@ -197,8 +182,8 @@ class MISwacoConfigDialog(QDialog):
             tipo_fijo = self.tipo_list[0] if self.tipo_list else ""
 
         item_tipo = QTableWidgetItem(tipo_fijo)
-        item_tipo.setFlags(Qt.ItemIsEnabled)  # Read-only
-        item_tipo.setTextAlignment(Qt.AlignCenter) # Opcional: Centrarlo
+        item_tipo.setFlags(Qt.ItemIsEnabled)  
+        item_tipo.setTextAlignment(Qt.AlignCenter) 
         self.table_widget.setItem(row_idx, 1, item_tipo)
         
         current_selected_tipo = tipo_fijo

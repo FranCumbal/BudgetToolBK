@@ -1,3 +1,5 @@
+#plan_actividades1
+
 import pandas as pd
 from datetime import datetime
 from utils.dates import normalize_month_names, get_month_number, get_month_name
@@ -122,7 +124,7 @@ class PlanAnualActividades1:
                 valor = ejecutado_por_mes.get(mes_nombre, 0)
                 distribucion_df.at[idx, mes_nombre] = valor
 
-            for mes_num in [mes_actual, mes_siguiente]:
+            for mes_num in [mes_actual]:
                 mes_nombre = get_month_name(mes_num)
                 valor_cdf = cdf_counts_by_month.get(tipo_codigo, {}).get(mes_num, 0)
                 celda = distribucion_df.at[idx, mes_nombre]
@@ -136,7 +138,7 @@ class PlanAnualActividades1:
 
             meses_disponibles = [
                 mes for mes in columnas_meses
-                if get_month_number(mes) > mes_siguiente and (pd.isna(distribucion_df.at[idx, mes]) or distribucion_df.at[idx, mes] == 0)
+                if get_month_number(mes) > mes_actual and (pd.isna(distribucion_df.at[idx, mes]) or distribucion_df.at[idx, mes] == 0)
             ]
 
             if faltante > 0 and meses_disponibles:
@@ -194,7 +196,7 @@ class PlanAnualActividades1:
         
         columnas_editables = [
             mes for mes in columnas_meses 
-            if get_month_number(mes) > mes_siguiente
+            if get_month_number(mes) > mes_actual
         ]
         
         # 6. Hacer merge por tipo de actividad para preservar valores
@@ -217,7 +219,7 @@ class PlanAnualActividades1:
                 for mes in columnas_editables:
                     if mes in fila_guardada.index:
                         valor_guardado = fila_guardada[mes]
-                        if pd.notna(valor_guardado) and valor_guardado > 0:
+                        if pd.notna(valor_guardado):
                             distribucion_hibrida.at[idx, mes] = int(valor_guardado)
         
         # 7. Recalcular totales

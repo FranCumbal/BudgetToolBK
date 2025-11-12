@@ -1,3 +1,5 @@
+#mi_swaco_report
+
 import pandas as pd
 import calendar
 import os
@@ -5,6 +7,8 @@ from logic.plan_actividades1 import PlanAnualActividades1
 from logic.reports.base_report import LineReport
 from utils.dates import get_all_months, get_month_number, normalize_month_names
 from utils.file_manager import get_catalog_path, get_forecasted_plan_path, get_mi_swaco_config_path
+
+pd.set_option('display.max_columns', None)
 
 class MISwacoReport(LineReport):
     """
@@ -112,7 +116,11 @@ class MISwacoReport(LineReport):
         plan_path = get_forecasted_plan_path(self.year)
         # Asegúrate de que PlanAnualActividades1 es el correcto, tu archivo lo usa.
         plan_provider = PlanAnualActividades1(self.data_loader, plan_path) 
-        distribucion_df = plan_provider.calcular_distribucion_por_tipo(year=self.year)
+        distribucion_df = plan_provider.calcular_distribucion_hibrida(
+            year=self.year, 
+            saved_excel_path=plan_path, 
+            saved_sheet_name=plan_provider.sheet_name
+        )
 
         # Normalizar nombres de meses del plan
         distribucion_df.columns = [
