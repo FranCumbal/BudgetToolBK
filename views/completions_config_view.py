@@ -138,22 +138,18 @@ class CompletionsConfigDialog(QDialog):
         self.table_widget.setRowCount(len(self.df_config))
         
         for row_idx in range(len(self.df_config)):
-            # Lógica de carga compatible (NUEVO vs VIEJO)
             month_val = str(self.df_config.iloc[row_idx].get(self.COL_MONTH, 
                               self.df_config.iloc[row_idx].get("Month", "")))
             
-            # Para Completions, leemos 'TYPE' (nuevo) o 'Descripción' (viejo)
             tipo_val = str(self.df_config.iloc[row_idx].get(self.COL_TIPO, 
                              self.df_config.iloc[row_idx].get("Descripción", ""))) 
             
-            # Para Completions, no había 'ACTIVITIES', así que solo buscamos el nuevo
             act_val = str(self.df_config.iloc[row_idx].get(self.COL_ACTIVIDAD, ""))
             
-            # Para Completions, leemos 'AVG_QUANTITY' (nuevo) o 'Cantidad' (viejo)
             avg_val = self.df_config.iloc[row_idx].get(self.COL_AVG, 
                              self.df_config.iloc[row_idx].get("Cantidad", None))
             
-            if avg_val is None: # Si no estaba en el archivo, buscarlo en el mapa
+            if avg_val is None:
                 avg_val = self.avg_map.get((tipo_val, act_val), 0.0)
 
             self.insert_row_widgets(row_idx, month_val, tipo_val, act_val, float(avg_val))
@@ -164,7 +160,6 @@ class CompletionsConfigDialog(QDialog):
     def insert_row_widgets(self, row_idx, month_val, tipo_val, act_val, avg_val):
         """Helper para insertar todos los widgets en una fila (nueva o existente)."""
         
-        # Col 0: MONTH
         combo_month = QComboBox()
         combo_month.addItems(self.months_list)
         idx_m = combo_month.findText(month_val)

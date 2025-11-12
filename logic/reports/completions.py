@@ -1,3 +1,5 @@
+#completions
+
 import pandas as pd
 import calendar
 import os
@@ -6,6 +8,7 @@ from utils.dates import get_all_months, get_month_number, normalize_month_names
 from utils.file_manager import get_catalog_path, get_forecasted_plan_path, get_completions_config_path
 from logic.plan_actividades1 import PlanAnualActividades1
 
+pd.set_option('display.max_columns', None)
 
 class CompletionsReport(LineReport):
     """
@@ -138,7 +141,11 @@ class CompletionsReport(LineReport):
         # 1. Cargar el Plan Automático
         plan_path = get_forecasted_plan_path(self.year)
         plan_provider = PlanAnualActividades1(self.data_loader, plan_path)
-        distribucion_df = plan_provider.calcular_distribucion_por_tipo(year=self.year)
+        distribucion_df = plan_provider.calcular_distribucion_hibrida(
+            year=self.year, 
+            saved_excel_path=plan_path, 
+            saved_sheet_name=plan_provider.sheet_name
+        )
 
         # Normalizar nombres de meses del plan
         distribucion_df.columns = [
